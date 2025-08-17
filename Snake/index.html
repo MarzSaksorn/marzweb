@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            touch-action: manipulation;
+            overflow: hidden;
+        }
+        
+        #game-container {
+            position: relative;
+        }
+        
+        #game-board {
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+        
+        #score-display {
+            margin-top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        #mobile-controls {
+            display: none;
+            margin-top: 20px;
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+        
+        .control-btn {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: white;
+            user-select: none;
+        }
+        
+        #up-btn {
+            top: 0;
+            left: 70px;
+        }
+        
+        #left-btn {
+            top: 70px;
+            left: 0;
+        }
+        
+        #right-btn {
+            top: 70px;
+            right: 0;
+        }
+        
+        #down-btn {
+            bottom: 0;
+            left: 70px;
+        }
+        
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        #start-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: block;
+            }
+            
+            #game-board {
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-board"></canvas>
+        <div id="score-display">Score: 0</div>
+        <div id="mobile-controls">
+            <div class="control-btn" id="up-btn">↑</div>
+            <div class="control-btn" id="left-btn">←</div>
+            <div class="control-btn" id="right-btn">→</div>
+            <div class="control-btn" id="down-btn">↓</div>
+        </div>
+        <div id="start-screen">
+            <h1>Snake Game</h1>
+            <p>Use arrow keys or tap buttons to control the snake</p>
+            <button id="start-btn">Start Game</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('game-board');
+            const ctx = canvas.getContext('2d');
+            const scoreDisplay = document.getElementById('score-display');
+            const startScreen = document.getElementById('start-screen');
+            const startBtn = document.getElementById('start-btn');
+            
+            // Mobile controls
+            const upBtn = document.getElementById('up-btn');
+            const leftBtn = document.getElementById('left-btn');
+            const rightBtn = document.getElementById('right-btn');
+            const downBtn = document.getElementById('down-btn');
+            
+            // Game settings
+            const gridSize = 20;
+            const tileCount = 20;
+            let speed = 7;
+            
+            // Set canvas size
+            canvas.width = gridSize * tileCount;
+            canvas.height = gridSize * tileCount;
+            
+            // Game variables
+            let snake = [{x: 10, y: 10}];
+            let food = {x: 5, y: 5};
+            let xVelocity = 0;
+            let yVelocity = 0;
+            let score = 0;
+            let gameRunning = false;
+            let gameLoop;
+            
+            // Draw functions
+            function drawSnake() {
+                ctx.fillStyle = '#4CAF50';
+                snake.forEach(part => {
+                    ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
+                });
+            }
+            
+            function drawFood() {
+                ctx.fillStyle = '#f44336';
+                ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+            }
+            
+            function clearBoard() {
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Game logic
+            function moveSnake() {
+                const head = {x: snake[0].x + xVelocity, y: snake[0].y + yVelocity};
+                
+                // Check wall collision
+                if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                    gameOver();
+                    return;
+                }
+                
+                // Check self collision
+                for (let i = 0; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        gameOver();
+                        return;
+                    }
+                }
+                
+                snake.unshift(head);
+                
+                // Check food collision
+                if (head.x === food.x && head.y === food.y) {
+                    score++;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                    
+                    // Increase speed every 5 points
+                    if (score % 5 === 0) {
+                        speed += 1;
+                    }
+                    
+                    generateFood();
+                } else {
+                    snake.pop();
+                }
+            }
+            
+            function generateFood() {
+                let validPosition = false;
+                
+                while (!validPosition) {
+                    food = {
+                        x: Math.floor(Math.random() * tileCount),
+                        y: Math.floor(Math.random() * tileCount)
+                    };
+                    
+                    validPosition = true;
+                    
+                    // Check if food appears on snake
+                    for (let i = 0; i < snake.length; i++) {
+                        if (food.x === snake[i].x && food.y === snake[i].y) {
+                            validPosition = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            function gameOver() {
+                clearInterval(gameLoop);
+                gameRunning = false;
+                startScreen.style.display = 'flex';
+                startBtn.textContent = 'Play Again';
+            }
+            
+            function game() {
+                clearBoard();
+                drawFood();
+                moveSnake();
+                drawSnake();
+            }
+            
+            function startGame() {
+                // Reset game state
+                snake = [{x: 10, y: 10}];
+                xVelocity = 0;
+                yVelocity = 0;
+                score = 0;
+                scoreDisplay.textContent = `Score: ${score}`;
+                speed = 7;
+                
+                generateFood();
+                startScreen.style.display = 'none';
+                gameRunning = true;
+                
+                gameLoop = setInterval(game, 1000 / speed);
+            }
+            
+            // Event listeners
+            document.addEventListener('keydown', (e) => {
+                if (!gameRunning) return;
+                
+                // Prevent reverse direction
+                switch(e.key) {
+                    case 'ArrowUp':
+                        if (yVelocity !== 1) {
+                            xVelocity = 0;
+                            yVelocity = -1;
+                        }
+                        break;
+                    case 'ArrowDown':
+                        if (yVelocity !== -1) {
+                            xVelocity = 0;
+                            yVelocity = 1;
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        if (xVelocity !== 1) {
+                            xVelocity = -1;
+                            yVelocity = 0;
+                        }
+                        break;
+                    case 'ArrowRight':
+                        if (xVelocity !== -1) {
+                            xVelocity = 1;
+                            yVelocity = 0;
+                        }
+                        break;
+                }
+            });
+            
+            // Mobile controls
+            upBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (gameRunning && yVelocity !== 1) {
+                    xVelocity = 0;
+                    yVelocity = -1;
+                }
+            });
+            
+            downBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (gameRunning && yVelocity !== -1) {
+                    xVelocity = 0;
+                    yVelocity = 1;
+                }
+            });
+            
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (gameRunning && xVelocity !== 1) {
+                    xVelocity = -1;
+                    yVelocity = 0;
+                }
+            });
+            
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                if (gameRunning && xVelocity !== -1) {
+                    xVelocity = 1;
+                    yVelocity = 0;
+                }
+            });
+            
+            // Prevent touch events from causing page scroll
+            [upBtn, downBtn, leftBtn, rightBtn].forEach(btn => {
+                btn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                });
+            });
+            
+            startBtn.addEventListener('click', startGame);
+        });
+    </script>
+</body>
+</html>

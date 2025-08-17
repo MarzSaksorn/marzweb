@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 3 Scientific Calculator by GPT-4</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.global.min.js" integrity="sha512-DJ2+sosWB5FnZAIeCWAHu2gxQ7Gi438oOZLcBQSOrW8gD0s7LIXDv/5RW76B3FcljF40BXnfqNIo6Dhp7dFHJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.6.4/math.min.js" integrity="sha512-iphNRh6dPbeuPGIrQbCdbBF/qcqadKWLa35YPVfMZMHBSI6PLJh1om2xCTWhpVpmUyb4IvVS9iYnnYMkleVXLA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+<div id="app" class="container mx-auto py-10">
+  <div class="bg-white p-6 rounded-lg shadow-md w-full md:w-96 mx-auto">
+    <input type="text" readonly v-model="result" class="w-full p-2 mb-2 bg-gray-100 rounded-lg text-right" />
+    <div class="grid grid-cols-4 gap-2">
+      <button @click="clear" class="p-2 bg-red-500 text-white font-bold rounded-lg">C</button>
+      <template v-for="func in functions">
+        <button @click="appendFunction(func)" class="p-2 bg-blue-500 text-white font-bold rounded-lg">{{ func }}</button>
+      </template>
+      <button @click="appendOperator(op)" v-for="op in operators" class="p-2 bg-yellow-500 text-white font-bold rounded-lg">{{ op }}</button>
+      <div></div>
+      <div></div>
+      <template v-for="(numrow, index) in numbers">
+        <button v-if="index===1" @click="memoryStore" class="p-2 bg-orange-500 text-white font-bold rounded-lg">MS</button>
+        <button v-if="index===2" @click="memoryRecall" class="p-2 bg-orange-500 text-white font-bold rounded-lg">MR</button>
+        <button v-if="index===3" @click="memoryClear" class="p-2 bg-orange-500 text-white font-bold rounded-lg">MC</button>
+        <template v-for="num in numrow">
+          <button @click="appendNumber(num)" class="p-2 bg-gray-200 font-bold rounded-lg">{{ num }}</button>
+        </template>
+      </template>
+      <button @click="calculate" class="p-2 bg-green-500 text-white font-bold rounded-lg">=</button>
+      <button @click="usePreviousResult" class="p-2 bg-purple-500 text-white font-bold rounded-lg">Ans</button>
+      <div></div>
+      <div></div>
+      <button @click="openModal" class="p-2 bg-teal-500 text-white font-bold rounded-lg">?</button>
+    </div>
+  </div>
+  <div v-if="showModal" class="fixed z-10 inset-0 overflow-y-auto">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div @click="closeModal" class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+        <div>
+          <h3 class="text-lg leading-6 font-medium text-gray-900">How to Use the Calculator</h3>
+          <div class="space-y-2 mt-3">
+            <details class="bg-white border rounded-md">
+              <summary class="cursor-pointer px-4 py-2">Basic Operations</summary>
+              <div class="px-4 py-2">
+                <p>Use the number buttons (0-9) and operator buttons (+, -, *, /) to input basic arithmetic operations.</p>
+                <p>Press "=" or the "Enter" key to calculate the result.</p>
+              </div>
+            </details>
+
+            <details class="bg-white border rounded-md">
+              <summary class="cursor-pointer px-4 py-2">Advanced Functions</summary>
+              <div class="px-4 py-2">
+                <p>Use the function buttons (sin, cos, tan, sqrt, etc.) to input advanced mathematical operations.</p>
+                <p>Press the "(" and ")" buttons or the respective keys to input parentheses for more complex expressions.</p>
+              </div>
+            </details>
+
+            <details class="bg-white border rounded-md">
+              <summary class="cursor-pointer px-4 py-2">Memory Functions</summary>
+              <div class="px-4 py-2">
+                <p>Press "MS" or the "M" key to store the current result in memory.</p>
+                <p>Press "MR" or the "R" key to recall the value stored in memory.</p>
+                <p>Press "MC" or the "C" key to clear the memory.</p>
+              </div>
+            </details>
+
+            <details class="bg-white border rounded-md">
+              <summary class="cursor-pointer px-4 py-2">Keyboard Support</summary>
+              <div class="px-4 py-2">
+                <p>The calculator supports keyboard input for most functions.</p>
+                <ul>
+                  <li>Numbers: 0-9</li>
+                  <li>Operators: +, -, *, /</li>
+                  <li>Parentheses: (, )</li>
+                  <li>Memory Store: M</li>
+                  <li>Memory Recall: R</li>
+                  <li>Memory Clear: C</li>
+                  <li>Calculate: Enter</li>
+                  <li>Clear Result: Escape, Delete, or Backspace</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+        <div class="mt-5">
+          <button @click="closeModal" class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const app = Vue.createApp({
+    data() {
+      return {
+        result: '',
+        previousResult: '',
+        memory: '',
+        showModal: false,
+        numbers: [
+          [7, 8, 9],
+          [4, 5, 6],
+          [1, 2, 3],
+          ['00', 0, '.']
+        ],
+        operators: ['+', '-', '*', '/', '^'],
+        functions: ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '(', ')', 'pi', 'e', 'abs', 'exp']
+      };
+    },
+    created() {
+      window.addEventListener('keydown', this.onKeyDown);
+    },
+    unmounted() {
+      window.removeEventListener('keydown', this.onKeyDown);
+    },
+    methods: {
+      appendNumber(num) {
+        this.result += num;
+      },
+      appendOperator(op) {
+        if (this.operators.includes(this.result.slice(-1))) return;
+        this.result += op;
+      },
+      appendFunction(func) {
+        if (func === '(' || func === ')') {
+          this.result += func;
+        } else if (func === 'pi') {
+          this.result += Math.PI;
+        } else if (func === 'e') {
+          this.result += Math.E;
+        } else {
+          this.result += func + '(';
+        }
+      },
+      calculate() {
+        try {
+          this.previousResult = this.result;
+          this.result = math.evaluate(this.result).toString();
+        } catch (error) {
+          this.result = 'Error';
+        }
+      },
+      clear() {
+        this.result = '';
+      },
+      usePreviousResult() {
+        this.result += this.previousResult;
+      },
+      memoryStore() {
+        this.memory = this.result;
+      },
+      memoryRecall() {
+        this.result += this.memory;
+      },
+      memoryClear() {
+        this.memory = '';
+      },
+      onKeyDown(event) {
+        const key = event.key;
+        if (this.numbers.flat().includes(Number(key)) || this.operators.includes(key) || key === '(' || key === ')') {
+          this.result += key;
+        } else if (key === 'Enter' || key === '=') {
+          this.calculate();
+        } else if (key === 'Escape' || key === 'Delete' || key === 'Backspace') {
+          this.clear();
+        } else if (key === 'ArrowUp') {
+          this.usePreviousResult();
+        } else if (key === ',') {
+          this.result += key;
+        } else if (key === 'm' || key === 'M') {
+          this.memoryStore();
+        } else if (key === 'r' || key === 'R') {
+          this.memoryRecall();
+        } else if (key === 'c' || key === 'C') {
+          this.memoryClear();
+        }
+      },
+      openModal() {
+        this.showModal = true;
+      },
+      closeModal() {
+        this.showModal = false;
+      },
+    }
+  });
+
+  app.mount('#app');
+</script>
+<script src="../sidebar.js"></script>
+</body>
+</html>

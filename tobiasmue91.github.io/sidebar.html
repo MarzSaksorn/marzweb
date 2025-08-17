@@ -1,0 +1,305 @@
+<style>
+    .sidebar {
+        background-color: #eee;
+        width: 300px;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: scroll;
+        text-align: left;
+    }
+
+    .lists {
+        padding: 50px 20px 20px;
+    }
+
+    .sidebar h2 {
+        color: #000000;
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 0;
+    }
+
+    .sidebar li a {
+        display: block;
+        padding: 10px;
+        color: #333;
+        text-decoration: none;
+    }
+
+    .sidebar li a:hover {
+        background-color: #ddd;
+    }
+
+    .sidebar-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #search-input {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1rem;
+    }
+
+    .home-button {
+        display: inline-block;
+        border: 2px solid black;
+        padding: 6px 12px;
+        border-radius: 4px;
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+    }
+
+    .home-icon {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        margin-right: 6px;
+        border-top: 2px solid black;
+        border-left: 2px solid black;
+        transform: rotate(-45deg);
+    }
+</style>
+<div class="sidebar" style="display: none;">
+  <div class="lists">
+    <div class="sidebar-header">
+      <a href="/" class="home-button">
+        <span class="home-icon"></span>
+        Home
+      </a>
+      <label><input type="text" id="search-input" placeholder="🔍 Search..."></label>
+      <h2>Games by ChatGPT</h2>
+    </div>
+    <ul id="games-list" class="sidebar-list">
+      <li><a href="/games/2048.html">2048</a></li>
+      <li><a href="/games/asteroids.html">Asteroids</a></li>
+      <li><a href="/games/ball_bouncing.html">Ball Bouncing</a></li>
+      <li><a href="/games/blackjack.html">Blackjack</a></li>
+      <li><a href="/games/breakout.html">Breakout</a></li>
+      <li><a href="/games/catchcircle.html">Catch Circle</a></li>
+      <li><a href="/games/animals.html">Catching Game for Cats 🐱</a></li>
+      <li><a href="/games/checkers.html">Checkers</a></li>
+      <li><a href="/games/chess.html">Chess</a></li>
+      <li><a href="/games/connect_four.html">Connect Four</a></li>
+      <li><a href="/games/crazy_eights.html">Crazy Eights</a></li>
+      <li><a href="/games/obstacle_dodge.html">Dodge the Obstacles</a></li>
+      <li><a href="/games/doodling.html">Doodling</a></li>
+      <li><a href="/games/duck_hunt.html">Duck Hunt</a></li>
+      <li><a href="/games/escape_the_maze.html">Escape the Maze</a></li>
+      <li><a href="/games/family_feud.html">Family Feud</a></li>
+      <li><a href="/games/fishing.html">Fishing Game</a></li>
+      <li><a href="/games/flappy_bird.html">Flappy Bird</a></li>
+      <li><a href="/games/frogger.html">Frogger</a></li>
+      <li><a href="/games/hangman.html">Hangman</a></li>
+      <li><a href="/games/human_benchmark/">Human Benchmark Tests</a></li>
+      <li><a href="/games/number_guess.html">Guess the Number</a></li>
+      <li><a href="/games/jump.html">Joodle Dump</a></li>
+      <li><a href="/games/memory_match.html">Memory Match</a></li>
+      <li><a href="/games/monkeytype.html">Monkeytype Clone</a></li>
+      <li><a href="/games/minesweeper.html">Minesweeper</a></li>
+      <li><a href="/games/pong.html">Pong</a></li>
+      <li><a href="/games/rock_paper_scissors.html">Rock Paper Scissors</a></li>
+      <li><a href="/games/rock_paper_scissors_mp.html">Rock Paper Scissors Multiplayer</a></li>
+      <li><a href="/games/simon_says.html">Simon Says</a></li>
+      <li><a href="/games/snake.html">Snake</a></li>
+      <li><a href="/games/sudoku.html">Sudoku</a></li>
+      <li><a href="/games/blockdrop.html">Blockdrop</a></li>
+      <li><a href="/games/tic_tac_toe_mp.html">Tic-Tac-Toe</a></li>
+      <li><a href="/games/time_travel_agency.html">Time Travel Agency</a></li>
+      <li><a href="/games/typing_game.html">Typing Game</a></li>
+      <li><a href="/games/whac.html">Whac-a-Hedgehog</a></li>
+      <li><a href="/games/who_wants_to_be_a_millionaire.html">Who Wants to Be a Millionaire</a></li>
+      <li><a href="/games/word_search.html">Word Search</a></li>
+      <li><a href="/games/alphabet.html">Alphabet Typing Speed</a></li>
+      <li><a href="/games/suika.html">Suika</a></li>
+      <li><a href="/games/wordle.html">Wordle</a></li>
+      <li><a href="/games/emoji_puzzle_mania.html">Emoji Puzzle Mania</a></li>
+      <li><a href="/games/death_by_ai.html">Death by AI</a></li>
+      <li><a href="/games/mystery_ai.html">Mystery AI: Detective</a></li>
+    </ul>
+    <div class="sidebar-header">
+      <h2>Tools by ChatGPT</h2>
+    </div>
+    <ul id="tools-list" class="sidebar-list">
+      <li><a href="/tools/1337.html">Leetspeak Converter</a></li>
+      <li><a href="/tools/color_picker.html">Color Picker</a></li>
+      <li><a href="/tools/word_counter.html">Word and Character Counter</a></li>
+      <li><a href="/tools/minify.html">HTML Minify</a></li>
+      <li><a href="/tools/timer.html">Online Timer</a></li>
+      <li><a href="/tools/number_converter.html">Number System Converter</a></li>
+      <li><a href="/tools/unix_converter.html">Unix Timestamp Converter</a></li>
+      <li><a href="/tools/password_generator.html">Secure Password Generator</a></li>
+      <li><a href="/tools/lorem_ipsum.html">Lorem Ipsum Generator</a></li>
+      <li><a href="/tools/url_encoder.html">URL Encoder/Decoder</a></li>
+      <li><a href="/tools/qr_generator.html">QR Code Generator</a></li>
+      <li><a href="/tools/markdown_converter.html">Markdown Converter</a></li>
+      <li><a href="/tools/box_shadow_generator.html">Box Shadow Generator</a></li>
+      <li><a href="/tools/text_shadow_generator.html">Text Shadow Generator</a></li>
+      <li><a href="/tools/temperature_converter.html">Temperature Converter</a></li>
+      <li><a href="/tools/regex_tester.html">Regular Expression Tester</a></li>
+      <li><a href="/tools/hash_generator.html">Hash Generator</a></li>
+      <li><a href="/tools/html_entities_converter.html">HTML Entity Converter</a></li>
+      <li><a href="/tools/code_diff.html">Code/Text Diff Tool</a></li>
+      <li><a href="/tools/unit_converter.html">Unit Converter</a></li>
+      <li><a href="/tools/household_planner.html">Household Planner</a></li>
+      <li><a href="/tools/calculator.html">Calculator</a></li>
+      <li><a href="/tools/argumentator/argumentator.html">Argumentator</a></li>
+      <li><a href="/tools/gptranslator.html">GPTranslator</a></li>
+      <li><a href="/tools/json_formatter.html">JSON Formatter</a></li>
+      <li><a href="/tools/age_calculator.html">Age Calculator</a></li>
+      <li><a href="/tools/emoji_search.html">Emoji Search</a></li>
+      <li><a href="/tools/css_gradient_generator.html">CSS Gradient Generator</a></li>
+      <li><a href="/tools/stopwatch.html">Stopwatch</a></li>
+      <li><a href="/tools/photo_filter_editor.html">Photo Filter Editor</a></li>
+      <li><a href="/tools/file_size_converter.html">File Size Converter</a></li>
+      <li><a href="/tools/online_notepad.html">Online Notepad</a></li>
+      <li><a href="/tools/image_comparison_slider.html">Image Comparison Slider</a></li>
+      <li><a href="/tools/base64_encoder_decoder.html">Base64 Encoder/Decoder</a></li>
+      <li><a href="/tools/quotosaurus.html">QuotoSaurus</a></li>
+      <li><a href="/tools/time_zone_converter.html">Time Zone Converter</a></li>
+      <li><a href="/tools/online_voice_recorder.html">Online Voice Recorder</a></li>
+      <li><a href="/tools/paste_to_markdown.html">Paste to Markdown</a></li>
+      <li><a href="/tools/html_table_generator.html">HTML Table Generator</a></li>
+      <li><a href="/tools/ai_text_naturalizer.html">AI Text Naturalizer</a></li>
+      <li><a href="/tools/image_compressor.html">Image Compressor</a></li>
+      <li><a href="/tools/image_to_base64_converter.html">Image to Base64 Converter</a></li>
+      <li><a href="/tools/seo_meta_tag_generator.html">SEO Meta Tag Generator</a></li>
+      <li><a href="/tools/online_pixel_art_editor.html">Online Pixel Art Editor</a></li>
+      <li><a href="/tools/csv_json_converter.html">CSV JSON Converter</a></li>
+      <li><a href="/tools/image_cropper.html">Image Cropper</a></li>
+      <li><a href="/tools/online_business_card_maker.html">Online Business Card Maker</a></li>
+      <li><a href="/tools/css_flexbox_generator.html">CSS Flexbox Generator</a></li>
+      <li><a href="/tools/online_signature_maker.html">Online Signature Maker</a></li>
+      <li><a href="/tools/percentage_calculator.html">Percentage Calculator</a></li>
+      <li><a href="/tools/online_color_palette_generator.html">Online Color Palette Generator</a></li>
+      <li><a href="/tools/bmi_calculator.html">BMI Calculator</a></li>
+      <li><a href="/tools/keyboard_tester.html">Keyboard Tester</a></li>
+      <li><a href="/tools/javascript_snippet_runner.html">JavaScript Snippet Runner</a></li>
+      <li><a href="/tools/css_border_radius_generator.html">CSS Border Radius Generator</a></li>
+      <li><a href="/tools/javascript_obfuscator.html">JavaScript Obfuscator</a></li>
+      <li><a href="/tools/online_text_case_converter.html">Online Text Case Converter</a></li>
+      <li><a href="/tools/name_generator.html">Name Generator</a></li>
+      <li><a href="/tools/movie_script_generator.html">Movie Script Generator</a></li>
+      <li><a href="/tools/online_kanban_board.html">Online Kanban Board</a></li>
+      <li><a href="/tools/online_dice_roller.html">Online Dice Roller</a></li>
+      <li><a href="/tools/online_word_scrambler.html">Online Word Scrambler</a></li>
+      <li><a href="/tools/letter_frequency_counter.html">Letter Frequency Counter</a></li>
+      <li><a href="/tools/pixelate.html">Pixelate</a></li>
+      <li><a href="/tools/recipe_converter.html">Recipe Converter</a></li>
+      <li><a href="/tools/image_resizer.html">Image Resizer</a></li>
+      <li><a href="/tools/pdf_merger.html">PDF Merger</a></li>
+      <li><a href="/tools/file_renamer.html">File Renamer</a></li>
+      <li><a href="/tools/password_strength_checker.html">Password Strength Checker</a></li>
+      <li><a href="/tools/image_to_text_converter.html">Image to Text Converter</a></li>
+      <li><a href="/tools/image_color_extractor.html">Image Color Extractor</a></li>
+      <li><a href="/tools/random_number_generator.html">Random Number Generator</a></li>
+      <li><a href="/tools/html_link_extractor.html">HTML Link Extractor</a></li>
+      <li><a href="/tools/palindrome_checker.html">Palindrome Checker</a></li>
+      <li><a href="/tools/image_to_ascii_converter.html">Image to ASCII Converter</a></li>
+      <li><a href="/tools/online_qr_code_reader.html">Online QR Code Reader</a></li>
+      <li><a href="/tools/image_to_sketch_converter.html">Image to Sketch Converter</a></li>
+      <li><a href="/tools/file_type_identifier.html">File Type Identifier</a></li>
+      <li><a href="/tools/image_noise_reducer.html">Image Noise Reducer</a></li>
+      <li><a href="/tools/descriptocraft.html">DescriptoCraft</a></li>
+      <li><a href="/tools/ai_game_challenge_generator.html">AI Game Challenge Generator</a></li>
+      <li><a href="/tools/regexpress.html">RegExpress</a></li>
+      <li><a href="/tools/dalle_prompt.html">DALL-E Prompt Generator</a></li>
+      <li><a href="/tools/opposite_finder.html">OppositeFinder</a></li>
+      <li><a href="/tools/synonym_finder.html">SynonymFinder</a></li>
+      <li><a href="/tools/image_converter.html">Image Converter</a></li>
+      <li><a href="/tools/css_grid_generator.html">CSS Grid Generator</a></li>
+      <li><a href="/tools/online_webcam_filters.html">Online Webcam Filters</a></li>
+      <li><a href="/tools/binary_to_text_converter.html">Binary to Text Converter</a></li>
+      <li><a href="/tools/css_filter_playground.html">CSS Filter Playground</a></li>
+      <li><a href="/tools/html_template_generator.html">HTML Template Generator</a></li>
+      <li><a href="/tools/image_exif_data_viewer.html">Image EXIF Data Viewer</a></li>
+      <li><a href="/tools/morse_code_translator.html">Morse Code Translator</a></li>
+      <li><a href="/tools/pomodoro_timer.html">Pomodoro Timer</a></li>
+      <li><a href="/tools/php_code_minifier.html">PHP Code Minifier</a></li>
+      <li><a href="/tools/sql_minifier.html">SQL Minifier & Formatter</a></li>
+      <li><a href="/tools/daily_quote_generator.html">Daily Quote Generator</a></li>
+      <li><a href="/tools/reading_time_estimator.html">Reading Time Estimator</a></li>
+      <li><a href="/tools/fractal_viewer.html">Fractal Viewer</a></li>
+      <li><a href="/tools/online_music_player.html">Online Music Player</a></li>
+      <li><a href="/games/living_rps.html">Living RPS</a></li>
+      <li><a href="/tools/grammar_check.html">AI Grammar Checker</a></li>
+      <li><a href="/tools/svg_path_editor.html">SVG Path Editor</a></li>
+      <li><a href="/tools/video_to_gif_converter.html">Video to GIF Converter</a></li>
+      <li><a href="/tools/code_case_converter.html">Code Case Converter</a></li>
+      <li><a href="/tools/todo_list.html">ToDo-List</a></li>
+      <li><a href="/tools/paste_table.html">PasteTable</a></li>
+      <li><a href="/tools/game_of_life.html">Conway's Game of Life</a></li>
+      <li><a href="/tools/word_explainer.html">WordSage</a></li>
+      <li><a href="/tools/legal_finder.html">LegalFinder</a></li>
+      <li><a href="/tools/reaction_time_trainer.html">Reaction Time Trainer</a></li>
+      <li><a href="/tools/cps_test.html">CPS Test</a></li>
+      <li><a href="/tools/ai_code_explainer.html">AI Code Explainer</a></li>
+      <li><a href="/tools/web_accessibility_checker.html">Web Accessibility Checker</a></li>
+      <li><a href="/tools/cron_expression_builder.html">Cron Expression Builder</a></li>
+      <li><a href="/tools/markdown_table_generator.html">Markdown Table Generator</a></li>
+      <li><a href="/games/emoji_horde_survival.html">Emoji Horde Survival</a></li>
+      <li><a href="/tools/color_blindness_simulator.html">Color Blindness Simulator</a></li>
+      <li><a href="/tools/fractal_viewer_3d.html">3D Fractal Explorer</a></li>
+      <li><a href="/tools/favicon_generator.html">Favicon Generator | Favicon Studio Pro</a></li>
+      <li><a href="/tools/uuid_generator.html">UUID Generator | Create and Export UUIDs</a></li>
+      <li><a href="/games/asteroids_3d.html">3D Asteroids</a></li>
+      <li><a href="/tools/zalgo_text_generator.html">Zalgo Text Generator</a></li>
+      <li><a href="/tools/character_map_explorer.html">Character Map Explorer</a></li>
+      <li><a href="/tools/css_cursor_playground.html">CSS Cursor Playground - Interactive CSS Cursor Property Tool</a></li>
+      <li><a href="/tools/text_sound_visualizer.html">Text Sound Visualizer</a></li>
+      <li><a href="/tools/invoice_generator.html">Invoice Generator</a></li>
+      <li><a href="/games/color_guessing_game.html">Color Guessing Game</a></li>
+      <li><a href="/tools/code_minifier.html">Code Minifier</a></li>
+      <li><a href="/games/emoji_match_three.html">Emoji Match 3</a></li>
+      <li><a href="/tools/roman_numeral_converter.html">Roman Numeral Converter</a></li>
+      <li><a href="/tools/image_background_remover.html">Image Background Remover</a></li>
+      <li><a href="/tools/audio_cutter.html">Audio Cutter</a></li>
+      <li><a href="/games/color_flood.html">Color Flood</a></li>
+      <li><a href="/tools/interactive_periodic_table.html">Interactive Periodic Table</a></li>
+      <li><a href="/tools/speed_reading_trainer.html">Speed Reading Trainer</a></li>
+      <li><a href="/tools/radial_spectrum_visualizer.html">Radial Spectrum Visualizer</a></li>
+      <li><a href="/tools/latex_editor.html">Online LaTeX Editor</a></li>
+      <li><a href="/tools/physics_simulator.html">Physics Simulator</a></li>
+      <li><a href="/tools/metadata_cleaner.html">Metadata Cleaner</a></li>
+      <li><a href="/tools/epub_reader.html">EPUB Reader</a></li>
+      <li><a href="/tools/ascii_camera.html">ASCII Camera</a></li>
+      <li><a href="/games/ludo.html">Ludo</a></li>
+      <li><a href="/games/space_invaders.html">Space Invaders</a></li>
+      <li><a href="/games/lights_out.html">Lights Out</a></li>
+      <li><a href="/games/yahtzee.html">Yahtzee</a></li>
+      <li><a href="/tools/pdf_editor.html">PDF Editor</a></li>
+      <li><a href="/games/solitaire.html">Solitaire</a></li>
+      <li><a href="/games/missile_command.html">Missile Command</a></li>
+      <li><a href="/tools/pdf_to_image_converter.html">PDF to Image Converter</a></li>
+      <li><a href="/tools/video_frame_extractor.html">Video Frame Extractor</a></li>
+      <li><a href="/tools/pdf_splitter.html">PDF Splitter</a></li>
+      <li><a href="/tools/metronome.html">Metronome</a></li>
+      <li><a href="/tools/pdf_sign.html">PDF Sign Tool</a></li>
+      <li><a href="/tools/graphing_calculator.html">Graphing Calculator</a></li>
+      <li><a href="/tools/sober_time_tracker.html">Sober Time Tracker</a></li>
+      <li><a href="/tools/zip_extractor.html">Zip Extractor Pro</a></li>
+      <li><a href="/tools/sudoku_solver.html">Sudoku Solver</a></li>
+      <li><a href="/tools/decision_wheel.html">Decision Wheel</a></li>
+      <li><a href="/games/reversi.html">Reversi</a></li>
+      <li><a href="/tools/flashcard_creator.html">Flashcard Creator</a></li>
+      <li><a href="/tools/pixel_art_animator.html">Pixel Art Animator</a></li>
+      <li><a href="/tools/image_placeholder_generator.html">Image Placeholder Generator</a></li>
+      <li><a href="/games/mini_tower_defense.html">Elite Tower Defense</a></li>
+<!-- end -->
+    </ul>
+  </div>
+</div>

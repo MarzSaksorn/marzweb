@@ -1,0 +1,42 @@
+
+body{
+    background-color: rgba(129,213,249,255);
+}
+.top{
+    background: url(https://cdn.wallpapersafari.com/20/42/udkAc5.jpg);
+    
+    font-weight: bold;
+    font-family: 'Noto Sans Thai';
+    text-align: center;
+    padding: 13%;
+    background-size: cover;
+}
+.top #info{
+    
+    font-weight: lighter;
+    
+}
+.top #play{
+    background-color: rgb(255, 210, 154);
+    border-radius: 15%;
+    padding: 10px;
+}
+
+
+
+.container {
+  display: grid;
+  gap: 5px;
+  background-color: rgba(129,213,249,255);
+  padding-top: 75px;
+}
+.container > div {
+  background-color: rgba(129,213,249,255);
+}
+.container > div > a {
+    padding-left: 5%;
+    
+}
+.container > div > a > img {
+    width: 18%;
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Display</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        #container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* For toggle positioning */
+        }
+        #preview {
+            flex: 1;
+            overflow: auto;
+        }
+        #codeEditor {
+            flex: 1;
+            display: flex;
+            overflow: auto;
+            background-color: #1e1e1e;
+            position: relative; /* For code labels */
+        }
+        #codeEditor textarea {
+            flex: 1;
+            margin: 2px;
+            padding: 10px; /* Adjust for label */
+            height: calc(100% - 24px);
+            box-sizing: border-box;
+            background-color: #2b2b2b;
+            color: #dcdcdc;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px; /* Slightly larger font for readability */
+            scrollbar-width: thin; /* For Firefox */
+            scrollbar-color: #606060 #454545; /* For Firefox */
+        }
+        #codeEditor textarea:hover {
+            background-color: #333333; /* Hover effect */
+        }
+        /* Scrollbar styles for Webkit (Chrome, Safari, etc.) */
+        #codeEditor textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        #codeEditor textarea::-webkit-scrollbar-track {
+            background: #454545;
+        }
+        #codeEditor textarea::-webkit-scrollbar-thumb {
+            background-color: #606060;
+            border-radius: 4px;
+        }
+        .codeLabel {
+            position: absolute;
+            color: #ffffff;
+            font-size: 12px;
+            margin-left: 5px; /* Positioning label inside textarea */
+            pointer-events: none; /* Allows click through */
+            padding-left: 5px;
+        }
+        #toggle {
+            position: absolute;
+            top: calc(50% - 30px); /* Adjusted to be on top middle */
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            z-index: 1000;
+            background-color: #2b2b2b;
+            border: 1px solid #606060;
+            padding: 5px;
+            border-radius: 50% 50% 0 0;
+            border-bottom: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #toggle::before {
+            content: '';
+            display: block;
+            border: solid #dcdcdc;
+            border-width: 0 2px 2px 0;
+            padding: 3px;
+            transform: rotate(45deg);
+            transition: transform 0.3s ease-in-out;
+        }
+        #container.collapsed #toggle {
+            top: calc(100% - 30px);
+        }
+        #container.collapsed #toggle::before {
+            transform: rotate(-135deg);
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="toggle" title="Toggle Code Editor"></div>
+    <iframe id="preview" style="width: 100%; height: 100%; border: none; flex: 1 1 0%;"></iframe>
+    <div id="codeEditor" style="display: flex;">
+        <div class="codeLabel" style="left:0;">HTML</div>
+        <textarea id="htmlCode"></textarea>
+        <div class="codeLabel" style="left:33.5%;">CSS</div>
+        <textarea id="cssCode"></textarea>
+        <div class="codeLabel" style="left:67%;">JS</div>
+        <textarea id="jsCode"></textarea>
+    </div>
+</div>
+<script>
+const container = document.getElementById('container');
+const toggle = document.getElementById('toggle');
+const iframe = document.getElementById('preview');
+
+function compressAndBase64Encode(str) {
+    return btoa(String.fromCharCode.apply(null, pako.deflate(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function base64DecodeAndDecompress(base64EncodedData) {
+    const adjustedData = base64EncodedData.replace(/-/g, '+').replace(/_/g, '/');
+    const decodedData = atob(adjustedData);
+    const charData = decodedData.split('').map(c => c.charCodeAt(0));
+    const binData = new Uint8Array(charData);
+    return pako.inflate(binData, { to: 'string' });
+}
+
+function updateURL() {
+    console.log('url updated');
+    const html = compressAndBase64Encode(document.getElementById('htmlCode').value);
+    const css = compressAndBase64Encode(document.getElementById('cssCode').value);
+    const js = compressAndBase64Encode(document.getElementById('jsCode').value);
+    history.replaceState(null, '', `?html=${html}&css=${css}&js=${js}`);
+    updatePreview();
+}
+
+function updatePreview() {
+    const html = document.getElementById('htmlCode').value;
+    const css = document.getElementById('cssCode').value;
+    const js = document.getElementById('jsCode').value;
+    
+    // Create a new iframe to avoid variable redeclaration issues
+    const oldIframe = document.getElementById('preview');
+    const newIframe = document.createElement('iframe');
+    newIframe.id = 'preview';
+    newIframe.style = 'width: 100%; height: 100%; border: none; flex: 1 1 0%;';
+    oldIframe.parentNode.replaceChild(newIframe, oldIframe);
+    
+    // Get the new iframe's document
+    const iframeDoc = newIframe.contentDocument || newIframe.contentWindow.document;
+    
+    // Write content to the new iframe
+    iframeDoc.open();
+    iframeDoc.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>${css}</style>
+        </head>
+        <body>${html}
+        <script>${js}<\/script>
+        <script>
+        (function() {
+            function captureFormStates() {
+                const clone = document.body.cloneNode(true);
+                
+                // Update checkbox and radio states
+                const inputs = document.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+                const cloneInputs = clone.querySelectorAll('input[type="checkbox"], input[type="radio"]');
+                
+                for (let i = 0; i < inputs.length; i++) {
+                    if (inputs[i].checked) {
+                        cloneInputs[i].setAttribute('checked', 'checked');
+                    } else {
+                        cloneInputs[i].removeAttribute('checked');
+                    }
+                }
+                
+                // Update text input, textarea and select values
+                const formElements = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]), textarea, select');
+                const cloneFormElements = clone.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]), textarea, select');
+                
+                for (let i = 0; i < formElements.length; i++) {
+                    cloneFormElements[i].value = formElements[i].value;
+                    if (formElements[i].tagName === 'SELECT') {
+                        const options = formElements[i].options;
+                        const cloneOptions = cloneFormElements[i].options;
+                        
+                        for (let j = 0; j < options.length; j++) {
+                            if (options[j].selected) {
+                                cloneOptions[j].setAttribute('selected', 'selected');
+                            } else {
+                                cloneOptions[j].removeAttribute('selected');
+                            }
+                        }
+                    }
+                }
+                
+                return clone.innerHTML;
+            }
+            
+            function handleInputChange(e) {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                    window.parent.postMessage({
+                        type: 'inputChanged',
+                        html: captureFormStates()
+                    }, '*');
+                }
+            }
+            
+            document.addEventListener('input', handleInputChange);
+            document.addEventListener('change', handleInputChange);
+        })();
+        <\/script>
+        </body>
+        </html>
+    `);
+    iframeDoc.close();
+}
+
+function sanitizeEncodedValue(encodedValue) {
+    return encodedValue.replace(/[\s'"]+$/g, '');
+}
+
+function loadFromURL() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let html = urlParams.get('html') ? sanitizeEncodedValue(urlParams.get('html')) : '';
+    let css = urlParams.get('css') ? sanitizeEncodedValue(urlParams.get('css')) : '';
+    let js = urlParams.get('js') ? sanitizeEncodedValue(urlParams.get('js')) : '';
+
+    html = html ? base64DecodeAndDecompress(html) : '';
+    css = css ? base64DecodeAndDecompress(css) : '';
+    js = js ? base64DecodeAndDecompress(js) : '';
+
+    if (html) document.getElementById('htmlCode').value = html;
+    if (css) document.getElementById('cssCode').value = css;
+    if (js) document.getElementById('jsCode').value = js;
+    
+    updatePreview();
+}
+
+document.getElementById('htmlCode').addEventListener('input', updateURL);
+document.getElementById('cssCode').addEventListener('input', updateURL);
+document.getElementById('jsCode').addEventListener('input', updateURL);
+
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'inputChanged') {
+        document.getElementById('htmlCode').value = event.data.html;
+        updateURL();
+    }
+});
+
+loadFromURL();
+
+toggle.addEventListener('click', () => {
+    const codeEditor = document.getElementById('codeEditor');
+    const preview = document.getElementById('preview');
+    if (codeEditor.style.display === 'none' || !codeEditor.style.display) {
+        codeEditor.style.display = 'flex';
+        preview.style.flex = '1';
+        container.classList.remove('collapsed');
+    } else {
+        codeEditor.style.display = 'none';
+        preview.style.flex = '0 0 100%';
+        container.classList.add('collapsed');
+    }
+});
+</script>
+<script src="../logo.js"></script>
+</body>
+</html>

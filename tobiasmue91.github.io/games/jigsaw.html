@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Jigsaw Puzzle</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            padding: 1rem;
+        }
+
+        header h1 {
+            color: #fff;
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        #puzzleCanvas {
+            position: relative;
+            border: 2px solid #333;
+            background-color: #fff;
+            cursor: move;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        #puzzleCanvas {
+            position: relative;
+            border: 2px solid #333;
+            background-color: #fff;
+            cursor: move;
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #444;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body id="body">
+<header>
+    <h1>Custom Jigsaw Puzzle</h1>
+</header>
+<main>
+    <section class="difficulty-selection">
+        <h2>Select Difficulty</h2>
+        <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+    </section>
+    <section class="image-upload">
+        <h2>Upload Your Image</h2>
+        <input type="file" id="imageUpload" accept="image/*">
+    </section>
+    <section class="puzzle-preview">
+        <h2>Puzzle Preview</h2>
+        <canvas id="previewCanvas" width="150" height="150"></canvas>
+    </section>
+    <section class="puzzle-board">
+        <h2>Puzzle Board</h2>
+        <canvas id="puzzleCanvas" width="800" height="600"></canvas>
+    </section>
+    <section class="game-controls">
+        <button id="startButton">Start Game</button>
+        <button id="saveButton">Save Progress</button>
+        <button id="loadButton">Load Progress</button>
+    </section>
+</main>
+<footer>
+    <p>&copy; 2023 Jigsaw Puzzle. All rights reserved.</p>
+</footer>
+
+<script type="text/javascript">
+    // DOM elements
+    const difficultySelect = document.getElementById("difficulty");
+    const imageUpload = document.getElementById("imageUpload");
+    const previewCanvas = document.getElementById("previewCanvas");
+    const puzzleCanvas = document.getElementById("puzzleCanvas");
+    const startButton = document.getElementById("startButton");
+    const saveButton = document.getElementById("saveButton");
+    const loadButton = document.getElementById("loadButton");
+    const body = document.getElementById("body");
+
+    // Variables
+    let image;
+    let pieces;
+    let gridSize;
+    let pieceWidth;
+    let pieceHeight;
+    let selectedPiece;
+    let canvasWidth;
+    let canvasHeight;
+
+    // Event listeners
+    imageUpload.addEventListener("change", loadImage);
+    startButton.addEventListener("click", startGame);
+    saveButton.addEventListener("click", saveProgress);
+    loadButton.addEventListener("click", loadProgress);
+    puzzleCanvas.addEventListener("mousedown", onPuzzleCanvasMouseDown);
+    puzzleCanvas.addEventListener("mousemove", onPuzzleCanvasMouseMove);
+    puzzleCanvas.addEventListener("mouseup", onPuzzleCanvasMouseUp);
+
+    // Functions
+
+    function loadImage(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const fileReader = new FileReader();
+        fileReader.onload = (e) => {
+            image = new Image();
+            image.src = e.target.result;
+            image.onload = () => {
+                const previewContext = previewCanvas.getContext("2d");
+                previewContext.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+                previewContext.drawImage(image, 0, 0, previewCanvas.width, previewCanvas.height);
+            };
+        };
+        fileReader.readAsDataURL(file);
+    }
+
+    function scaleImageToFitCanvas() {
+        const maxWidth = puzzleCanvas.width;
+        const maxHeight = puzzleCanvas.height;
+
+        const imgWidth = image.width;
+        const imgHeight = image.height;
+
+        const aspectRatio = imgWidth / imgHeight;
+
+        let newWidth, newHeight;
+
+        if (imgWidth > imgHeight) {
+            newWidth = maxWidth;
+            newHeight = maxWidth / aspectRatio;
+        } else {
+            newHeight = maxHeight;
+            newWidth = maxHeight * aspectRatio;
+        }
+
+        image.width = newWidth;
+        image.height = newHeight;
+
+        pieceWidth = newWidth / gridSize;
+        pieceHeight = newHeight / gridSize;
+    }
+
+    function startGame() {
+        const difficultyMap = {easy: 3, medium: 5, hard: 7};
+        gridSize = difficultyMap[difficultySelect.value];
+        scaleImageToFitCanvas();
+        pieceWidth = image.width / gridSize;
+        pieceHeight = image.height / gridSize;
+        createPuzzlePieces();
+        shufflePuzzlePieces();
+    }
+
+    function saveProgress() {
+        localStorage.setItem("puzzleState", JSON.stringify(pieces));
+    }
+
+    function loadProgress() {
+        const savedState = localStorage.getItem("puzzleState");
+        if (savedState) {
+            pieces = JSON.parse(savedState);
+            const puzzleContext = puzzleCanvas.getContext("2d");
+            puzzleContext.clearRect(0, 0, puzzleCanvas.width, puzzleCanvas.height);
+
+            for (const piece of pieces) {
+                puzzleContext.drawImage(
+                    image,
+                    piece.x,
+                    piece.y,
+                    piece.width,
+                    piece.height,
+                    piece.offsetX,
+                    piece.offsetY,
+                    piece.width,
+                    piece.height
+                );
+            }
+        }
+    }
+
+    function createPuzzlePieces() {
+        pieces = [];
+        const scaleFactor = Math.min(
+            puzzleCanvas.width / image.width,
+            puzzleCanvas.height / image.height
+        );
+
+        for (let i = 0; i < gridSize; i++) {
+            for (let j = 0; j < gridSize; j++) {
+                const piece = {
+                    x: j * pieceWidth,
+                    y: i * pieceHeight,
+                    width: pieceWidth,
+                    height: pieceHeight,
+                    scaledWidth: pieceWidth * scaleFactor,
+                    scaledHeight: pieceHeight * scaleFactor,
+                    offsetX: 0,
+                    offsetY: 0,
+                    isDragging: false,
+                    snapped: false,
+                    snappedPieces: [],
+                };
+                pieces.push(piece);
+            }
+        }
+    }
+
+    function shufflePuzzlePieces() {
+        // Shuffle the pieces array
+        pieces.sort(() => Math.random() - 0.5);
+
+        const puzzleContext = puzzleCanvas.getContext("2d");
+        puzzleContext.clearRect(0, 0, puzzleCanvas.width, puzzleCanvas.height);
+
+        for (let i = 0; i < pieces.length; i++) {
+            const piece = pieces[i];
+
+            // Calculate the shuffled position for each piece
+            piece.offsetX = Math.random() * (puzzleCanvas.width - piece.width);
+            piece.offsetY = Math.random() * (puzzleCanvas.height - piece.height);
+
+            // Draw the shuffled piece on the puzzle canvas
+            puzzleContext.drawImage(
+                image,
+                piece.x,
+                piece.y,
+                piece.width,
+                piece.height,
+                piece.offsetX,
+                piece.offsetY,
+                piece.width,
+                piece.height
+            );
+        }
+    }
+
+    function onPuzzleCanvasMouseDown(event) {
+        const x = event.clientX - puzzleCanvas.getBoundingClientRect().left;
+        const y = event.clientY - puzzleCanvas.getBoundingClientRect().top;
+
+        // Get all pieces under the mouse pointer
+        const overlappingPieces = pieces.filter(
+            (piece) =>
+                x > piece.offsetX &&
+                x < piece.offsetX + piece.scaledWidth &&
+                y > piece.offsetY &&
+                y < piece.offsetY + piece.scaledHeight
+        );
+
+        if (overlappingPieces.length > 0) {
+            // Pick the most foreground piece
+            selectedPiece = overlappingPieces[overlappingPieces.length - 1];
+
+            selectedPiece.isDragging = true;
+            selectedPiece.mouseOffsetX = x - selectedPiece.offsetX;
+            selectedPiece.mouseOffsetY = y - selectedPiece.offsetY;
+
+            // Move the selected piece to the end of the array
+            pieces = pieces.filter((piece) => piece !== selectedPiece);
+            pieces.push(selectedPiece);
+        }
+    }
+
+    function onPuzzleCanvasMouseMove(event) {
+        if (!selectedPiece || !selectedPiece.isDragging) return;
+
+        const x = event.clientX - puzzleCanvas.getBoundingClientRect().left;
+        const y = event.clientY - puzzleCanvas.getBoundingClientRect().top;
+
+        const prevOffsetX = selectedPiece.offsetX;
+        const prevOffsetY = selectedPiece.offsetY;
+
+        selectedPiece.offsetX = x - selectedPiece.mouseOffsetX;
+        selectedPiece.offsetY = y - selectedPiece.mouseOffsetY;
+
+        const deltaX = selectedPiece.offsetX - prevOffsetX;
+        const deltaY = selectedPiece.offsetY - prevOffsetY;
+
+        for (const snappedPiece of selectedPiece.snappedPieces) {
+            snappedPiece.offsetX += deltaX;
+            snappedPiece.offsetY += deltaY;
+        }
+
+        const puzzleContext = puzzleCanvas.getContext("2d");
+        puzzleContext.clearRect(0, 0, puzzleCanvas.width, puzzleCanvas.height);
+
+        for (const piece of pieces) {
+            puzzleContext.drawImage(
+                image,
+                piece.x,
+                piece.y,
+                piece.width,
+                piece.height,
+                piece.offsetX,
+                piece.offsetY,
+                piece.scaledWidth,
+                piece.scaledHeight
+            );
+        }
+    }
+
+    function onPuzzleCanvasMouseUp(event) {
+        if (!selectedPiece || !selectedPiece.isDragging) return;
+
+        selectedPiece.isDragging = false;
+
+        for (const piece of pieces) {
+            if (piece === selectedPiece || piece.snapped) continue;
+
+            if (snapPieces(selectedPiece, piece)) {
+                checkIfSolved();
+                break;
+            }
+        }
+    }
+
+    function mergeSnappedPieces(piece1, piece2) {
+        const uniquePieces = new Set([...piece1.snappedPieces, ...piece2.snappedPieces, piece1, piece2]);
+
+        for (const piece of uniquePieces) {
+            piece.snappedPieces = Array.from(uniquePieces);
+            piece.snappedPieces = piece.snappedPieces.filter((p) => p !== piece);
+        }
+    }
+
+    function snapPieces(piece1, piece2) {
+        const snapThreshold = 10;
+
+        // Calculate the expected offset
+        const expectedOffsetX = piece2.x - piece1.x;
+        const expectedOffsetY = piece2.y - piece1.y;
+
+        // Calculate the actual offset
+        const actualOffsetX = piece2.offsetX - piece1.offsetX;
+        const actualOffsetY = piece2.offsetY - piece1.offsetY;
+
+        // Check if the pieces fit together
+        if (
+            Math.abs(expectedOffsetX - actualOffsetX) <= snapThreshold &&
+            Math.abs(expectedOffsetY - actualOffsetY) <= snapThreshold
+        ) {
+            // Snap the pieces together
+            piece1.snapped = true;
+            piece2.snapped = true;
+            piece1.offsetX = piece2.offsetX - expectedOffsetX;
+            piece1.offsetY = piece2.offsetY - expectedOffsetY;
+
+            mergeSnappedPieces(piece1, piece2);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    function checkIfSolved() {
+        if (pieces.every((piece) => piece.snapped)) {
+            alert("Congratulations! You've solved the puzzle!");
+        }
+    }
+</script>
+<script src="../sidebar.js"></script>
+</body>
+</html>

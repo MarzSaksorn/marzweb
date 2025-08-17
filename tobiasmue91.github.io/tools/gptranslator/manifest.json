@@ -1,0 +1,58 @@
+{
+    "short_name": "GPTranslator",
+    "name": "GPT Powered Translator",
+    "icons": [
+        {
+            "src": "favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        },
+        {
+            "src": "android-chrome-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "android-chrome-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "description": "Discover GPTranslator, your go-to language wizard! Effortlessly translate text with automatic language detection and context-aware accuracy in a sleek, user-friendly interface.",
+    "start_url": "https://www.gptgames.dev/tools/gptranslator.html",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#121212",
+    "id": "https://www.gptgames.dev/tools/gptranslator.html",
+    "launch_handler": {
+        "route_to": "auto",
+        "client_mode": "default"
+    },
+    "orientation": "portrait",
+    "screenshots": [
+        {
+            "src": "https://www.gptgames.dev/screenshots/screenshot_62.png",
+            "type": "image/png",
+            "sizes": "1024x768"
+        }
+    ],
+    "display_override": [
+        "window-controls-overlay"
+    ],
+    "categories": [
+        "language",
+        "education",
+        "tools",
+        "translation"
+    ],
+    "dir": "ltr",
+    "lang": "en",
+    "prefer_related_applications": false,
+    "related_applications": [
+        {
+            "platform": "play",
+            "url": "https://play.google.com/store/apps/details?id=com.google.android.apps.translate"
+        }
+    ]
+}

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/json5/2.2.3/index.min.js"></script>
+    <title>AI Grammar Checker</title>
+    <style>.error-highlight {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .error-highlight:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .grammar {
+        border-bottom: 2px solid #ef4444;
+    }
+
+    .tooltip {
+        visibility: hidden;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 100;
+        opacity: 0;
+        transition: opacity 0.2s, visibility 0.2s;
+        width: max-content;
+        max-width: 300px;
+    }
+
+    .error-highlight:hover .tooltip {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    #word-count {
+        transition: all 0.3s ease;
+    }
+
+    .shake {
+        animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+        10%, 30%, 50%, 70%, 90% {
+            transform: translateX(-5px);
+        }
+        20%, 40%, 60%, 80% {
+            transform: translateX(5px);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }</style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200">
+<div class="container mx-auto max-w-4xl p-5 bg-white dark:bg-gray-800 rounded-lg shadow-lg transition-colors duration-200">
+    <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2"><h1
+                class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
+            AI Grammar Checker</h1></div>
+        <select id="mode-select"
+                class="px-3 py-1 border rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-colors duration-200">
+            <option value="standard">Standard Mode</option>
+            <option value="academic">Academic Writing</option>
+            <option value="business">Business Writing</option>
+            <option value="casual">Casual Writing</option>
+        </select></div>
+    <div class="mb-4 space-y-2">
+        <div class="flex justify-between items-center"><label for="input"
+                                                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Enter
+            Text:</label>
+            <div id="word-count" class="text-sm text-gray-500 dark:text-gray-400 font-mono">0 words | 0 characters</div>
+        </div>
+        <textarea id="input" rows="6"
+                  class="w-full p-3 border rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 transition-colors duration-200 resize-y"
+                  placeholder="Type or paste your text here..."></textarea>
+        <div class="flex flex-wrap gap-3">
+            <button id="check-grammar"
+                    class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                </svg>
+                Check Grammar
+            </button>
+            <button id="clear-text"
+                    class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                </svg>
+                Clear
+            </button>
+        </div>
+    </div>
+    <div id="result"
+         class="p-4 border rounded-md min-h-[100px] bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 transition-colors duration-200"></div>
+    <div class="mt-4 flex flex-wrap gap-3">
+        <button id="show-all-errors"
+                class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Show All Errors
+        </button>
+        <button id="copy-corrected"
+                class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors duration-200 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+            </svg>
+            Copy
+        </button>
+    </div>
+    <div id="history" class="mt-4 space-y-2">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Recent Corrections
+        </h3>
+        <div id="history-list" class="space-y-2"></div>
+    </div>
+    <div id="error-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full mx-4 max-h-[90vh] flex flex-col">
+            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center"><h3
+                    class="text-lg font-semibold text-gray-900 dark:text-gray-100">All Detected Errors</h3>
+                <button id="close-modal"
+                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto flex-1">
+                <div id="error-list" class="space-y-4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>let errorHistory = [];
+let currentText = '';
+let lastCheckTimestamp = 0;
+window.errors = [];
+document.getElementById('check-grammar').addEventListener('click', checkGrammar);
+document.getElementById('clear-text').addEventListener('click', clearText);
+document.getElementById('copy-corrected').addEventListener('click', copyCorrectText);
+document.getElementById('input').addEventListener('input', updateWordCount);
+const showAllErrorsBtn = document.getElementById('show-all-errors');
+showAllErrorsBtn.disabled = true;
+const errorModal = document.getElementById('error-modal');
+const closeModal = document.getElementById('close-modal');
+showAllErrorsBtn.addEventListener('click', showErrorModal);
+closeModal.addEventListener('click', function () {
+    errorModal.classList.add('hidden');
+    errorModal.classList.remove('flex');
+});
+errorModal.addEventListener('click', function (e) {
+    if (e.target === errorModal) {
+        errorModal.classList.add('hidden');
+        errorModal.classList.remove('flex');
+    }
+});
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !errorModal.classList.contains('hidden')) {
+        errorModal.classList.add('hidden');
+        errorModal.classList.remove('flex');
+    }
+});
+
+function updateWordCount() {
+    const text = document.getElementById('input').value;
+    const words = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    const chars = text.length;
+    document.getElementById('word-count').textContent = `${words} words | ${chars} characters`;
+}
+
+function clearText() {
+    document.getElementById('input').value = '';
+    document.getElementById('result').innerHTML = '';
+    window.errors = [];
+    showAllErrorsBtn.disabled = true;
+    updateWordCount();
+}
+
+async function copyCorrectText() {
+    const input = document.getElementById('input');
+    const correctedText = input.value;
+    if (correctedText) {
+        try {
+            await navigator.clipboard.writeText(correctedText);
+            showNotification('Text copied to clipboard!');
+        } catch (err) {
+            showNotification('Failed to copy text', 'error');
+        }
+    }
+}
+
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-md ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white fade-in`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+async function checkGrammar() {
+    const currentTime = Date.now();
+    if (currentTime - lastCheckTimestamp < 3000) {
+        showNotification('Please wait a few seconds before checking again', 'error');
+        return;
+    }
+    lastCheckTimestamp = currentTime;
+    const inputElement = document.getElementById('input');
+    const resultContainer = document.getElementById('result');
+    const button = document.getElementById('check-grammar');
+    const mode = document.getElementById('mode-select').value;
+    const inputText = inputElement.value.trim();
+    if (!inputText) {
+        inputElement.classList.add('shake');
+        setTimeout(() => inputElement.classList.remove('shake'), 500);
+        return;
+    }
+    button.disabled = true;
+    button.innerHTML = '<svg class="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Checking';
+    const botMessage = `I am a grammar checking API. I analyze text for grammar errors with a focus on ${mode} writing. I always respond in this JSON format:{"errors":[{"text":"original text","suggestion":"suggested correction","description":"error description"}]}\nRules:\n* Max 7 words per error\n* I split longer corrections into smaller chunks`;
+    try {
+        const response = await fetch('https://chatgpt.tobiasmue91.workers.dev/', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                max_tokens: 800,
+                temperature: 0.3,
+                messages: [{role: "assistant", content: botMessage}, {
+                    role: "user",
+                    content: `Check this text: ${inputText}`
+                }]
+            })
+        });
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        const responseContent = data.choices[0].message.content;
+        const jsonMatch = responseContent.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('Invalid response format');
+        const grammarData = JSON5.parse(jsonMatch[0]);
+        window.errors = grammarData.errors;
+        showAllErrorsBtn.disabled = window.errors.length === 0;
+        displayResults(inputText, grammarData.errors);
+        addToHistory(inputText, grammarData.errors);
+    } catch (error) {
+        console.error('Error:', error);
+        resultContainer.textContent = 'An error occurred while checking the text. Please try again.';
+        showNotification('Error checking grammar', 'error');
+    } finally {
+        button.disabled = false;
+        button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>Check Grammar';
+    }
+}
+
+function addToHistory(text, errors) {
+    const historyEntry = {text, errors, timestamp: new Date().toLocaleString()};
+    errorHistory.unshift(historyEntry);
+    errorHistory = errorHistory.slice(0, 5);
+    updateHistoryDisplay();
+}
+
+function updateHistoryDisplay() {
+    const historyList = document.getElementById('history-list');
+    historyList.innerHTML = errorHistory.map((entry, index) => `<div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200 group" onclick="restoreHistoryEntry(${index})"><div class="flex justify-between items-center"><div class="text-sm text-gray-500 dark:text-gray-400">${entry.timestamp}</div><div class="text-xs px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 rounded-full">${entry.errors.length} errors</div></div><div class="text-sm text-gray-900 dark:text-gray-100 mt-1 truncate">${entry.text.substring(0, 50)}...</div><div class="text-xs text-gray-500 dark:text-gray-400 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">Click to restore</div></div>`).join('');
+}
+
+function restoreHistoryEntry(index) {
+    const entry = errorHistory[index];
+    const input = document.getElementById('input');
+    input.value = entry.text;
+    displayResults(entry.text, entry.errors);
+    updateWordCount();
+}
+
+function displayResults(originalText, errors) {
+    const resultContainer = document.getElementById('result');
+    let displayText = originalText;
+    errors.sort((a, b) => b.text.length - a.text.length);
+    errors.forEach(error => {
+        const highlightHtml = `<span class="error-highlight grammar" data-original="${error.text}" data-suggestion="${error.suggestion}">${error.text}<div class="tooltip bg-gray-800 text-white p-3 rounded-lg shadow-lg"><div class="font-semibold mb-1">Grammar Issue</div><div class="text-gray-200 mb-2">${error.description}</div><div class="border-t border-gray-600 pt-2"><div class="text-sm text-gray-300">Suggestion:</div><div class="text-green-400">${error.suggestion}</div></div></div></span>`;
+        const regex = new RegExp(escapeRegExp(error.text), 'g');
+        displayText = displayText.replace(regex, highlightHtml);
+    });
+    resultContainer.innerHTML = displayText;
+    document.querySelectorAll('.error-highlight').forEach(highlight => {
+        highlight.addEventListener('click', function () {
+            const original = this.dataset.original;
+            const suggestion = this.dataset.suggestion;
+            const input = document.getElementById('input');
+            input.value = input.value.replace(original, suggestion);
+            displayResults(input.value, errors.filter(e => e.text !== original));
+            showNotification(`Corrected: ${original} → ${suggestion}`, 'success');
+            updateWordCount();
+        });
+    });
+}
+
+function showErrorModal() {
+    const errorList = document.getElementById('error-list');
+    errorList.innerHTML = window.errors.map((error, index) => `<div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"><div class="flex justify-between items-start"><div class="font-medium text-gray-900 dark:text-gray-100">Error ${index + 1}</div><button onclick="applyCorrection('${error.text}','${error.suggestion}')" class="text-sm px-3 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors duration-200">Apply Fix</button></div><div class="mt-2 space-y-2"><div class="text-sm"><span class="text-gray-500 dark:text-gray-400">Original text: </span><span class="text-red-600 dark:text-red-400">${error.text}</span></div><div class="text-sm"><span class="text-gray-500 dark:text-gray-400">Suggestion: </span><span class="text-green-600 dark:text-green-400">${error.suggestion}</span></div><div class="text-sm"><span class="text-gray-500 dark:text-gray-400">Description: </span><span class="text-gray-900 dark:text-gray-100">${error.description}</span></div></div></div>`).join('');
+    errorModal.classList.remove('hidden');
+    errorModal.classList.add('flex');
+}
+
+function applyCorrection(original, suggestion) {
+    const input = document.getElementById('input');
+    input.value = input.value.replace(original, suggestion);
+    displayResults(input.value, window.errors.filter(e => e.text !== original));
+    updateWordCount();
+    showNotification(`Corrected: ${original} → ${suggestion}`, 'success');
+}
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+updateWordCount();
+let autoSaveTimeout;
+document.getElementById('input').addEventListener('input', function () {
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(() => {
+        localStorage.setItem('grammarProText', this.value);
+    }, 1000);
+});
+window.addEventListener('load', function () {
+    const savedText = localStorage.getItem('grammarProText');
+    if (savedText) {
+        document.getElementById('input').value = savedText;
+        updateWordCount();
+    }
+});</script>
+<script src="../logo.js"></script>
+</body>
+</html>

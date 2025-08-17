@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <title>Dodge the Obstacles</title>
+    <meta name="keywords"
+          content="dodge the obstacles, game, challenge, score points, arrow keys, obstacles, character, high score"/>
+    <meta name="description"
+          content="Play Dodge the Obstacles, a fun and challenging game where you need to help the character avoid the obstacles and score points. Use the arrow keys to move up and down, and watch out for the randomly generated obstacles that come your way. Can you beat your high score?"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1.5rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .game-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: #333;
+            text-align: center;
+        }
+
+        .game-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.25rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        #game-canvas {
+            background-color: #fff;
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .score-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .current-score {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .high-score {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            background-color: #f0f0f5;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+
+        .btn:hover {
+            background-color: #e5e5e9;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            text-align: center;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .game-screen h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .game-screen p {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            max-width: 400px;
+            color: #555;
+        }
+
+        .game-screen .cta {
+            background-color: #3478F6;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.75rem;
+        }
+
+        .game-screen .cta:hover {
+            background-color: #2461d5;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .instructions {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+            background-color: #f0f0f5;
+            padding: 0.75rem;
+            border-radius: 6px;
+            max-width: 100%;
+        }
+
+        .instructions p {
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions p:last-child {
+            margin-bottom: 0;
+        }
+
+        .notification {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3478F6;
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 5;
+        }
+
+        .multiplier {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            font-size: 0.9rem;
+            color: #555;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            z-index: 5;
+        }
+
+        .screen-flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.2);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            z-index: 1;
+        }
+
+        .touch-controls {
+            display: none;
+            width: 100%;
+            justify-content: space-between;
+            margin-top: 0.75rem;
+            gap: 1rem;
+        }
+
+        .touch-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background-color: #f0f0f5;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+            user-select: none;
+        }
+
+        .touch-btn:active {
+            background-color: #e5e5e9;
+        }
+
+        .touch-btn span {
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .footer {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 15;
+        }
+
+        .loading-indicator div {
+            width: 16px;
+            height: 16px;
+            margin: 0 4px;
+            background-color: #3478F6;
+            border-radius: 50%;
+            display: inline-block;
+            animation: loading 1.4s infinite ease-in-out both;
+        }
+
+        .loading-indicator div:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-indicator div:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes loading {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1.0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .game-title {
+                font-size: 1.75rem;
+            }
+
+            .touch-controls {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .game-ui {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="game-title">Dodge the Obstacles</h1>
+    <div class="game-wrapper">
+        <canvas id="game-canvas" width="500" height="500"></canvas>
+        <div class="multiplier" id="multiplier">x1</div>
+        <div class="screen-flash" id="screen-flash"></div>
+        <div class="loading-indicator" id="loading">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="game-screen" id="start-screen">
+            <h2>Dodge the Obstacles</h2>
+            <p>Use the arrow keys to move up and down. Avoid the obstacles and survive as long as you can!</p>
+            <div class="instructions">
+                <p><strong>↑ / ↓</strong> - Move up/down</p>
+                <p><strong>P</strong> - Pause game</p>
+                <p><strong>M</strong> - Toggle sound</p>
+            </div>
+            <button class="cta" id="start-button">Start Game</button>
+        </div>
+        <div class="game-screen hidden" id="pause-screen">
+            <h2>Game Paused</h2>
+            <p>Take a breather!</p>
+            <button class="cta" id="resume-button">Resume</button>
+        </div>
+        <div class="game-screen hidden" id="game-over-screen">
+            <h2>Game Over</h2>
+            <p>Your final score: <span id="final-score">0</span></p>
+            <p>High score: <span id="high-score-display">0</span></p>
+            <button class="cta" id="restart-button">Play Again</button>
+        </div>
+        <div class="notification" id="notification"></div>
+    </div>
+    <div class="game-ui">
+        <div class="score-container">
+            <div class="current-score">Score: <span id="score">0</span></div>
+            <div class="high-score">High Score: <span id="high-score">0</span></div>
+        </div>
+        <div class="controls">
+            <button class="btn" id="pause-button" title="Pause">⏸️</button>
+            <button class="btn" id="mute-button" title="Toggle Sound">🔊</button>
+        </div>
+    </div>
+    <div class="touch-controls">
+        <div class="touch-btn" id="touch-up"><span>↑</span>Up</div>
+        <div class="touch-btn" id="touch-down"><span>↓</span>Down</div>
+    </div>
+    <div class="footer">© 2025 Dodge Game - Press Space to Start/Pause</div>
+</div>
+<audio id="score-sound" src="sfx/obstacle/score.mp3"></audio>
+<audio id="collision-sound" src="sfx/obstacle/collision.mp3"></audio>
+<script>
+    const config = {
+        canvasWidth: 500,
+        canvasHeight: 500,
+        characterWidth: 20,
+        characterHeight: 20,
+        baseSpeed: 5,
+        characterColor: '#3478F6',
+        characterTrailColor: 'rgba(52,120,246,0.15)',
+        obstacleColors: ['#FF3B30', '#FF9500', '#5856D6'],
+        backgroundColor: '#ffffff',
+        gridColor: 'rgba(0,0,0,0.04)',
+        difficultyIncreaseInterval: 10,
+        maxDifficultyMultiplier: 2.5,
+        scoreMultiplierIncrease: 0.1,
+        maxScoreMultiplier: 3,
+        obstacleMinWidth: 20,
+        obstacleMaxWidth: 60,
+        obstacleMinHeight: 20,
+        obstacleMaxHeight: 60,
+        obstacleMinSpeed: 3,
+        obstacleMaxSpeed: 6,
+        minObstacleInterval: 600,
+        maxObstacleInterval: 2000,
+        trailLength: 5,
+        countdownDuration: 600,
+        fps: 60
+    };
+    const gameState = {
+        current: 'START',
+        score: 0,
+        highScore: localStorage.getItem('dodgeHighScore') || 0,
+        isFirstStart: true,
+        isMuted: false,
+        isPaused: false,
+        difficulty: 1,
+        scoreMultiplier: 1,
+        lastObstacleGenTime: 0,
+        difficultyTimer: 0,
+        consecutiveDodges: 0,
+        frameTimeLast: 0,
+        deltaTime: 0,
+        fpsInterval: 1000 / config.fps,
+        frameCount: 0,
+        startTime: 0,
+        now: 0,
+        then: 0,
+        elapsed: 0
+    };
+    const elements = {
+        canvas: document.getElementById('game-canvas'),
+        ctx: document.getElementById('game-canvas').getContext('2d'),
+        score: document.getElementById('score'),
+        highScore: document.getElementById('high-score'),
+        finalScore: document.getElementById('final-score'),
+        highScoreDisplay: document.getElementById('high-score-display'),
+        muteButton: document.getElementById('mute-button'),
+        pauseButton: document.getElementById('pause-button'),
+        startButton: document.getElementById('start-button'),
+        resumeButton: document.getElementById('resume-button'),
+        restartButton: document.getElementById('restart-button'),
+        startScreen: document.getElementById('start-screen'),
+        pauseScreen: document.getElementById('pause-screen'),
+        gameOverScreen: document.getElementById('game-over-screen'),
+        multiplier: document.getElementById('multiplier'),
+        screenFlash: document.getElementById('screen-flash'),
+        notification: document.getElementById('notification'),
+        touchUp: document.getElementById('touch-up'),
+        touchDown: document.getElementById('touch-down'),
+        loading: document.getElementById('loading'),
+        scoreSound: document.getElementById('score-sound'),
+        collisionSound: document.getElementById('collision-sound')
+    };
+    const character = {
+        x: 50,
+        y: elements.canvas.height / 2 - config.characterHeight / 2,
+        width: config.characterWidth,
+        height: config.characterHeight,
+        speed: config.baseSpeed,
+        velocityY: 0,
+        acceleration: 0.4,
+        friction: 0.9,
+        maxSpeed: 7,
+        trail: []
+    };
+    let obstacles = [];
+    let upPressed = false;
+    let downPressed = false;
+
+    function init() {
+        elements.highScore.textContent = gameState.highScore;
+        showScreen('START');
+        addEventListeners();
+        resizeCanvas();
+        gameState.then = Date.now();
+        startAnimating();
+    }
+
+    function addEventListeners() {
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
+        elements.muteButton.addEventListener('click', toggleMute);
+        elements.pauseButton.addEventListener('click', togglePause);
+        elements.startButton.addEventListener('click', startGame);
+        elements.resumeButton.addEventListener('click', resumeGame);
+        elements.restartButton.addEventListener('click', restartGame);
+        elements.touchUp.addEventListener('touchstart', () => {
+            upPressed = true;
+        });
+        elements.touchUp.addEventListener('touchend', () => {
+            upPressed = false;
+        });
+        elements.touchDown.addEventListener('touchstart', () => {
+            downPressed = true;
+        });
+        elements.touchDown.addEventListener('touchend', () => {
+            downPressed = false;
+        });
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('visibilitychange', () => {
+            if (document.hidden && gameState.current === 'PLAYING') {
+                togglePause();
+            }
+        });
+    }
+
+    function handleKeyDown(event) {
+        switch (event.code) {
+            case'ArrowUp':
+            case'KeyW':
+                upPressed = true;
+                event.preventDefault();
+                break;
+            case'ArrowDown':
+            case'KeyS':
+                downPressed = true;
+                event.preventDefault();
+                break;
+            case'KeyP':
+                togglePause();
+                break;
+            case'KeyM':
+                toggleMute();
+                break;
+            case'Space':
+                if (gameState.current === 'START') startGame(); else if (gameState.current === 'PAUSED') resumeGame(); else if (gameState.current === 'GAME_OVER') restartGame(); else togglePause();
+                event.preventDefault();
+                break;
+        }
+    }
+
+    function handleKeyUp(event) {
+        switch (event.code) {
+            case'ArrowUp':
+            case'KeyW':
+                upPressed = false;
+                break;
+            case'ArrowDown':
+            case'KeyS':
+                downPressed = false;
+                break;
+        }
+    }
+
+    function toggleMute() {
+        gameState.isMuted = !gameState.isMuted;
+        elements.muteButton.textContent = gameState.isMuted ? '🔇' : '🔊';
+    }
+
+    function togglePause() {
+        if (gameState.current === 'PLAYING') {
+            gameState.current = 'PAUSED';
+            showScreen('PAUSED');
+        } else if (gameState.current === 'PAUSED') {
+            resumeGame();
+        }
+    }
+
+    function startGame() {
+        showLoading(true);
+        setTimeout(() => {
+            gameState.current = 'PLAYING';
+            gameState.score = 0;
+            gameState.difficulty = 1;
+            gameState.scoreMultiplier = 1;
+            gameState.consecutiveDodges = 0;
+            obstacles = [];
+            character.y = elements.canvas.height / 2 - character.height / 2;
+            character.velocityY = 0;
+            character.trail = [];
+            hideAllScreens();
+            showLoading(false);
+            doCountdown(() => {
+                if (gameState.isFirstStart) {
+                    gameState.isFirstStart = false;
+                }
+                obstacles = [];
+                createObstacle();
+            });
+            updateScoreDisplay();
+            updateMultiplierDisplay();
+        }, 500);
+    }
+
+    function resumeGame() {
+        gameState.current = 'PLAYING';
+        hideAllScreens();
+        doCountdown();
+    }
+
+    function restartGame() {
+        startGame();
+    }
+
+    function gameOver() {
+        gameState.current = 'GAME_OVER';
+        flashScreen();
+        playSound(elements.collisionSound);
+        if (gameState.score > gameState.highScore) {
+            gameState.highScore = gameState.score;
+            localStorage.setItem('dodgeHighScore', gameState.highScore);
+            elements.highScore.textContent = gameState.highScore;
+            showNotification('New High Score!', 2000);
+        }
+        elements.finalScore.textContent = gameState.score;
+        elements.highScoreDisplay.textContent = gameState.highScore;
+        setTimeout(() => {
+            showScreen('GAME_OVER');
+        }, 1000);
+    }
+
+    function createObstacle() {
+        if (gameState.current !== 'PLAYING') return;
+        const difficultyFactor = Math.min(gameState.difficulty, config.maxDifficultyMultiplier);
+        const obstacle = {
+            width: config.obstacleMinWidth + Math.random() * (config.obstacleMaxWidth - config.obstacleMinWidth),
+            height: config.obstacleMinHeight + Math.random() * (config.obstacleMaxHeight - config.obstacleMinHeight),
+            x: elements.canvas.width,
+            y: Math.random() * (elements.canvas.height - config.obstacleMaxHeight),
+            speed: (config.obstacleMinSpeed + Math.random() * (config.obstacleMaxSpeed - config.obstacleMinSpeed)) * difficultyFactor,
+            color: config.obstacleColors[Math.floor(Math.random() * config.obstacleColors.length)],
+            passed: false
+        };
+        obstacles.push(obstacle);
+        const minInterval = Math.max(config.minObstacleInterval, config.maxObstacleInterval - (config.maxObstacleInterval - config.minObstacleInterval) * (difficultyFactor - 1));
+        const maxInterval = config.maxObstacleInterval - (config.maxObstacleInterval - config.minObstacleInterval) * 0.5 * (difficultyFactor - 1);
+        const nextObstacleTime = minInterval + Math.random() * (maxInterval - minInterval);
+        gameState.lastObstacleGenTime = Date.now();
+        setTimeout(createObstacle, nextObstacleTime);
+    }
+
+    function updateObstacles(deltaTime) {
+        for (let i = 0; i < obstacles.length; i++) {
+            const obstacle = obstacles[i];
+            obstacle.x -= obstacle.speed * deltaTime;
+            if (!obstacle.passed && obstacle.x + obstacle.width < character.x) {
+                obstacle.passed = true;
+                gameState.score += Math.round(gameState.scoreMultiplier);
+                gameState.consecutiveDodges++;
+                if (gameState.consecutiveDodges % 5 === 0 && gameState.scoreMultiplier < config.maxScoreMultiplier) {
+                    gameState.scoreMultiplier = Math.min(config.maxScoreMultiplier, gameState.scoreMultiplier + config.scoreMultiplierIncrease);
+                    updateMultiplierDisplay();
+                    showNotification(`Multiplier x${gameState.scoreMultiplier.toFixed(1)}!`, 1500);
+                }
+                playSound(elements.scoreSound);
+                updateScoreDisplay();
+            }
+            if (checkCollision(character, obstacle)) {
+                gameOver();
+                return;
+            }
+        }
+        obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
+    }
+
+    function updateCharacter(deltaTime) {
+        if (upPressed) {
+            character.velocityY -= character.acceleration * deltaTime;
+        } else if (downPressed) {
+            character.velocityY += character.acceleration * deltaTime;
+        } else {
+            character.velocityY *= character.friction;
+        }
+        character.velocityY = Math.max(-character.maxSpeed, Math.min(character.maxSpeed, character.velocityY));
+        character.y += character.velocityY;
+        if (character.y < 0) {
+            character.y = 0;
+            character.velocityY = 0;
+        } else if (character.y > elements.canvas.height - character.height) {
+            character.y = elements.canvas.height - character.height;
+            character.velocityY = 0;
+        }
+        if (Math.abs(character.velocityY) > 0.5 && gameState.frameCount % 3 === 0) {
+            character.trail.push({
+                x: character.x + character.width / 2,
+                y: character.y + character.height / 2,
+                size: character.width / 2
+            });
+        }
+        for (let i = 0; i < character.trail.length; i++) {
+            character.trail[i].size -= 0.5;
+        }
+        character.trail = character.trail.filter(point => point.size > 0);
+    }
+
+    function updateDifficulty(deltaTime) {
+        if (gameState.current !== 'PLAYING') return;
+        gameState.difficultyTimer += deltaTime;
+        if (gameState.difficultyTimer >= config.difficultyIncreaseInterval) {
+            gameState.difficultyTimer = 0;
+            if (gameState.difficulty < config.maxDifficultyMultiplier) {
+                gameState.difficulty += 0.1;
+                showNotification('Speed Increasing!', 1500);
+            }
+        }
+    }
+
+    function checkCollision(character, obstacle) {
+        return (character.x < obstacle.x + obstacle.width && character.x + character.width > obstacle.x && character.y < obstacle.y + obstacle.height && character.y + character.height > obstacle.y);
+    }
+
+    function render() {
+        const ctx = elements.ctx;
+        ctx.fillStyle = config.backgroundColor;
+        ctx.fillRect(0, 0, elements.canvas.width, elements.canvas.height);
+        drawGrid(ctx);
+        for (let i = 0; i < character.trail.length; i++) {
+            const point = character.trail[i];
+            const alpha = point.size / (character.width / 2) * 0.5;
+            ctx.fillStyle = `rgba(52,120,246,${alpha})`;
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, point.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.fillStyle = config.characterColor;
+        ctx.fillRect(character.x, character.y, character.width, character.height);
+        for (let i = 0; i < obstacles.length; i++) {
+            const obstacle = obstacles[i];
+            ctx.fillStyle = obstacle.color;
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        }
+    }
+
+    function drawGrid(ctx) {
+        const gridSize = 25;
+        ctx.strokeStyle = config.gridColor;
+        ctx.lineWidth = 1;
+        for (let x = 0; x < elements.canvas.width; x += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, elements.canvas.height);
+            ctx.stroke();
+        }
+        for (let y = 0; y < elements.canvas.height; y += gridSize) {
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(elements.canvas.width, y);
+            ctx.stroke();
+        }
+    }
+
+    function updateScoreDisplay() {
+        elements.score.textContent = gameState.score;
+    }
+
+    function updateMultiplierDisplay() {
+        elements.multiplier.textContent = `x${gameState.scoreMultiplier.toFixed(1)}`;
+        elements.multiplier.style.transform = 'scale(1.2)';
+        setTimeout(() => {
+            elements.multiplier.style.transform = 'scale(1)';
+        }, 200);
+    }
+
+    function playSound(sound) {
+        if (!gameState.isMuted) {
+            sound.currentTime = 0;
+            sound.play().catch(e => {
+                console.log("Audio play failed:", e);
+            });
+        }
+    }
+
+    function showNotification(message, duration, callback) {
+        elements.notification.textContent = message;
+        elements.notification.style.opacity = 1;
+        setTimeout(() => {
+            elements.notification.style.opacity = 0;
+            if (callback) setTimeout(callback, 300);
+        }, duration);
+    }
+
+    function flashScreen() {
+        elements.screenFlash.style.opacity = 1;
+        setTimeout(() => {
+            elements.screenFlash.style.opacity = 0;
+        }, 300);
+    }
+
+    function showScreen(screen) {
+        hideAllScreens();
+        switch (screen) {
+            case'START':
+                elements.startScreen.classList.remove('hidden');
+                break;
+            case'PAUSED':
+                elements.pauseScreen.classList.remove('hidden');
+                break;
+            case'GAME_OVER':
+                elements.gameOverScreen.classList.remove('hidden');
+                break;
+        }
+    }
+
+    function hideAllScreens() {
+        elements.startScreen.classList.add('hidden');
+        elements.pauseScreen.classList.add('hidden');
+        elements.gameOverScreen.classList.add('hidden');
+    }
+
+    function showLoading(show) {
+        elements.loading.style.display = show ? 'block' : 'none';
+    }
+
+    function doCountdown(callback) {
+        let count = 3;
+        const doCount = () => {
+            if (count > 0) {
+                showNotification(count, config.countdownDuration, () => {
+                    count--;
+                    doCount();
+                });
+            } else {
+                showNotification('GO!', config.countdownDuration, callback);
+            }
+        };
+        doCount();
+    }
+
+    function resizeCanvas() {
+        const container = document.querySelector('.game-wrapper');
+        const maxWidth = Math.min(container.clientWidth, config.canvasWidth);
+        const scale = maxWidth / config.canvasWidth;
+        elements.canvas.style.width = `${maxWidth}px`;
+        elements.canvas.style.height = `${config.canvasHeight * scale}px`;
+    }
+
+    function startAnimating() {
+        gameState.fpsInterval = 1000 / config.fps;
+        gameState.then = Date.now();
+        gameState.startTime = gameState.then;
+        gameLoop();
+    }
+
+    function gameLoop() {
+        requestAnimationFrame(gameLoop);
+        gameState.now = Date.now();
+        gameState.elapsed = gameState.now - gameState.then;
+        if (gameState.elapsed > gameState.fpsInterval) {
+            gameState.then = gameState.now - (gameState.elapsed % gameState.fpsInterval);
+            gameState.frameCount++;
+            if (gameState.current === 'PLAYING') {
+                const deltaTime = 1 / config.fps * 60;
+                updateCharacter(deltaTime);
+                updateObstacles(deltaTime);
+                updateDifficulty(1 / config.fps);
+                if (obstacles.length === 0 && Date.now() - gameState.lastObstacleGenTime > 1000) {
+                    createObstacle();
+                }
+            }
+            render();
+        }
+    }
+
+    init();
+</script>
+<script src="../logo.js"></script>
+</body>
+</html>
