@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Tetris Chaos Edition</title>
+
+    <meta name="description" content="Totally normal tetris featuring all the very normal pieces.">
+
+    <meta property="og:site_name" content="bleach.dev">
+    <meta property="og:title" content="Tetris Chaos Edition">
+    <meta property="og:url" content="https://tetris.bleach.dev/">
+    <meta property="og:image" content="https://tetris.bleach.dev/static/tetris.png">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="Totally normal tetris featuring all the very normal pieces.">
+    <meta name="theme-color" content="#ebafcc">
+
+    <meta id="vp" name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/x-icon" href="static/tetris.ico">
+    <link rel="stylesheet" href="https://bleach.dev/static/css/main.css">
+    <link rel="stylesheet" href="tetris.css">
+
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+    <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
+</head>
+<body>
+
+<div id="game">
+    <div id="sp-container">
+        <div class="small-grid">
+            <h2 style="margin: 0;">HOLD</h2>
+            <div id="holding" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+        </div>
+
+        <div id="tetris" class="grid"></div>
+
+        <div class="small-grid">
+            <h2 style="margin: 0;">NEXT</h2>
+            <div id="next-1" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-2" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-3" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-4" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-5" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="vs-container">
+        <div id="vs-tetris" class="grid"></div>
+
+        <div class="small-grid">
+            <h2 style="margin: 0;">NEXT</h2>
+            <div id="next-6" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-7" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-8" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-9" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+            <div id="next-10" class="grid">
+                <div class="grid-cell"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sp-text-container">
+        <div id="progress">
+            <div id="progressbar"></div>
+            <p id="cleared-text">Lines Cleared: 0</p>
+        </div>
+    </div>
+    <div id="vs-text-container">
+        <div style="display: inline-block; margin-right: 120px; width: 350px;">
+            <span id="vs-player-1" style="font-size: 20px;">...</span>
+        </div>
+        <div style="display: inline-block; margin-left: 120px; width: 350px;">
+            <span id="vs-player-2" style="font-size: 20px;">...</span>
+        </div>
+    </div>
+
+    <p id="timer">00:00.00</p>
+    <span id="spectators"></span>
+</div>
+
+<div class="bottom-right">
+    <a href="https://github.com/BleachDev/tetris.bleach.dev" class="color-link"><img src="/static/source.svg" width="30"></a>
+    <p class="corner-text" id="game-info">
+        A&nbsp;<a href="https://bleach.dev" class="bleach-link">bleach.dev</a>&nbsp;Game
+    </p>
+</div>
+<div class="bottom-left">
+    <p class="corner-text">
+        Controls:<br>
+        <b>ARROWS</b> Move<br>
+        <b>X/Z/UP</b> Rotate<br>
+        <b>SPACE</b> Drop Piece<br>
+        <b>C/SHIFT</b> Hold Piece
+    </p>
+</div>
+
+<div class="toast" id="menu-toast" style="display: flex;">
+    <div class="box">
+        <h1>Tetris™<br>Chaos Edition</h1>
+
+        <button class="menu-button" onclick="if (validateUsername()) openToast('play-toast');">Singleplayer</button>
+        <br/>
+        <button class="menu-button" onclick="if (validateUsername()) hostGame(getAndSaveUsername('username'));">Versus <span style="font-size: 14px;">(beta™)</span></button>
+        <br/>
+        <button class="menu-button" style="font-size: 16px;" onclick="openToast('leaderboard-toast', false);">Leaderboard</button>
+        <div class="hr"></div>
+
+        <label for="username" id="username-label">Username</label>
+        <input type="text" id="username" name="username-join" placeholder="Username">
+    </div>
+</div>
+
+<div class="toast" id="play-toast">
+    <div class="box">
+        <h1>Singleplayer</h1>
+        <p class="toast-header">Goal: Clear 40 Lines.</p>
+        <p id="play-text">You can continue playing after 40 lines<br/>to get a higher "Most Lines" score!</p>
+        <button class="menu-button" id="play-button" onclick="start();">Play</button>
+        <button class="half-menu-button" onclick="openToast('menu-toast');">Back to Menu</button>
+        <button class="half-menu-button" onclick="openToast('leaderboard-toast', false);">Leaderboard</button>
+    </div>
+</div>
+
+<div class="toast" id="vs-toast">
+    <div class="box">
+        <h1>1v1 Versus</h1>
+        <button id="vs-copy">📋</button>
+        <span class="toast-header" id="vs-code">code brokey :(</span>
+        <p>Share the url above to start<br/>Waiting for player to join...</p>
+        <button class="half-menu-button" onclick="clearVs(); openToast('menu-toast');">Back to Menu</button>
+        <button class="half-menu-button" onclick="openToast('leaderboard-toast', false);">Leaderboard</button>
+    </div>
+</div>
+
+<div class="toast" id="vs-join-toast">
+    <div class="box">
+        <h1>1v1 Versus</h1>
+        <p class="toast-header" id="vs-join-text" style="margin: 20px 20px 0;">Loading...</p>
+        <p class="toast-header" id="vs-join-text-2" style="margin: 5px 20px 20px;"></p>
+        <div id="vs-username-container">
+            <div class="hr"></div>
+            <label for="vs-username" id="vs-username-label">Username</label>
+            <input type="text" id="vs-username" name="username-join" placeholder="Username">
+        </div>
+        <button class="menu-button" id="vs-join-button" disabled="disabled">Join</button>
+        <button class="half-menu-button" onclick="clearVs(); openToast('menu-toast');">Back to Menu</button>
+        <button class="half-menu-button" onclick="openToast('leaderboard-toast', false);">Leaderboard</button>
+    </div>
+</div>
+
+<div class="toast" id="leaderboard-toast">
+    <div class="box">
+        <h1>Leaderboard</h1>
+        <div>
+            <button style="margin: 0" onclick="closeToast('leaderboard-toast');"><</button>
+            <button class="leaderboard-button" id="lb-lines" style="text-decoration: underline;"
+                    onclick="fetchLeaderboard(`https://api.bleach.dev/tetris/leaderboardlines`);
+                        document.getElementById(`lb-lines`).style.textDecoration = `underline`;
+                        document.getElementById(`lb-time`).style.textDecoration = ``;
+                        document.getElementById(`lb-vs`).style.textDecoration = ``;">Most Lines</button>
+            <button class="leaderboard-button" id="lb-time"
+                    onclick="fetchLeaderboard(`https://api.bleach.dev/tetris/leaderboardtime`);
+                        document.getElementById(`lb-time`).style.textDecoration = `underline`;
+                        document.getElementById(`lb-lines`).style.textDecoration = ``;
+                        document.getElementById(`lb-vs`).style.textDecoration = ``;">40 Lines</button>
+            <button class="leaderboard-button" id="lb-vs"
+                    onclick="fetchLeaderboard(`https://api.bleach.dev/tetris/leaderboardvs`);
+                        document.getElementById(`lb-time`).style.textDecoration = ``;
+                        document.getElementById(`lb-lines`).style.textDecoration = ``;
+                        document.getElementById(`lb-vs`).style.textDecoration = `underline`;">VS Wins</button>
+            <div class="box" id="leaderboard">
+                <div>Loading..</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="touch-controls">
+    <div class="box touch-box" style="bottom: 10px; right: 100px;"
+         ontouchstart="dispEvent('keydown', 'ArrowLeft');" ontouchend="dispEvent('keyup', 'ArrowLeft');"><p><</p></div>
+    <div class="box touch-box" style="bottom: 10px; right: 10px;"
+         ontouchstart="dispEvent('keydown', 'ArrowRight');" ontouchend="dispEvent('keyup', 'ArrowRight');"><p>></p></div>
+
+    <div class="box touch-box" style="bottom: 100px; right: 100px;"
+         ontouchstart="dispEvent('keydown', 'z');" ontouchend="dispEvent('keyup', 'z');"><p>↺</p></div>
+    <div class="box touch-box" style="bottom: 100px; right: 10px;"
+         ontouchstart="dispEvent('keydown', 'x');" ontouchend="dispEvent('keyup', 'x');"><p>↻</p></div>
+
+    <div class="box touch-box" style="bottom: 10px; left: 10px; width: 100px;"
+         ontouchstart="dispEvent('keydown', ' ');" ontouchend="dispEvent('keyup', ' ');"><p>⤓</p></div>
+    <div class="box touch-box" style="bottom: 10px; left: 130px; width: 100px;"
+         ontouchstart="dispEvent('keydown', 'ArrowDown');" ontouchend="dispEvent('keyup', 'ArrowDown');"><p>⇣</p></div>
+
+    <div class="box touch-box" style="bottom: 10px; right: 200px; width: calc(100vw - 470px);"
+         ontouchstart="dispEvent('keydown', 'Shift');" ontouchend="dispEvent('keyup', 'Shift');"><p>⛶</p></div>
+</div>
+
+<script>
+    class Piece {
+        constructor(array, width, rotation = 0) {
+            this.array = array;
+            this.width = width;
+            this.height = array.length / width;
+            this.rotation = rotation;
+        }
+    }
+
+    const VERSION = "v1.3.2";
+    document.getElementById("game-info").innerHTML = VERSION + "<br>" + document.getElementById("game-info").innerHTML;
+
+    let iceServerPromise = fetch("https://api.bleach.dev/turn").then(r => r.json()).catch(_ => null);
+
+    // Yes, I'm aware these are in fact not toasts, please send further complaints to thisisnotatoast@bleach.dev
+    const TOASTS = [ "menu-toast", "play-toast", "vs-toast", "vs-join-toast", "leaderboard-toast"].map(t => document.getElementById(t));
+    const USERNAMES = [ "username", "vs-username" ];
+    const SYNTH = new Tone.FMSynth().toDestination();
+
+    const SRS_3X2 = [
+        [[0, 0], [-1, 0], [-1, -1], [0, 2], [-1, 2]],
+        [[0, 0], [1, 0], [1, 1], [0, -2], [1, -2]],
+        [[0, 0], [1, 0], [1, -1], [0, 2], [1, 2]],
+        [[0, 0], [-1, 0], [-1, 1], [0, -2], [-1, -2]],
+    ];
+    const SRS_4X1 = [
+        [[0, 0], [-2, 0], [1, 0], [-2, 1], [1, -2]],
+        [[0, 0], [-1, 0], [2, 0], [-1, -2], [2, 1], [3, 1]],
+        [[0, 0], [2, 0], [-1, 0], [2, -1], [-1, 2]],
+        [[0, 0], [1, 0], [-2, 0], [1, 2], [-2, -1], [-3, -1]],
+    ];
+
+    const DEFAULT_COLORS = [
+        "hsla(158, 51%, 48%, 1)", "hsl(250,51%,64%)", "hsla(23, 51%, 50%, 1)",
+        "hsla(49, 53%, 52%, 1)", "hsla(357, 50%, 49%, 1)", "hsla(305, 40%, 49%, 1)", "hsla(83, 51%, 47%, 1)"];
+    const PIECES = [
+        new Piece([1, 1, 1, 1], 4), // I
+        new Piece([1, 0, 0, 1, 1, 1], 3), // J
+        new Piece([0, 0, 1, 1, 1, 1], 3), // L
+        new Piece([1, 1, 1, 1], 2), // O
+        new Piece([1, 1, 0, 0, 1, 1], 3), // S
+        new Piece([0, 1, 0, 1, 1, 1], 3), // T
+        new Piece([0, 1, 1, 1, 1, 0], 3), // Z
+        new Piece([1], 1), // .
+        new Piece([1, 1], 2), // I-2
+        new Piece([1, 1, 1, 0], 2), // L-
+        new Piece([1, 1, 1], 3), // I-3
+        new Piece([1, 1, 1, 1, 0, 0, 1, 0, 0], 3), // L+
+        new Piece([0, 1, 0, 0, 1, 0, 1, 1, 1], 3), // T+
+        new Piece([1, 1, 1, 1, 0, 1, 0, 0], 4), // T-4
+        new Piece([1, 1, 1, 1, 0, 0, 1, 0], 4), // T-4A
+        new Piece([1, 1, 1, 1, 1, 1, 1, 1, 1], 3), // O-3
+        new Piece([0, 1, 1, 0, 1, 0, 1, 1, 0], 3), // S+
+        new Piece([1, 1, 0, 0, 1, 0, 0, 1, 1], 3), // Z+
+        new Piece([1, 0, 0, 1], 2), // DIAGONAL-2
+        new Piece([1, 1, 1, 1, 1], 5), // I-5
+        new Piece([1, 0, 1, 0, 1, 0], 3), // V
+        new Piece([0, 1, 1, 1, 1, 0, 1, 0, 0], 3), // W
+        new Piece([0, 1, 1, 1, 1, 1, 0, 0], 4), // LONG S
+        new Piece([1, 1, 1, 0, 0, 0, 1, 1], 4), // LONG Z
+        new Piece([0, 0, 1, 0, 1, 0, 0, 1, 0], 3), // I-2+DIAGONAL
+        new Piece([0, 1, 1, 0, 1, 1, 1, 1], 4), // 4x2 MINUS CORNERS
+        new Piece([1, 1, 0, 0, 1, 1, 0, 1, 0], 3), // F
+        new Piece([0, 1, 0, 1, 1, 1, 0, 1, 0], 3), // +
+        new Piece([0, 0, 1, 0, 1, 0, 1, 0, 0], 3), // DIAGONAL-3
+        new Piece([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 4), // O-4
+        new Piece([1, 0, 1, 1, 1, 1], 3), // U
+        new Piece([1, 0, 0, 1], 4), // EYES
+        new Piece([0, 1, 0, 1, 1, 0, 0, 0, 1], 3), // Y
+        new Piece([1, 0, 1, 1, 0, 0], 3), // I-2+EYES
+        new Piece([1, 1, 0, 1, 1, 0, 0, 1, 0, 0], 5), // LONG V
+        new Piece([0, 1, 0, 0, 0, 0, 1, 0, 1], 3), // 3 CORNERS
+        new Piece([1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0], 4), // L++
+        new Piece([0, 0, 1, 0, 0, 0, 1, 0, 0], 3), // DIAGONAL EYES
+        new Piece([1, 0, 1, 0, 0, 0, 1, 0, 1], 3), // CORNERS
+    ];
+    for (let i = 0; i < PIECES.length; i++) {
+        for (let k = 0; k < PIECES[i].array.length; k++) {
+            const v = PIECES[i].array[k];
+            PIECES[i].array[k] = v === 0 ? 0 : i < DEFAULT_COLORS.length ? DEFAULT_COLORS[i] : `hsla(${i * 0.17 * 360}, 100%, 70%, 1)`;
+        }
+    }
+    const BUH_PIECES = [
+        new Piece([0, 1, 0, 1, 1, 1], 3), // T
+        new Piece([1, 0, 1, 0, 1, 0], 3), // V
+        new Piece([1, 1, 1, 1, 0, 0, 1, 0, 0], 3), // L+
+        new Piece([0, 1, 0, 0, 1, 0, 1, 1, 1], 3), // T+
+        new Piece([1, 1, 1, 1, 1, 1, 1, 1, 1], 3), // O-3
+        new Piece([0, 1, 1, 0, 1, 0, 1, 1, 0], 3), // S+
+        new Piece([1, 1, 0, 0, 1, 0, 0, 1, 1], 3), // Z+
+        new Piece([1, 1, 0, 0, 1, 1, 0, 1, 0], 3), // F
+        new Piece([0, 1, 0, 1, 1, 1, 0, 1, 0], 3), // +
+        new Piece([0, 0, 1, 0, 1, 0, 1, 0, 0], 3), // DIAGONAL-3
+        new Piece([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 4), // O-4
+        new Piece([1, 0, 1, 1, 1, 0, 1, 0, 0], 3), // ??
+        new Piece([1, 0, 1, 1, 0, 1, 0, 1, 0], 3), // TALL V
+        new Piece([1, 0, 1, 1, 1, 0, 0, 1, 1], 3), // W WITH DOT
+        new Piece([1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0], 5), // V+
+        new Piece([0, 1, 0, 0, 0, 0, 1, 0, 1], 3), // 3 CORNERS
+        new Piece([0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0], 4), // S++
+        new Piece([0, 1, 0, 1, 0, 1, 0, 1, 0], 3), // DIAMOND
+        new Piece([0, 0, 1, 0, 0, 0, 1, 0, 0], 3), // DIAGONAL EYES
+        new Piece([1, 1, 1, 1, 0, 1, 1, 1, 1], 3), // DONUT
+        new Piece([1, 1, 1, 1, 1, 1, 1], 1), // I-7
+        new Piece([1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1], 5), // ROTATED I-5
+        new Piece(Array(25).fill(1), 5), // O-5
+        new Piece([1, 0, 1, 0, 0, 0, 1, 0, 1], 3), // CORNERS
+        new Piece(Array(36).fill(1), 6), // O-6
+        new Piece(Array(49).fill(1), 7), // O-7
+    ];
+    for (let i = 0; i < BUH_PIECES.length; i++) {
+        for (let k = 0; k < BUH_PIECES[i].array.length; k++) {
+            BUH_PIECES[i].array[k] = BUH_PIECES[i].array[k] === 0 ? 0 : "hsla(0, 0%, 80%, 1)";
+        }
+    }
+
+    const height = 22;
+    const width = 10;
+    const boards = [ new Array(height * width).fill(0) ];
+    const fallingBoards = [ new Array(height * width).fill(0) ];
+    const nextPieces = []; // Each board has a pair of 5 pieces
+
+    let canHold = true;
+    let holdingPiece;
+    let rotation = 0;
+    let clearedLines = 0;
+    let gracePeriod = 0;
+    let buh = 0; // How much buh garbage you have
+    let tempBuh = 0;
+    let combo = 0;
+
+    let timer = 0;
+    let lastTime;
+
+    let gameId;
+    let pieceRandom;
+    let moves;
+
+    // 0/1 >< Player 1/2 update [0/1, board[], fallingBoard[], Piece[next1], Piece[next2]..]
+    // 2 >< Send over buh [2, amount]
+    // 252 < Send Line 2 Message [252, "message"]
+    // 253 < Open Rematches [253]
+    //     > Request Rematch [253]
+    //     < Start Rematch [253, 1]
+    // 254 > End Game [254, "messageKey"]
+    //     < Show message [254, "message", losingPlayer]
+    // 255 > Request Game Info [255]
+    //     > Join Game [255, "username"]
+    //     < Game Info [255, yourIndex, "player1", "player2"..]
+    let serverCon;
+    let clients = [];
+    let vsPlayers = [];
+    let yourIndex;
+    let rematches = [];
+
+    const keyStates = {};
+    // Always process keyups so keys don't get glued down when we stop ticking
+    document.addEventListener("keyup", e => keyStates[e.key] = null);
+    const handleKeyDown = e => {
+        if (!Object.hasOwn(keyStates, e.key) || keyStates[e.key] === null)
+            keyStates[e.key] = 0;
+
+        if (e.key === "ArrowUp" || e.key.toLowerCase() === "x" || e.key.toLowerCase() === "z") {
+            rotateFalling(e.key === "z");
+            if (gracePeriod >= 0)
+                gracePeriod = 1;
+
+            SYNTH.triggerAttackRelease("G4", "256n", Tone.now(), 0.3);
+        } else if (e.key === " ") {
+            while (offsetFalling(0, 1, 0)) {}
+            gracePeriod = 0;
+
+            const prevLines = clearedLines;
+            tick();
+
+            if (prevLines === clearedLines) {
+                document.getElementById("tetris").style.marginTop = "11px";
+                setTimeout(() => document.getElementById("tetris").style.marginTop = null, 100);
+            }
+
+            SYNTH.triggerAttackRelease("D3", "24n", Tone.now(), 0.2);
+        } else if (e.key === "Shift" || e.key.toLowerCase() === "c") {
+            holdPiece();
+        } else if (e.key === "Escape" && !serverCon) {
+            document.getElementById("play-text").innerHTML = `The game is paused.`;
+            document.getElementById("play-button").innerText = "Continue";
+            document.getElementById("play-button").onclick = resume;
+            stop();
+        }
+    };
+
+    let ticker = 0;
+    let lastTick = 0;
+    let tickId;
+    const tickInterval = () => {
+        const diff = Math.floor(performance.now() - ticker);
+        lastTick = ticker;
+        ticker += diff;
+
+        const leftDown = keyStates["ArrowLeft"] === 0 || (keyStates["ArrowLeft"] >= 200 && keyStates["ArrowLeft"] % 60 < (keyStates["ArrowLeft"] - diff) % 60);
+        const rightDown = keyStates["ArrowRight"] === 0 || (keyStates["ArrowRight"] >= 200 && keyStates["ArrowRight"] % 60 < (keyStates["ArrowRight"] - diff) % 60);
+        const downDown = keyStates["ArrowDown"] === 0 || (keyStates["ArrowDown"] >= 200 && keyStates["ArrowDown"] % 60 < (keyStates["ArrowDown"] - diff) % 60);
+        if (leftDown || rightDown || downDown) {
+            if (gracePeriod >= 0)
+                gracePeriod = 1;
+
+            if ((((leftDown || rightDown) && offsetFalling(leftDown ? -1 : 1, 0, 0))) || (downDown && offsetFalling(0, 1, 0))) {
+                render();
+                SYNTH.triggerAttackRelease(leftDown || rightDown ? "E#4" : "C#4", "256n", Tone.now(), 0.4);
+            }
+        }
+
+        for (let key in keyStates) {
+            if (keyStates[key] !== null) {
+                keyStates[key] += diff;
+            }
+        }
+
+        const tickRate = Math.max(90, 570 - (buh * 10.8));
+        if (ticker % tickRate < lastTick % tickRate) {
+            tick();
+        }
+
+        timer = Math.round(timer + (performance.now() - lastTime));
+        lastTime = performance.now();
+        document.getElementById("timer").innerText = formatTime(timer);
+    };
+
+    // Init for my fellow touch friends
+    if (screen.width < 600) {
+        document.getElementById('vp').setAttribute('content', 'width=600,maximum-scale=1,user-scalable=0');
+    }
+    if ('ontouchstart' in window) {
+        document.getElementById("touch-controls").style.display = "inline-block";
+        document.getElementsByClassName("bottom-left")[0].style.display = "none";
+        const info = document.getElementsByClassName("bottom-right")[0];
+        info.className = "bottom-left";
+        info.style.top =  "calc(100% - 100px)";
+        document.getElementsByClassName("bleach-link")[0].removeAttribute("href"); // No troll link :(
+        for (const p of document.querySelectorAll('p, a')) {
+            p.style.userSelect = "none";
+            p.style.webkitUserSelect = "none";
+        }
+    }
+
+    // Init
+    for (let e of document.getElementsByTagName("button")) {
+        e.addEventListener("click", () => {
+            Tone.start();
+            SYNTH.triggerAttackRelease("G3", "128n", Tone.now(), 0.25);
+        });
+    }
+
+    document.addEventListener("keydown", e => {
+        if (e.key === "Escape") {
+            closeToast("leaderboard-toast");
+        }
+
+        if (e.key === "Enter" && document.getElementById("play-toast").style.display === "flex") {
+            document.getElementById("play-button").click();
+        }
+    });
+
+    // Set username
+    USERNAMES.forEach(u => document.getElementById(u).value =
+        document.cookie.split("; ").find(row => row.startsWith("username="))?.split("=")[1] ?? "");
+
+    // Setup Tetris Grid
+    for (const element of [ initGrid("tetris", width, height), initGrid("vs-tetris", width, height) ]) {
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add(y <= 1 ? "grid-cell-hidden" : 'grid-cell');
+                cellElement.id = element.id + "-" + x + "-" + y;
+                element.appendChild(cellElement);
+            }
+        }
+    }
+
+    fetchLeaderboard("https://api.bleach.dev/tetris/leaderboardlines");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has("join")) {
+        const code = urlParams.get("join");
+        openToast("vs-join-toast");
+
+        createPeer().then(metadataPeer => {
+            metadataPeer.on('open', id => {
+                console.log('Client peer ID is: ' + id);
+
+                const metadataCon = metadataPeer.connect("bl-ttne-" + code);
+                metadataCon.on('open', () => {
+                    metadataCon.on('data', data => {
+                        if (data.length >= 4) {
+                            document.getElementById("vs-join-button").innerText = "Spectate";
+                        }
+                        document.getElementById("vs-join-text").innerHTML = data.length >= 4 ?
+                            `<b>${data[2]}</b> vs <b>${data[3]}</b>` : `<b>${data[2]}</b> invited you to tetris gaming!`;
+                        document.getElementById("vs-join-text-2").innerHTML = `Click ${data.length >= 4 ? "Spectate" : "Join"} to start`;
+                        document.getElementById("vs-join-button").disabled = "";
+                        document.getElementById("vs-join-button").onclick = () => {
+                            if (!document.getElementById("vs-username").value) {
+                                document.getElementById("vs-username-label").innerHTML = `<span style="color: #ff8d90">Please choose a username!</span>`
+                            } else {
+                                document.getElementById("vs-join-button").disabled = "disabled";
+                                joinGame(code, getAndSaveUsername("vs-username"));
+                            }
+                        };
+
+                        metadataPeer.destroy();
+                    });
+                    metadataCon.send([ 255 ]);
+                });
+            });
+        });
+    }
+
+    // Tetris code
+    function initGrid(id, width, height) {
+        const element = document.getElementById(id);
+        element.style.gridTemplateColumns = "repeat(" + width + ", 1fr)";
+        element.style.gridAutoRows = (100 / height) + "%";
+        element.innerHTML = "";
+        return element;
+    }
+
+    function fetchLeaderboard(url) {
+        document.getElementById("leaderboard").innerHTML = "Loading..";
+        fetch(url)
+            .then(r => r.json())
+            .then(d => {
+                let i = 1;
+                let str = "<div class='leaderboard-left-h'>Rank</div><div class='leaderboard-left-h'>Username</div><div class='leaderboard-right-h'>Score</div>";
+                d.forEach(e => {
+                    str += "<div class='leaderboard-left'>#" + i
+                        + "</div><div class='leaderboard-left'>" + e.username
+                        + (url.endsWith("time")
+                            ? "</div><div class='leaderboard-right'>" + formatTime(e.time) + "</div>" : url.endsWith("vs")
+                            ? "</div><div class='leaderboard-right'>" + e.wins + "</span></div>"
+                                : "</div><div class='leaderboard-right'>" + e.lines + " <span style='color: #999; font-size: 12px;'>" + formatTime(e.time) + "</span></div>");
+                    i++;
+                });
+                document.getElementById("leaderboard").innerHTML = str;
+            });
+    }
+
+    function start() {
+        TOASTS.forEach(t => t.style.display = "none");
+
+        lastTime = performance.now();
+        timer = 0;
+        rotation = 0;
+        clearedLines = 0;
+        buh = 0;
+        tempBuh = 0;
+        combo = 0;
+        updateLinesCleared();
+        boards.forEach(b => b.fill(0));
+        fallingBoards.forEach(b => b.fill(0));
+
+        holdingPiece = undefined;
+        initGrid("holding", 1, 1);
+        document.getElementById("holding").innerHTML =`<div class="grid-cell"></div>`;
+
+        gameId = Math.floor(Date.now() / 1000);
+        pieceRandom = mulberry32(gameId);
+        moves = "";
+        if (!serverCon) {
+            fetch("https://api.bleach.dev/tetris/startgame?id=" + gameId);
+        }
+
+        if (!(yourIndex >= 2)) {
+            // Generate random next pieces
+            for (let i = 0; i < 5; i++) {
+                nextPieces[i] = PIECES[7 * pieceRandom() | 0];
+            }
+
+            document.addEventListener("keydown", handleKeyDown);
+            tickId = setInterval(tickInterval, 10);
+            summonPiece();
+        }
+
+        render();
+    }
+
+    function stop() {
+        document.removeEventListener("keydown", handleKeyDown);
+        openToast(serverCon ? "vs-join-toast" : "play-toast");
+
+        clearInterval(tickId);
+    }
+
+    function resume() {
+        document.addEventListener("keydown", handleKeyDown);
+        closeToast("play-toast");
+
+        lastTime = performance.now();
+        tickId = setInterval(tickInterval, 10);
+    }
+
+    function tick() {
+        if (!offsetFalling(0, 1, 0)) {
+            if (gracePeriod > 0) {
+                gracePeriod = -1;
+                return;
+            }
+
+            for (let j = 0; j < fallingBoards[0].length; j++) {
+                if (fallingBoards[0][j]) {
+                    boards[0][j] = fallingBoards[0][j];
+                    if (!serverCon)
+                        moves += "c" + j;
+                }
+            }
+            fallingBoards[0].fill(0);
+
+            // Clear lines
+            const prevCombo = combo;
+            for (let line = 0; line < boards[0].length; line += width) {
+                if (boards[0].slice(line, line + width).every(v => v)) {
+                    for (let cell = line + width - 1; cell >= 0; cell--) {
+                        boards[0][cell] = cell < width ? 0 : boards[0][cell - width];
+                    }
+
+                    clearedLines++;
+                    combo++;
+                    if (serverCon) {
+                        const newBuh = 3 + ~~(Math.random() * (8 + combo * 1.5));
+                        serverCon.send([ 2, newBuh ]);
+                        tempBuh = Math.max(0, ~(tempBuh - newBuh * 1.25));
+                    } else {
+                        buh++;
+                    }
+
+                    document.getElementById("tetris").style.marginTop = "19px";
+                    setTimeout(() => document.getElementById("tetris").style.marginTop = null, 130);
+                    if (clearedLines === 40) {
+                        if (!serverCon) {
+                            document.getElementById("play-text").innerHTML = `<span style="color: #9cff8d;">You cleared 40 lines in ${document.getElementById("timer").innerText}!</span>`;
+                            document.getElementById("play-button").innerText = "Continue";
+                            document.getElementById("play-button").onclick = resume;
+
+                            stop();
+                            fetch(`https://api.bleach.dev/tetris/submittime?id=${gameId}&name=${getAndSaveUsername("username")}&lines=${clearedLines}&time=${timer}&version=${VERSION}`, {
+                                method: 'POST',
+                                body: moves
+                            }).then(r => r.ok);
+                        }
+                    }
+
+                    updateLinesCleared();
+                }
+            }
+
+            if (prevCombo === combo) {
+                combo = 0;
+            }
+
+            summonPiece();
+            canHold = true;
+        } else {
+            gracePeriod = 0;
+        }
+
+        if (serverCon) {
+            serverCon.send([ yourIndex, boards[0], fallingBoards[0] ].concat(nextPieces.slice(0, 5)));
+        }
+
+        render();
+    }
+
+    function updateLinesCleared() {
+        document.getElementById("cleared-text").innerText = "Lines Cleared: " + clearedLines;
+        document.getElementById("progressbar").style.width = (clearedLines / 40 * 100) + "%";
+    }
+
+    function render() {
+        for (let b = 0; b < boards.length; b++) {
+            // Reset board
+            for (let x = 0; x < width; x++) {
+                for (let y = 0; y < height; y++) {
+                    document.getElementById((b ? "vs-" : "") + "tetris-" + x + "-" + y).style = null;
+                }
+            }
+
+            // Ghost rendering
+            for (let i = 1; i <= height; i++) {
+                if (!offsetFalling(0, i, b, false)) {
+                    for (let x = 0; x < width; x++) {
+                        for (let y = 0; y < height; y++) {
+                            if (getBoard(fallingBoards[b], x, y)) {
+                                document.getElementById((b ? "vs-" : "") + "tetris-" + x + "-" + (y + i - 1)).style.border = "2px solid " + getBoard(fallingBoards[b], x, y);
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+
+            // Board rendering
+            for (let x = 0; x < width; x++) {
+                for (let y = 0; y < height; y++) {
+                    if (getBoard(fallingBoards[b], x, y))
+                        document.getElementById((b ? "vs-" : "") + "tetris-" + x + "-" + y).style.border = "12px solid " + getBoard(fallingBoards[b], x, y);
+
+                    if (getBoard(boards[b], x, y))
+                        document.getElementById((b ? "vs-" : "") + "tetris-" + x + "-" + y).style.border = "12px solid " + getBoard(boards[b], x, y);
+                }
+            }
+        }
+    }
+
+    function offsetFalling(offsetX, offsetY, index, write = true) {
+        for (let x = 0; x < width; x++) {
+            for (let y = 0; y < height; y++) {
+                if (getBoard(fallingBoards[index], x, y) && getBoard(boards[index], x + offsetX, y + offsetY)) {
+                    return false;
+                }
+            }
+        }
+
+        if (write) {
+            const buffer = fallingBoards[index].slice();
+            fallingBoards[index].fill(0);
+            for (let i = 0; i < fallingBoards[index].length; i++) {
+                if (buffer[i]) {
+                    fallingBoards[index][i + offsetY * width + offsetX] = buffer[i];
+                }
+            }
+        }
+        return true;
+    }
+
+    function cropBoard(brd) {
+        let minX, minY, maxX, maxY;
+        for (let i = 0; i < brd.length; i++) {
+            if (brd[i]) {
+                maxY = Math.floor(i / width);
+                if (minY === undefined) {
+                    minY = maxY;
+                }
+            }
+        }
+
+        for (let i = 0; i < brd.length + width - 1; i += width) {
+            if (i >= width * height) {
+                i = i % (width * height) + 1;
+            }
+
+            if (brd[i]) {
+                maxX = Math.floor(i % width);
+                if (minX === undefined) {
+                    minX = maxX;
+                }
+            }
+        }
+
+        const piece = new Piece(new Array((maxX - minX + 1) * (maxY - minY + 1)), (maxX - minX) + 1);
+        for (let y = 0; y <= maxY - minY; y++) {
+            for (let x = 0; x <= maxX - minX; x++) {
+                piece.array[y * piece.width + x] = brd[(minY + y) * width + minX + x];
+            }
+        }
+
+        const centerX = piece.width === piece.height ? (minX + maxX) / 2
+            : piece.width * piece.height === 4 ? (rotation === 1 ? minX - 0.5 : rotation === 3 ? maxX + 0.5 : ((minX + maxX) / 2))
+            : rotation === 0 || rotation === 3 ? Math.ceil((minX + maxX) / 2) : Math.floor((minX + maxX) / 2);
+        const centerY = piece.width === piece.height ? (minY + maxY) / 2
+            : piece.width * piece.height === 4 ? (rotation === 0 ? maxY + 0.5 : rotation === 2 ? minY - 0.5 : ((minY + maxY) / 2))
+            : rotation <= 1 ? Math.ceil((minY + maxY) / 2) : Math.floor((minY + maxY) / 2);
+        return {
+            "piece": piece,
+            "minX": minX,
+            "minY": minY,
+            "maxX": maxX,
+            "maxY": maxY,
+            "centerX": centerX,
+            "centerY": centerY
+        };
+    }
+
+    function rotateFalling(reverse) {
+        const c = cropBoard(fallingBoards[0]);
+        const newX = reverse ? c.centerX - (c.centerY - c.minY) : c.centerX + (c.centerY - c.minY);
+        const newY = reverse ? c.centerY + (c.centerX - c.minX) : c.centerY - (c.centerX - c.minX);
+
+        const srsIndex = reverse ? (((rotation - 1) % 4) + 4) % 4 : rotation;
+        for (let o of Math.max(c.piece.width, c.piece.height) >= 4 ? SRS_4X1[srsIndex] : SRS_3X2[srsIndex]) {
+            const rx = (reverse ? -o[0] : o[0]);
+            const ry = (reverse ? -o[1] : o[1]);
+            let found = true;
+            for (let x = 0; x <= c.maxX - c.minX; x++) {
+                for (let y = 0; y <= c.maxY - c.minY; y++) {
+                    if (getBoard(fallingBoards[0], c.minX + x, c.minY + y)
+                        && getBoard(boards[0], newX + (reverse ? y : -y) + rx, newY + (reverse ? -x : x) + ry)) {
+                        found = false;
+                    }
+                }
+            }
+
+            if (found) {
+                const buffer = fallingBoards[0].slice();
+                fallingBoards[0].fill(0);
+                for (let x = 0; x <= c.maxX - c.minX; x++) {
+                    for (let y = 0; y <= c.maxY - c.minY; y++) {
+                        if (buffer[(c.minY + y) * width + c.minX + x]) {
+                            //console.log(x, y, newX - (c.maxY - c.minY) + (reverse ? y : (c.maxY - c.minY) - y) + rx, newY + (reverse ? (c.maxX - c.minX) - x : x) + ry, c);
+                            fallingBoards[0][(newY + (reverse ? -x : x) + ry) * width + newX + (reverse ? y : -y) + rx] = buffer[(c.minY + y) * width + c.minX + x];
+                        }
+                    }
+                }
+
+                rotation = (((rotation + (reverse ? -1 : 1)) % 4) + 4) % 4;
+                render();
+                return;
+            }
+        }
+    }
+
+    function holdPiece() {
+        if (!canHold) {
+            SYNTH.triggerAttackRelease("A2", "24n", Tone.now(), 0.2);
+            return;
+        }
+
+        const c = cropBoard(fallingBoards[0]);
+        c.piece.rotation = rotation;
+
+        putPieceInGrid("holding", c.piece);
+
+        // Swap or summon new piece on the board
+        fallingBoards[0].fill(0);
+        if (holdingPiece !== undefined) {
+            for (let i = 0; i < holdingPiece.array.length; i++) {
+                fallingBoards[0][Math.floor(i / holdingPiece.width) * width + (i % holdingPiece.width) + 4] = holdingPiece.array[i];
+            }
+
+            rotation = holdingPiece.rotation;
+        } else {
+            summonPiece();
+        }
+
+        holdingPiece = c.piece;
+        canHold = false;
+        if (!serverCon)
+            moves += "h";
+
+        SYNTH.triggerAttackRelease("C5", "24n", Tone.now(), 0.3);
+        render();
+    }
+
+    function putPieceInGrid(elementName, piece) {
+        let dimensions = Math.max(piece.width, piece.height);
+        if (dimensions < 3)
+            dimensions += 2;
+        const offsetX = Math.floor((dimensions - piece.width) / 2);
+        const offsetY = Math.floor((dimensions - piece.height) / 2);
+
+        // Create holding grid
+        const element = initGrid(elementName, dimensions, dimensions);
+        for (let y = 0; y < dimensions; y++) {
+            for (let x = 0; x < dimensions; x++) {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('grid-cell');
+                element.appendChild(cellElement);
+
+                if ((x - offsetX) >= 0 && (x - offsetX) < piece.width && (y - offsetY) >= 0 && (y - offsetY) < piece.height) {
+                    cellElement.style.border = (dimensions > 5 ? 5 : dimensions > 3 ? 8 : 10) + "px solid " + piece.array[(y - offsetY) * piece.width + (x - offsetX)];
+                }
+            }
+        }
+    }
+
+    function updateNextPieces() {
+        for (let i = 0; i < nextPieces.length; i++) {
+            putPieceInGrid("next-" + (i + 1), nextPieces[i]);
+        }
+    }
+
+    function summonPiece() {
+        const nextPiece = nextPieces.shift();
+        if (!serverCon)
+            moves += "s" + PIECES.indexOf(nextPiece);
+
+        for (let i = 0; i < nextPiece.array.length; i++) {
+            const boardPos = 5 - Math.floor(nextPiece.width / 2) + Math.floor(i / nextPiece.width) * width + (i % nextPiece.width);
+            if (boards[0][boardPos]) {
+                if (serverCon) {
+                    serverCon.send([ 254, "", yourIndex ]);
+                    document.getElementById("vs-join-text").innerHTML = `<span style="color: #ff8d90;">You Lost after clearing ${clearedLines} line${clearedLines === 1 ? "" : "s"}.</span>`;
+                    document.getElementById("vs-join-button").innerText = "Rematch";
+                } else {
+                    document.getElementById("play-text").innerHTML = `<span style="color: #ff8d90;">You Lost after clearing ${clearedLines} line${clearedLines === 1 ? "" : "s"}.</span>`;
+                    document.getElementById("play-button").innerText = "Restart";
+                    document.getElementById("play-button").onclick = start;
+
+                    fetch(`https://api.bleach.dev/tetris/submitlines?id=${gameId}&name=${getAndSaveUsername("username")}&lines=${clearedLines}&time=${timer}&version=${VERSION}`, {
+                        method: 'POST',
+                        body: moves
+                    }).then(r => r.ok);
+                }
+
+                stop();
+                return;
+            }
+
+            fallingBoards[0][boardPos] = nextPiece.array[i];
+        }
+
+        rotation = 0;
+        if (tempBuh > 5) {
+            let piece = ~~(Math.random() * Math.min(3 + tempBuh, BUH_PIECES.length));
+            tempBuh = Math.max(tempBuh - piece - 2, 0);
+            nextPieces.splice(4, 0, BUH_PIECES[piece]);
+        } else {
+            nextPieces.splice(4, 0, PIECES[~~(pieceRandom() * Math.min(7 + buh, PIECES.length))]);
+        }
+
+        if (serverCon)
+            document.getElementById("vs-player-1").innerHTML = `${vsPlayers[yourIndex]} <span style='font-size: 14px'>C: ${combo}, Buh: ${buh}+${tempBuh}</span>`;
+
+        updateNextPieces();
+    }
+
+    function getBoard(brd, x, y) {
+        return (x < 0 || x >= width || y < 0 || y >= height) ? 99 : brd[y * width + x];
+    }
+
+    function openToast(id, closeOthers = true) {
+        TOASTS.forEach(t => t.style.display = id === t.id ? "flex" : closeOthers ? "none" : t.style.display);
+    }
+
+    function closeToast(id) {
+        TOASTS.find(t => id === t.id).style.display = "none";
+    }
+
+    // Misc code
+    function getAndSaveUsername(id) {
+        const name = document.getElementById(id).value;
+        document.cookie = "username=" + name + "; max-age=2592000";
+        USERNAMES.forEach(u => document.getElementById(u).value = name);
+        return name;
+    }
+
+    function validateUsername() {
+        if (!document.getElementById("username").value) {
+            document.getElementById("username-label").innerHTML = `<span style="color: #ff8d90">Please choose a username!</span>`;
+            return false;
+        }
+        return true;
+    }
+
+    function formatTime(ms) {
+        const minutes = Math.floor(ms / 1000 / 60);
+        const seconds = Math.floor(ms / 1000) % 60;
+        const millis = Math.floor(ms / 10) % 100;
+        return (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds + "." + (millis < 10 ? "0" : "") + millis;
+    }
+
+    function playerToBoard(i) {
+        return yourIndex >= 2 ? i : yourIndex === i ? 0 : 1;
+    }
+
+    function randomId(length) {
+        let str = "";
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (let i = 0; i < length; i++) {
+            str += characters.charAt(~~(Math.random() * characters.length));
+        }
+        return str;
+    }
+
+    function mulberry32(a) {
+        return function() {
+            let t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+    }
+
+    function dispEvent(event, key) {
+        document.dispatchEvent(new KeyboardEvent(event,{ 'key':key }));
+    }
+
+    // Multiplayer code
+    function hostGame(username) {
+        let roomCode = randomId(4);
+        document.getElementById("vs-code").innerText = "tetris.bleach.dev/?join=" + roomCode;
+        document.getElementById("vs-copy").onclick = () => navigator.clipboard.writeText("https://tetris.bleach.dev/?join=" + roomCode);
+        openToast("vs-toast");
+
+        createPeer("bl-ttne-" + roomCode).then(clientAcceptor => {
+            clientAcceptor.on('open', id => {
+                console.log('Server peer ID is: ' + id);
+
+                clientAcceptor.on('connection', clientCon => {
+                    console.log("Client Accepted", clientCon);
+
+                    clientCon.on('data', data => {
+                        if (data[0] !== 0)
+                            console.log("Server Received", data);
+
+                        let clIndex = clients.indexOf(clientCon);
+                        if (data[0] <= 1) {
+                            for (const cl of clients) {
+                                if (clients.indexOf(cl) !== clIndex) {
+                                    cl.send(data);
+                                }
+                            }
+                        } else if (data[0] === 2) {
+                            clients[clIndex ? 0 : 1].send(data);
+                        } else if (data[0] === 253) {
+                            if (!rematches.includes(clIndex)) {
+                                rematches.push(clIndex)
+                                for (const cl of clients) {
+                                    cl.send([252, `${rematches.map(i => vsPlayers[i]).join(", ")} Wants a rematch!`]);
+                                }
+
+                                if (rematches.includes(0) && rematches.includes(1)) {
+                                    startCountdown();
+                                }
+                            }
+                        } else if (data[0] === 254) {
+                            for (const cl of clients) {
+                                cl.send(data);
+                                cl.send([ 253 ]);
+                            }
+                        } else if (data[0] === 255) {
+                            if (data.length >= 2 && clIndex === -1) {
+                                console.log("Client Added To Game", clientCon);
+                                clIndex = clients.push(clientCon) - 1;
+                                vsPlayers.push(data[1]);
+
+                                for (let i = 0; i < clients.length - 1; i++) {
+                                    clients[i].send([ 255, i ].concat(vsPlayers));
+                                }
+
+                                if (vsPlayers.length === 2) {
+                                    document.getElementById("vs-join-button").disabled = "disabled";
+                                    startCountdown();
+                                }
+                            }
+
+                            clientCon.send([ 255, clIndex ].concat(vsPlayers));
+                        }
+                    });
+                });
+            });
+            console.log(clientAcceptor);
+        });
+
+        joinGame(roomCode, username);
+    }
+
+    function startCountdown() {
+        let countdown = 3;
+        let countdownFunc = setInterval(() => {
+            if (countdown > 0) {
+                for (const cl of clients) {
+                    cl.send([ 252, countdown + ".." ]);
+                }
+            } else {
+                for (let i = 0; i < clients.length; i++) {
+                    clients[i].send([ 252, "Click Rematch to rematch" ]);
+                    clients[i].send([ 253, 1 ]);
+                }
+                clearInterval(countdownFunc);
+            }
+            countdown--;
+        }, 700);
+    }
+
+    function joinGame(roomCode, username) {
+        createPeer().then(toServerPeer => {
+            toServerPeer.on('open', id => {
+                console.log('Client peer ID is: ' + id);
+
+                serverCon = toServerPeer.connect("bl-ttne-" + roomCode);
+                serverCon.on('open', () => {
+                    serverCon.on('data', data => {
+                        if (data[0] !== 0)
+                            console.log("Client Received", data);
+
+                        if (data[0] <= 1) {
+                            boards[playerToBoard(data[0])] = data[1];
+                            fallingBoards[playerToBoard(data[0])] = data[2];
+                            for (let i = 0; i < 5; i++)
+                                nextPieces[playerToBoard(data[0]) * 5 + i] = data[3 + i];
+
+                            updateNextPieces();
+                            render();
+                        } else if (data[0] === 2) {
+                            buh++;
+                            tempBuh += data[1];
+                            document.getElementById("vs-player-1").innerHTML = `${vsPlayers[yourIndex]} <span style='font-size: 14px'>C: ${combo}, Buh: ${buh}+${tempBuh}</span>`;
+
+                            document.getElementById("tetris").style.borderBottom = "3px solid #b03434";
+                            setTimeout(() => document.getElementById("tetris").style.borderBottom = "0px solid #b03434", 450);
+                        } else if (data[0] === 252) {
+                            document.getElementById("vs-join-text-2").innerHTML = data[1];
+                            document.getElementById("vs-username-container").style.display = "none";
+                            SYNTH.triggerAttackRelease("A4", "128n", Tone.now(), 0.3);
+                            stop();
+                        } else if (data[0] === 253) {
+                            if (data.length >= 2) {
+                                rematches = [];
+                                start();
+                            } else {
+                                document.getElementById("vs-join-button").disabled = "";
+                                document.getElementById("vs-join-button").onclick = () => {
+                                    serverCon.send([ 253 ]);
+                                    document.getElementById("vs-join-button").disabled = "disabled";
+                                }
+                            }
+                        } else if (data[0] === 254) {
+                            if (data[2] !== yourIndex) {
+                                document.getElementById("vs-join-text").innerHTML = `<span style="color: #9cff8d;">You Won after clearing ${clearedLines} line${clearedLines === 1 ? "" : "s"}.</span>`;
+                                document.getElementById("vs-join-button").innerText = "Rematch";
+                            }
+                            if (yourIndex <= 1) {
+                                fetch(`https://api.bleach.dev/tetris/submitvs?name=${vsPlayers[data[2] ? 0 : 1]}&code=${roomCode}&version=${VERSION}`, {method: 'POST'}).then(r => r.ok);
+                            }
+
+                            stop();
+                        } else if (data[0] === 255) {
+                            vsPlayers = data.slice(2);
+                            yourIndex = data[1];
+
+                            document.getElementById("vs-player-1").innerText = vsPlayers[yourIndex === 1 ? 1 : 0];
+                            document.getElementById("vs-player-2").innerText = vsPlayers.length >= 2 ? vsPlayers[yourIndex === 1 ? 0 : 1] : "...";
+                            if (yourIndex >= 2) {
+                                closeToast("vs-join-toast");
+                            }
+
+                            if (data.length >= 5) {
+                                document.getElementById("spectators").innerText = "👁 " + data.slice(4).join(", ");
+                            }
+                        }
+                    });
+
+                    console.log("Connected to server!");
+                    const path = window.location.protocol + "//" + window.location.host + window.location.pathname + "?join=" + roomCode;
+                    window.history.pushState({ path: path }, '', path);
+
+                    document.getElementById("vs-container").style.display = "inline-block";
+                    document.getElementById("vs-text-container").style.display = "block";
+                    document.getElementById("sp-text-container").style.display = "none";
+
+                    serverCon.send([ 255, username ]);
+                });
+            });
+        });
+    }
+
+    function clearVs() {
+        rematches = [];
+        vsPlayers = [];
+        yourIndex = -1;
+        clients = [];
+        serverCon?.close();
+        serverCon = undefined;
+        document.getElementById("vs-container").style.display = "none";
+        document.getElementById("vs-text-container").style.display = "none";
+        document.getElementById("sp-text-container").style.display = "block";
+        document.getElementById("spectators").innerText = "";
+    }
+
+    async function createPeer(id) {
+        const iceServer = await iceServerPromise;
+        return new peerjs.Peer(id, iceServer ? { config: { iceServers: iceServer } } : null);
+    }
+</script>
+</body>
+</html>
