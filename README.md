@@ -1,5 +1,8 @@
 # marzweb
 
+Just A School Work Project 
+I wanna test my skills so
+
 Credit to:
 
 https://github.com/gd4Ark/2048
