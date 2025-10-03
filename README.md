@@ -1,7 +1,6 @@
 # marzweb
 
-Just A School Work Project 
-I wanna test my skills so
+marzweb is a coding project in my free time which inside include my Game Hub and my Portfolio
 
 Credit to:
 
