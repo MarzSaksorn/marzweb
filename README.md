@@ -1,6 +1,8 @@
 # marzweb
 
-marzweb is a coding project in my free time which inside include my Game Hub and my Portfolio
+marzweb is a Homepage of my everything
+
+which uses tailwind and bunch of tailwind libraries
 
 Credit to:
 
