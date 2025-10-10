@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://cdn-icons-png.flaticon.com/512/5190/5190698.png"
+    />
+    <script src="./script.js" type="module"></script>
+    <title>ซูโดกุ</title>
+  </head>
+  <body>
+    <div class="error">
+      <h2 id="heading">ซูโดกุ</h2>
+      <div class="sub-heading">
+        <p>ผิดพลาด : <span id="error-count" class="wrong">0</span></p>
+        <p class="timer">
+          <span id="minute">00</span> : <span id="second">00</span>
+        </p>
+      </div>
+    </div>
+    <div class="board-wrap" id="wrap">
+      <div class="numbers">
+        <button id="1" class="">1</button> <button id="2" class="">2</button>
+        <button id="3" class="">3</button> <button id="4" class="">4</button>
+        <button id="5" class="">5</button> <button id="6" class="">6</button>
+        <button id="7" class="">7</button> <button id="8" class="">8</button>
+        <button id="9" class="">9</button>
+        <!-- animatated box -->
+        <button id="moving-box" class="hidden"></button>
+        <!-- animatated box -->
+      </div>
+    </div>
+    <div class="blur" id="toggle-blur"><span>ซูโดกุ</span></div>
+    <div class="wrapper after" id="wrapper">
+      <button id="new-game">เริ่มใหม่</button>
+      <button id="continue" class="hide level">ไปต่อ</button>
+      <button id="easy" class="level">ง่าย</button>
+      <button id="medium" class="level">ปานกลาง</button>
+      <button id="hard" class="level">ยาก</button>
+      <button id="insane" class="level">ยากมาก</button>
+    </div>
+  </body>
+</html>

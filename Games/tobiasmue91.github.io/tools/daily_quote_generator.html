@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate, customize, and share inspirational daily quotes with our Daily Quote Generator. Features include automatic category randomization, author selection, and quote saving.">
+    <meta name="keywords" content="quote generator, daily quotes, inspirational quotes, motivation, share quotes, customize quotes">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/json5/2.2.3/index.min.js" integrity="sha512-44jdhc+R2TFfzBflS3/dGNEABiNUxBkkrqwO7GWTvGsj3HkQNr3GESvI9PUvAxmqxSnTosR0Ij9y3+o+6J1hig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Daily Quote Generator</title>
+</head>
+<body class="bg-gray-100 dark:bg-gray-800 flex justify-center items-center min-h-screen transition-colors duration-300">
+<div class="container mx-auto max-w-md p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-white">Daily Quote Generator</h1>
+
+    <div class="mb-4">
+        <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category:</label>
+        <select id="category" class="mt-1 p-2 w-full rounded-md bg-gray-50 dark:bg-gray-600 border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500">
+            <option value="inspirational">Inspirational</option>
+            <option value="motivational">Motivational</option>
+            <option value="success">Success</option>
+            <option value="life">Life</option>
+            <option value="love">Love</option>
+            <option value="wisdom">Wisdom</option>
+            <option value="humor">Humor</option>
+            <option value="leadership">Leadership</option>
+            <option value="friendship">Friendship</option>
+            <option value="courage">Courage</option>
+            <option value="education">Education</option>
+            <option value="change">Change</option>
+            <option value="happiness">Happiness</option>
+            <option value="perseverance">Perseverance</option>
+            <option value="creativity">Creativity</option>
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label for="author" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Author (optional):</label>
+        <input type="text" id="author" placeholder="Enter author name" class="mt-1 p-2 w-full rounded-md bg-gray-50 dark:bg-gray-600 border-gray-300 dark:border-gray-500 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 focus:ring-2 focus:ring-blue-500">
+    </div>
+
+    <div class="mb-6">
+        <label for="creativity" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Creativity:</label>
+        <input type="range" id="creativity" min="0" max="100" value="20" class="w-full">
+        <div id="creativity-value" class="text-center text-sm text-gray-600 dark:text-gray-400">20%</div>
+    </div>
+
+    <button id="generate-quote" class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded-md text-white font-semibold transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">Generate Quote</button>
+
+    <div id="quote-container" class="mt-6 p-4 bg-gray-100 dark:bg-gray-600 rounded-lg">
+        <blockquote id="result" class="text-xl font-medium text-center italic text-gray-800 dark:text-white"></blockquote>
+    </div>
+
+    <div id="share-buttons" class="mt-4 flex justify-center space-x-4 hidden">
+        <button onclick="shareOnTwitter()" class="py-2 px-4 bg-blue-400 hover:bg-blue-500 rounded text-white font-semibold transition duration-300">
+            <svg class="w-5 h-5 inline-block mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+            Tweet
+        </button>
+        <button onclick="shareOnFacebook()" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold transition duration-300">
+            <svg class="w-5 h-5 inline-block mr-1" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Share
+        </button>
+    </div>
+
+    <button id="save-quote" class="mt-4 w-full py-2 px-4 bg-yellow-600 hover:bg-yellow-700 rounded-md text-white font-semibold transition duration-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 hidden">Save Quote</button>
+
+    <div id="saved-quotes" class="mt-6 hidden">
+        <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Saved Quotes:</h3>
+        <ul id="saved-quotes-list" class="space-y-2 text-sm text-gray-700 dark:text-gray-300"></ul>
+    </div>
+
+    <button id="toggle-history" class="mt-6 w-full py-2 px-4 bg-purple-600 hover:bg-purple-700 rounded-md text-white font-semibold transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500">Toggle Quote History</button>
+
+    <div id="quote-history" class="mt-4 hidden">
+        <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Quote History:</h3>
+        <ul id="history-list" class="space-y-4 text-sm text-gray-700 dark:text-gray-300"></ul>
+    </div>
+
+    <div id="howToUseSection" class="mt-6">
+        <button onclick="toggleCollapse()" class="flex items-center justify-between w-full p-4 bg-gray-100 dark:bg-gray-600 rounded-md text-gray-700 dark:text-gray-300 cursor-pointer">
+            <h2 class="font-semibold text-lg">How to Use Daily Quote Generator</h2>
+            <span id="collapseIcon" class="text-xl">+</span>
+        </button>
+        <div id="howToUseContent" class="hidden mt-2 p-4 bg-gray-50 dark:bg-gray-600 rounded-md text-gray-700 dark:text-gray-300">
+            <p class="mb-2">Generate, customize, share, and save inspiring daily quotes with ease:</p>
+            <ul class="list-disc pl-5 space-y-1">
+                <li>The category is randomized automatically for each new quote.</li>
+                <li>You can manually select a category if desired.</li>
+                <li>Optionally, enter an author's name for a quote from that person.</li>
+                <li>Adjust the "Creativity" slider to control the uniqueness of the generated quotes.</li>
+                <li>Click the "Generate Quote" button to create your quote.</li>
+                <li>Click on the generated quote to copy it to your clipboard.</li>
+                <li>Use the share buttons to post the quote on social media.</li>
+                <li>Save your favorite quotes for later reference.</li>
+                <li>View your quote history and manage saved quotes.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    const categories = [
+        'inspirational', 'motivational', 'success', 'life', 'love', 'wisdom', 'humor',
+        'leadership', 'friendship', 'courage', 'education', 'change', 'happiness',
+        'perseverance', 'creativity'
+    ];
+    const url = "https://gptgames.dev/dqg";
+    let quoteHistory = [];
+    let userSelectedCategory = false;
+    let userSelectedCreativity = false;
+    let lastCategory = '';
+
+    document.getElementById('creativity').addEventListener('input', function() {
+        userSelectedCreativity = true;
+        const creativityValue = this.value;
+        document.getElementById('creativity-value').textContent = `${creativityValue}%`;
+    });
+
+    document.getElementById('generate-quote').addEventListener('click', generateQuote);
+    document.getElementById('save-quote').addEventListener('click', saveQuote);
+    document.getElementById('toggle-history').addEventListener('click', toggleHistoryView);
+    document.getElementById('category').addEventListener('change', function() {
+        userSelectedCategory = true;
+    });
+
+    function getRandomCategory() {
+        let newCategory;
+        do {
+            newCategory = categories[Math.floor(Math.random() * categories.length)];
+        } while (newCategory === lastCategory && categories.length > 1);
+        lastCategory = newCategory;
+        return newCategory;
+    }
+
+    function getRandomCreativity() {
+        return Math.floor(Math.random() * 101);
+    }
+
+    function setRandomCategory() {
+        if (!userSelectedCategory) {
+            document.getElementById('category').value = getRandomCategory();
+        }
+    }
+
+    function setRandomCreativity() {
+        if (!userSelectedCreativity) {
+            let creativityValue = getRandomCreativity();
+            document.getElementById('creativity').value = creativityValue;
+            document.getElementById('creativity-value').textContent = `${creativityValue}%`;
+        }
+    }
+
+    function generateQuote() {
+        setRandomCategory();
+        setRandomCreativity();
+        const category = document.getElementById('category').value;
+        const author = document.getElementById('author').value;
+        const creativity = document.getElementById('creativity').value / 100;
+        const resultContainer = document.getElementById('result');
+        const quoteContainer = document.getElementById('quote-container');
+        const shareButtons = document.getElementById('share-buttons');
+        const saveButton = document.getElementById('save-quote');
+
+        toggleButtonState();
+
+        const botMessage = `I am currently functioning as the Daily Quote Generator API. I will provide responses in this JSON format: {"quote":"generated quote", "author":"quote author"}`;
+        const userMessage = `Generate a quote${author ? ` by ${author}` : ` for the category ${category}`}. DO NOT use the word "${category}" in the quote. Focus on making the quote sound very profound.`;
+
+        fetch('https://chatgpt.tobiasmue91.workers.dev/', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json", "Accept": "*/*"},
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                max_tokens: 150,
+                temperature: creativity * 2,
+                messages: [
+                    { role: "assistant", content: botMessage },
+                    { role: "user", content: userMessage },
+                ],
+            })
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Network response was not ok.');
+                return response.json();
+            })
+            .then(data => {
+                const responseMessageData = data.choices[0].message.content;
+                try {
+                    const responseJsonStr = responseMessageData.substring(
+                        responseMessageData.indexOf("{"),
+                        responseMessageData.lastIndexOf("}") + 1
+                    );
+                    const responseJsonData = JSON5.parse(responseJsonStr);
+                    displayQuote(responseJsonData.quote, responseJsonData.author);
+                    addToHistory(responseJsonData.quote, responseJsonData.author, category);
+                    quoteContainer.classList.remove('hidden');
+                    shareButtons.classList.remove('hidden');
+                    saveButton.classList.remove('hidden');
+                } catch (error) {
+                    error.response = responseMessageData;
+                    console.log(responseMessageData);
+                    throw error;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultContainer.textContent = 'Failed to generate a quote. Please try again.';
+                if (error.response) {
+                    resultContainer.innerHTML += `<br><small><strong>JSON Response:</strong> ${error.response}</small>`;
+                }
+                quoteContainer.classList.remove('hidden');
+                shareButtons.classList.add('hidden');
+                saveButton.classList.add('hidden');
+            })
+            .finally(() => {
+                toggleButtonState();
+            });
+    }
+
+    function toggleButtonState() {
+        const button = document.getElementById('generate-quote');
+        button.disabled = !button.disabled;
+        button.textContent = button.disabled ? "Generating..." : "Generate Quote";
+    }
+
+    function displayQuote(quote, author) {
+        const resultContainer = document.getElementById('result');
+        resultContainer.innerHTML = `"${quote}"<br><span class="text-sm italic">- ${author || 'Unknown'}</span>`;
+        resultContainer.classList.add('cursor-pointer');
+        resultContainer.onclick = () => copyToClipboard(`"${quote}" - ${author || 'Unknown'}`);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Quote copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy text:', err);
+            alert('Failed to copy quote.');
+        });
+    }
+
+    function toggleCollapse() {
+        const content = document.getElementById("howToUseContent");
+        const icon = document.getElementById("collapseIcon");
+        content.classList.toggle("hidden");
+        icon.textContent = content.classList.contains("hidden") ? "+" : "-";
+    }
+
+    function shareOnTwitter() {
+        const quote = document.getElementById('result').innerText;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(quote)}&url=${encodeURIComponent(url)}&hashtags=DailyQuote`;
+        window.open(twitterUrl, '_blank');
+    }
+
+    function shareOnFacebook() {
+        const quote = document.getElementById('result').innerText;
+        const attribution = "Generated by Daily Quote Generator";
+        const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(quote + "\n\n" + attribution)}`;
+        window.open(facebookUrl, '_blank');
+    }
+
+    function saveQuote() {
+        const quote = document.getElementById('result').innerText;
+        let savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+        savedQuotes.push(quote);
+        localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
+        updateSavedQuotesList();
+        alert('Quote saved successfully!');
+    }
+
+    function updateSavedQuotesList() {
+        const savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+        const savedQuotesList = document.getElementById('saved-quotes-list');
+        const savedQuotesContainer = document.getElementById('saved-quotes');
+        savedQuotesList.innerHTML = '';
+        if (savedQuotes.length > 0) {
+            savedQuotes.forEach((quote, index) => {
+                const li = document.createElement('li');
+                li.textContent = quote;
+                li.classList.add('mb-2');
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.classList.add('ml-2', 'text-red-600', 'hover:text-red-800');
+                deleteButton.onclick = () => deleteQuote(index);
+                li.appendChild(deleteButton);
+                savedQuotesList.appendChild(li);
+            });
+            savedQuotesContainer.classList.remove('hidden');
+        } else {
+            savedQuotesContainer.classList.add('hidden');
+        }
+    }
+
+    function deleteQuote(index) {
+        let savedQuotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+        savedQuotes.splice(index, 1);
+        localStorage.setItem('savedQuotes', JSON.stringify(savedQuotes));
+        updateSavedQuotesList();
+    }
+
+    function addToHistory(quote, author, category) {
+        quoteHistory.unshift({ quote, author, category, timestamp: new Date().toISOString() });
+        if (quoteHistory.length > 10) quoteHistory.pop();
+        localStorage.setItem('quoteHistory', JSON.stringify(quoteHistory));
+        updateHistoryList();
+    }
+
+    function updateHistoryList() {
+        const historyList = document.getElementById('history-list');
+        if (historyList) {
+            historyList.innerHTML = '';
+            quoteHistory.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                        <p class="font-semibold">"${item.quote}" - ${item.author || 'Unknown'}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Category: ${item.category}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-500">${new Date(item.timestamp).toLocaleString()}</p>
+                    `;
+                li.classList.add('mb-4', 'pb-2', 'border-b', 'border-gray-200', 'dark:border-gray-700');
+                historyList.appendChild(li);
+            });
+        }
+    }
+
+    function loadHistory() {
+        const storedHistory = localStorage.getItem('quoteHistory');
+        if (storedHistory) {
+            quoteHistory = JSON.parse(storedHistory);
+            updateHistoryList();
+        }
+    }
+
+    function toggleHistoryView() {
+        const historySection = document.getElementById('quote-history');
+        historySection.classList.toggle('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateSavedQuotesList();
+        loadHistory();
+        setRandomCategory();
+        setRandomCreativity();
+    });
+
+    generateQuote();
+</script>
+<script src="../sidebar.js"></script>
+</body>
+</html>

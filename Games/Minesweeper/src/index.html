@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="css/graph-modal.css" />
+    <link rel="stylesheet" href="css/reseter.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/graph-modal.js"></script>
+    <script src="js/app.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <header class="header">
+      <h1 class="header__title">
+        Minesweeper
+        <img width="80px" height="80px" src="img/icon.webp" alt="mine" />
+      </h1>
+    </header>
+    <section class="menu">
+      <ul class="menu__list list-reset">
+        <li class="menu__item">
+          <button id="play" data-graph-path="choose">เริ่มเล่น!</button>
+        </li>
+        <li class="menu__item">
+          <button id="help" data-graph-path="help">ช่วยเหลือ</button>
+        </li>
+        <li class="menu__item">
+          <button id="exit" onClick="document.location='https://singularly-current-pika.ngrok-free.app/'">กลับหน้าหลัก</button>
+        </li>
+      </ul>
+    </section>
+    <div class="modal">
+      <div
+        class="modal__container"
+        role="dialog"
+        aria-modal="true"
+        data-graph-target="game"
+      >
+        <div class="modal-content">
+          <div class="container">
+            <div class="container__col container__col_left">
+              <ul class="field list-reset"></ul>
+              <div class="container__shell">
+                <div class="timer">
+                  <span id="min">00</span>:<span id="sec">00</span>
+                </div>
+                <div class="flags"><span id="flags"></span>🚩</div>
+              </div>
+              <span id="result">Nothing</span>
+            </div>
+            <div class="container__col container__col_right">
+              <button class="restart">
+                <img
+                  class="restart__icon"
+                  src="img/refresh.svg"
+                  alt="Press to restart"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="modal__container"
+        role="dialog"
+        aria-modal="true"
+        data-graph-target="choose"
+      >
+        <div class="choose">
+          <h2 class="choose__title">เลือกขนาดของสนาม</h2>
+          <ul class="choose__list list-reset">
+            <li class="choose__item">
+              <button data-graph-path="game" id="small">8x8</button>
+            </li>
+            <li class="choose__item">
+              <button data-graph-path="game" id="middle">10x10</button>
+            </li>
+            <li class="choose__item">
+              <button data-graph-path="game" id="big">12x12</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        class="modal__container"
+        role="dialog"
+        aria-modal="true"
+        data-graph-target="help"
+      >
+        <div class="help">
+          <h2 class="help__title">ช่วยเหลือ</h2>
+          <ul class="help__list">
+            <li class="help__item">
+              คุณสามารถเลือกขนาดสนาม: 8x8, 10x10, 12x12
+            </li>
+            <li class="help__item">
+              การคลิก <span>ซ้าย หรือ แตะในโทรศัพท์</span>คุณสามารถทายว่าตรงไหนว่างบ้าง
+            </li>
+            <li class="help__item">
+              การคลิก <span>ขวา หรือ กดค้างในโทรศัพท์</span>คุณสามารถวางธงไว้ตรงที่คุณคิดว่ามีระเบิดได้
+            </li>
+            <li class="help__item">
+              การกด <span>"Shift + A"</span> คุณสามารถใช้สูตรโกงในการดูว่าระเบิดอยู่ตรงไหนได้
+            </li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+    <h3>Credit To <a href="https://github.com/pink-eye/Minesweeper#">pink-eye</a></h3>
+    <h3>TH Version by  <a href="https://github.com/MarzSaksorn">MarzSaksorn</a></h3>
+  </body>
+</html>
