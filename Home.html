@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marzweb</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="shortcut icon" href="/src/img/Marz.jpg" type="image/x-icon">
     <link rel="stylesheet" href="Home.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/src/variants.css">
@@ -13,31 +14,31 @@
 </head>
 </head>
 
-<body id="body" style="font-family: 'Montserrat', sans-serif;" class="dark bg-white dark:bg-neutral-900 bg-[url(/src/background/white1-bg.jpg)] dark:bg-[url(/src/background/dark-bg.jpg)]">
+<body id="body" style="font-family: 'Montserrat', sans-serif;" class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
 
     <!-------Navigation Bar------>
 
     <header
-        class="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-neutral-100/50 text-sm py-3 dark:bg-neutral-800/55">
-        <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
-            <div class="flex items-center justify-between">
-                <a class="flex-none text-xl font-semibold dark:text-white focus:outline-hidden focus:opacity-80"
+        class="relative flex flex-wrap sm:flex-nowrap sm:justify-start bg-neutral-100/50 dark:bg-neutral-800/55 py-3 w-full text-sm">
+        <nav class="sm:flex sm:justify-between sm:items-center mx-auto px-4 w-full max-w-[85rem]">
+            <div class="flex justify-between items-center">
+                <a class="flex-none focus:opacity-80 focus:outline-hidden font-semibold dark:text-white text-xl"
                     href="#" aria-label="Brand">
-                    <img src="/src/img/Marz.jpg" alt="" class="w-10 rounded-md">
+                    <img src="/src/img/Marz.jpg" alt="" class="rounded-md w-10">
                 </a>
                 <div class="sm:hidden">
                     <button type="button"
-                        class="hs-collapse-toggle relative size-9 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10"
+                        class="hs-collapse-toggle relative flex justify-center items-center gap-x-2 bg-white hover:bg-gray-50 focus:bg-gray-50 dark:bg-transparent dark:hover:bg-white/10 dark:focus:bg-white/10 disabled:opacity-50 shadow-2xs border border-gray-200 dark:border-neutral-700 rounded-lg focus:outline-hidden size-9 text-gray-800 dark:text-white disabled:pointer-events-none"
                         id="hs-navbar-example-collapse" aria-expanded="false" aria-controls="hs-navbar-example"
                         aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-example">
-                        <svg class="hs-collapse-open:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                        <svg class="hs-collapse-open:hidden size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" x2="21" y1="6" y2="6" />
                             <line x1="3" x2="21" y1="12" y2="12" />
                             <line x1="3" x2="21" y1="18" y2="18" />
                         </svg>
-                        <svg class="hs-collapse-open:block hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg"
+                        <svg class="hidden hs-collapse-open:block size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
                             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 6 6 18" />
@@ -48,14 +49,14 @@
                 </div>
             </div>
             <div id="hs-navbar-example"
-                class="hidden hs-collapse overflow-hidden transition-all duration-300 basis-full grow sm:block"
+                class="hidden hs-collapse sm:block overflow-hidden transition-all duration-300 basis-full grow"
                 aria-labelledby="hs-navbar-example-collapse">
-                <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-                    <a class="font-medium text-gray-600 text-lg hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                <div class="flex sm:flex-row flex-col sm:justify-end sm:items-center gap-5 mt-5 sm:mt-0 sm:ps-5">
+                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
                         href="/Projects/Projects.html">My Projects</a>
-                    <a class="font-medium text-gray-600 text-lg hover:dark-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                    <a class="focus:outline-hidden font-medium text-gray-600 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg hover:dark-gray-400"
                         href="/Portfolio/Portfolio.html">Portfolio</a>
-                    <a class="font-medium text-gray-600 text-lg hover:text-gray-400 focus:outline-hidden focus:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500"
+                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
                         href="#">Contact</a>
                     
                 </div>
@@ -65,12 +66,12 @@
 
     <!------Navigation Bar--------->
 
-    <div id="headline" class="mx-auto mt-16 w-auto p-4 text-black grid justify-items-center items-center" ;>
-        <h1 class="text-3xl text-center lg:text-6xl text-black dark:text-white font-bold">Welcome to Marzweb!</h1>
-        <div id="button" class="mx-auto mt-4 w-auto p-4 text-black flex justify-center">
+    <div id="headline" class="justify-items-center items-center grid mx-auto mt-16 p-4 w-auto text-black" ;>
+        <h1 class="font-bold text-black dark:text-white text-3xl lg:text-6xl text-center">Welcome to Marzweb!</h1>
+        <div id="button" class="flex justify-center mx-auto mt-4 p-4 w-auto text-black">
             <a href="/Projects/Projects.html">
                 <button type="button"
-                    class="flex items-center gap-2.5 border border-gray-500/30 px-4 py-2 text-sm text-gray-800 rounded bg-white hover:text-cyan-500 hover:bg-cyan-500/10 hover:border-cyan-500/30 active:scale-95 transition mr-12">
+                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 mr-12 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M4.13 14.652a.553.553 0 0 1-.78-.78l4.097-4.098a.552.552 0 0 1 .78.78zM5.882 6.95l-2.11 2.887s-.402-.343-1.224-.236C1.332 9.76.816 11.167.56 11.457.295 11.639-.553 9.829.555 8.16c1.872-2.815 5.327-1.21 5.327-1.21m5.169 5.168-2.887 2.11s.343.401.236 1.224c-.16 1.216-1.566 1.731-1.856 1.988-.182.265 1.629 1.112 3.295.005 2.817-1.872 1.212-5.327 1.212-5.327m5.303-6.198c.607-1.365.616-2.753-.07-3.686l.02-.02C17.375 1.145 18.129.16 17.986.018c-.142-.142-1.126.611-2.198 1.682l-.019.02c-.931-.685-2.32-.677-3.683-.071a13.3 13.3 0 0 0 1.895 2.374 13.3 13.3 0 0 0 2.373 1.898"
@@ -79,12 +80,12 @@
                             d="M13.363 4.639a14.2 14.2 0 0 1-2.054-2.58 7 7 0 0 0-1.279 1.016c-1.314 1.314-6.163 7.728-6.163 7.728l.865.865 2.305-2.305a1.134 1.134 0 0 1 1.602 1.602L6.334 13.27l.865.865s6.414-4.849 7.728-6.163a7 7 0 0 0 1.018-1.283 14.2 14.2 0 0 1-2.582-2.05m-2.978 2.978A1.355 1.355 0 1 1 12.3 5.7a1.355 1.355 0 0 1-1.916 1.917"
                             fill="#06B6D4" />
                     </svg>
-                    <p class="text-nowrap text-lg">Projects</p>
+                    <p class="text-lg text-nowrap">Projects</p>
                 </button>
             </a>
             <a href="/Portfolio/Portfolio.html">
                 <button type="button"
-                    class="flex items-center gap-2.5 border border-gray-500/30 px-4 py-2 text-sm text-gray-800 rounded bg-white hover:text-cyan-500 hover:bg-cyan-500/10 hover:border-cyan-500/30 active:scale-95 transition ">
+                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
                     <img src="https://www.svgrepo.com/show/478629/graduate.svg" alt="" class="max-w-6">
                     <p class="text-lg">Portfolio</p>
                 </button>
