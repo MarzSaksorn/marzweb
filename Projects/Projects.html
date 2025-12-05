@@ -13,7 +13,8 @@
     <script src="/node_modules/preline/dist/preline.js"></script>
 </head>
 
-<body style="font-family: 'Montserrat', sans-serif;" class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900">
+<body style="font-family: 'Montserrat', sans-serif;"
+    class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900">
     <!-------Navigation Bar------>
 
     <header
@@ -50,7 +51,8 @@
                 class="hidden hs-collapse sm:block overflow-hidden transition-all duration-300 basis-full grow"
                 aria-labelledby="hs-navbar-example-collapse">
                 <div class="flex sm:flex-row flex-col sm:justify-end sm:items-center gap-5 mt-5 sm:mt-0 sm:ps-5">
-                    <a class="focus:outline-hidden font-medium text-blue-500 text-lg" href="/Projects/Projects.html" aria-current="page">My Projects</a>
+                    <a class="focus:outline-hidden font-medium text-blue-500 text-lg" href="/Projects/Projects.html"
+                        aria-current="page">My Projects</a>
                     <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
                         href="/Portfolio/Portfolio.html">Portfolio</a>
                     <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
@@ -63,19 +65,30 @@
 
     <!------Navigation Bar--------->
 
-    <div class="justify-center items-center grid mt-12">
+    <div class="justify-center items-center flex mt-12">
         <h1 class="font-bold text-black dark:text-white text-3xl lg:text-5xl">My Projects</h1>
     </div>
-
     <div class="grid mt-12">
-        <div class="lg:flex lg:justify-around justify-items-center items-center grid w-full">
-
+        <div class="lg:flex lg:justify-evenly justify-items-center items-center grid w-full">
+            <div class="items-start grid w-5/6 lg:w-[24rem]">
+                <a href="/Gamehub/Game.html" class="justify-self-center">
+                    <img src="/src/img/Gamehub.jpg" alt="" class="rounded-xl h-[24rem] transition-all hover:scale-105 active:scale-95">
+                </a>
+                <div>
+                    <p class="bg-slate-200/55 mt-6 p-2 rounded-lg font-bold text-2xl text-center transition-all hover:scale-105 active:95">
+                    Gamehub
+                    </p>
+                </div>
+            </div>
+            <div class="items-start grid w-5/6 mt-12 lg:mt-0 lg:w-[24rem]">
+                <a href="/" class="justify-self-center">
+                    <img src="/src/img/Marzweb.png" alt="" class="rounded-xl h-[24rem] transition-all hover:scale-105 active:scale-95">
+                </a>
+                <p class="bg-slate-200/55 mt-6 p-2 rounded-lg font-bold text-2xl text-center transition-all hover:scale-105 active:95">
+                    marzweb
+                </p>
+            </div>
         </div>
-        <div class="lg:flex lg:justify-around justify-items-center items-center grid lg:mt-16 mb-8 w-full">
-
-
-        </div>
-    </div>
 </body>
 
 </html>
