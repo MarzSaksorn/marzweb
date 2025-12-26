@@ -4,26 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marzweb</title>
+    <title>Marz's Projects</title>
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
     <link rel="shortcut icon" href="/src/img/Marz.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="Home.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/src/variants.css">
     <script src="/node_modules/preline/dist/preline.js"></script>
 </head>
-</head>
 
-<body id="body" style="font-family: 'Montserrat', sans-serif;" class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
-
+<body style="font-family: 'Montserrat', sans-serif;"
+    class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900">
     <!-------Navigation Bar------>
 
     <header
         class="relative flex flex-wrap sm:flex-nowrap sm:justify-start bg-neutral-100/50 dark:bg-neutral-800/55 py-3 w-full text-sm">
-        <nav class="sm:flex sm:justify-between sm:items-center mx-auto px-4 w-full max-w-[85rem]">
+        <nav class="sm:flex sm:justify-between sm:items-center mx-auto px-4 w-full max-w-[95rem]">
             <div class="flex justify-between items-center">
                 <a class="flex-none focus:opacity-80 focus:outline-hidden font-semibold dark:text-white text-xl"
-                    href="#" aria-label="Brand">
+                    href="/" aria-label="Brand">
                     <img src="/src/img/Marz.jpg" alt="" class="rounded-md w-10">
                 </a>
                 <div class="sm:hidden">
@@ -52,13 +50,13 @@
                 class="hidden hs-collapse sm:block overflow-hidden transition-all duration-300 basis-full grow"
                 aria-labelledby="hs-navbar-example-collapse">
                 <div class="flex sm:flex-row flex-col sm:justify-end sm:items-center gap-5 mt-5 sm:mt-0 sm:ps-5">
+                    <a class="focus:outline-hidden font-medium text-blue-500 text-lg" href="/Projects/Projects.html"
+                        aria-current="page">My Projects</a>
                     <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
-                        href="/Projects/Projects.html">My Projects</a>
-                    <a class="focus:outline-hidden font-medium text-gray-600 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg hover:dark-gray-400"
                         href="https://fastwork.co/user/saksornth?source=web_marketplace_profile-menu_profile">Fastwork</a>
                     <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
-                        href="/Contact/contact.html">Contact</a>
-                    
+                        href="#">Contact</a>
+
                 </div>
             </div>
         </nav>
@@ -66,26 +64,11 @@
 
     <!------Navigation Bar--------->
 
-    <div id="headline" class="justify-items-center items-center grid mx-auto mt-16 p-4 w-auto text-black" ;>
-        <h1 class="font-bold text-black dark:text-white text-3xl lg:text-6xl text-center">Welcome to Marzweb!</h1>
-        <div id="button" class="flex justify-center mx-auto mt-4 p-4 w-auto text-black">
-            <a href="/Projects/Projects.html">
-                <button type="button"
-                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 mr-12 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
-                    <img src="/src/img/GitHub_Logo.png" class="max-w-7">
-                    <p class="text-lg text-nowrap">Projects</p>
-                </button>
-            </a>
-            <a href="https://fastwork.co/user/saksornth?source=web_marketplace_profile-menu_profile">
-                <button type="button"
-                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
-                    <img src="https://design.fastwork.co/_nuxt/img/fw-logo-square-color-400x400.5120033.png" alt="" class="max-w-6">
-                    <p class="text-lg">Fastwork</p>
-                </button>
-            </a>
-        </div>
+    <div class="justify-center items-center flex mt-12">
+        <h1 class="font-bold text-black dark:text-white text-3xl lg:text-5xl">Contact Me!</h1>
     </div>
-    <script src="/node_modules/preline/dist/preline.js"></script>
+    
+    
 </body>
 
 </html>

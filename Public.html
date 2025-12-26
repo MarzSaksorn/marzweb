@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Drive</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="shortcut icon" href="/src/img/Marz.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="Home.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/src/variants.css">
+    <script src="/node_modules/preline/dist/preline.js"></script>
+</head>
+</head>
+
+<body id="body" style="font-family: 'Montserrat', sans-serif;" class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
+
+    <!-------Navigation Bar------>
+
+    <header
+        class="relative flex flex-wrap sm:flex-nowrap sm:justify-start bg-neutral-100/50 dark:bg-neutral-800/55 py-3 w-full text-sm">
+        <nav class="sm:flex sm:justify-between sm:items-center mx-auto px-4 w-full max-w-[85rem]">
+            <div class="flex justify-between items-center">
+                <a class="flex-none focus:opacity-80 focus:outline-hidden font-semibold dark:text-white text-xl"
+                    href="#" aria-label="Brand">
+                    <img src="/src/img/Marz.jpg" alt="" class="rounded-md w-10">
+                </a>
+                <div class="sm:hidden">
+                    <button type="button"
+                        class="hs-collapse-toggle relative flex justify-center items-center gap-x-2 bg-white hover:bg-gray-50 focus:bg-gray-50 dark:bg-transparent dark:hover:bg-white/10 dark:focus:bg-white/10 disabled:opacity-50 shadow-2xs border border-gray-200 dark:border-neutral-700 rounded-lg focus:outline-hidden size-9 text-gray-800 dark:text-white disabled:pointer-events-none"
+                        id="hs-navbar-example-collapse" aria-expanded="false" aria-controls="hs-navbar-example"
+                        aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-example">
+                        <svg class="hs-collapse-open:hidden size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" x2="21" y1="6" y2="6" />
+                            <line x1="3" x2="21" y1="12" y2="12" />
+                            <line x1="3" x2="21" y1="18" y2="18" />
+                        </svg>
+                        <svg class="hidden hs-collapse-open:block size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                        <span class="sr-only">Toggle navigation</span>
+                    </button>
+                </div>
+            </div>
+            <div id="hs-navbar-example"
+                class="hidden hs-collapse sm:block overflow-hidden transition-all duration-300 basis-full grow"
+                aria-labelledby="hs-navbar-example-collapse">
+                <div class="flex sm:flex-row flex-col sm:justify-end sm:items-center gap-5 mt-5 sm:mt-0 sm:ps-5">
+                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
+                        href="/Projects/Projects.html">My Projects</a>
+                    <a class="focus:outline-hidden font-medium text-gray-600 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg hover:dark-gray-400"
+                        href="https://fastwork.co/user/saksornth?source=web_marketplace_profile-menu_profile">Fastwork</a>
+                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
+                        href="/Contact/contact.html">Contact</a>
+                    
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!------Navigation Bar--------->
+
+    <div id="hero" class="grid justify-center w-full">
+        <a href="https://drive.google.com/drive/folders/1QbiLmsx0b9DJK7mN-DoskyopShAlVMAx?usp=sharing">
+            <button class="bg-white rounded-xl p-3 justify-center mt-10 text-2xl font-semibold">MarzSaksorn's Public Drive Link</button>
+        </a>
+    </div>
+    <script src="/node_modules/preline/dist/preline.js"></script>
+</body>
+
+</html>
