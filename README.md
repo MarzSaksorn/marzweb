@@ -1,8 +1,8 @@
 # marzweb
 
-https://marzweb.win
+https://www.marzweb.win
 
-marzweb is a Homepage of my everything 
+Marzweb is a Homepage of my everything 
 
 Which uses tailwind and bunch of tailwind libraries
 
