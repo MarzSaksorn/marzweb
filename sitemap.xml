@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://www.marzweb.win/</loc>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Projects/</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Contact/contact.html</loc>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/checkers_multiplayer</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Projects/Projects.html</loc>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/Minesweeper/src/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/2048/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/Sudoku/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/tobiasmue91.github.io/games/wordle.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/Rock-paper-scissors_frontend_project/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/TTT%20MP/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/JS-Flappy-Bird/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/tobiasmue91.github.io/games/whac.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/tobiasmue91.github.io/games/color_flood.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/taptaptap/play/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/tetris.bleach.dev/index.html</loc>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://www.marzweb.win/Gamehub/Stack-Game-JavaScript/index.html</loc>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
