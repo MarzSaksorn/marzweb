@@ -1,82 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Marzweb</title>
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-    <link rel="shortcut icon" href="/src/img/Marz.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="/src/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" />
+    <link rel="shortcut icon" href="/src/img/Marz.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="/src/style.css" />
 </head>
 
-<body id="body" style="font-family: 'Montserrat', sans-serif;" class="bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
-
+<body id="body" style="font-family: &quot;Montserrat&quot;, sans-serif"
+    class="h-screen bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
     <!-------Navigation Bar------>
 
-    <header
-        class="relative flex flex-wrap sm:flex-nowrap sm:justify-start bg-neutral-100/50 dark:bg-neutral-800/55 py-3 w-full text-sm">
-        <nav class="sm:flex sm:justify-between sm:items-center mx-auto px-4 w-full max-w-[95rem]">
-            <div class="flex justify-between items-center">
-                <a class="flex-none focus:opacity-80 focus:outline-hidden font-semibold dark:text-white text-xl"
-                    href="#" aria-label="Brand">
-                    <img src="/src/img/Marz.jpg" alt="" class="rounded-md w-10">
-                </a>
-                <div class="sm:hidden">
-                    <button type="button"
-                        class="hs-collapse-toggle relative flex justify-center items-center gap-x-2 bg-white hover:bg-gray-50 focus:bg-gray-50 dark:bg-transparent dark:hover:bg-white/10 dark:focus:bg-white/10 disabled:opacity-50 shadow-2xs border border-gray-200 dark:border-neutral-700 rounded-lg focus:outline-hidden size-9 text-gray-800 dark:text-white disabled:pointer-events-none"
-                        id="hs-navbar-example-collapse" aria-expanded="false" aria-controls="hs-navbar-example"
-                        aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-example">
-                        <svg class="hs-collapse-open:hidden size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="3" x2="21" y1="6" y2="6" />
-                            <line x1="3" x2="21" y1="12" y2="12" />
-                            <line x1="3" x2="21" y1="18" y2="18" />
+    <div class="drawer">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+            <!-- Navbar -->
+            <div class="navbar bg-base-300/70 w-full">
+                <div class="flex-none lg:drawer-open">
+                    <label for="my-drawer-2" aria-label="open sidebar" class="btn btn-square btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            class="inline-block h-6 w-6 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
-                        <svg class="hidden hs-collapse-open:block size-4 shrink-0" xmlns="http://www.w3.org/2000/svg"
-                            width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
-                        </svg>
-                        <span class="sr-only">Toggle navigation</span>
-                    </button>
+                    </label>
+                </div>
+                <div class="lg:ml-5 lg:mx-1 px-2">
+                    <img src="/src/img/Marz.jpg" alt="" class="h-10 w-10 rounded-sm" />
+                </div>
+                <div class="mx-2 ml-0 flex-1 px-2 text-lg">Marzweb</div>
+                <div class="hidden flex-none lg:block">
+                    <ul class="menu menu-horizontal">
+                        <!-- Navbar menu content here -->
+                        <li class="px-6 text-lg"><a href="/Projects/">Projects</a></li>
+                        <li class="px-6 text-lg"><a href="/Contact/">Contacts</a></li>
+                    </ul>
                 </div>
             </div>
-            <div id="hs-navbar-example"
-                class="hidden hs-collapse sm:block overflow-hidden transition-all duration-300 basis-full grow"
-                aria-labelledby="hs-navbar-example-collapse">
-                <div class="flex sm:flex-row flex-col sm:justify-end sm:items-center gap-5 mt-5 sm:mt-0 sm:ps-5">
-                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
-                        href="/Projects/">My Projects</a>
-                    <a class="focus:outline-hidden font-medium text-gray-600 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg hover:dark-gray-400"
-                        href="https://fastwork.co/user/saksornth?source=web_marketplace_profile-menu_profile">Fastwork</a>
-                    <a class="focus:outline-hidden font-medium text-gray-600 hover:text-gray-400 focus:text-gray-400 dark:hover:text-neutral-500 dark:focus:text-neutral-500 dark:text-neutral-400 text-lg"
-                        href="/Contact/">Contact</a>
-                    
-                </div>
-            </div>
-        </nav>
-    </header>
+        </div>
+        <div class="drawer-side">
+            <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+            <ul class="menu bg-base-200 min-h-full w-80 p-4">
+                <!-- Sidebar content here -->
+                <li><a>Sidebar Item 1</a></li>
+                <li><a>Sidebar Item 2</a></li>
+            </ul>
+        </div>
+    </div>
 
     <!------Navigation Bar--------->
 
-    <div id="headline" class="grid items-start mt-16 p-4 w-auto text-black h-screen" ;>
-        <h1 class="font-bold text-black dark:text-white text-3xl lg:text-6xl text-center">Welcome to Marzweb!</h1>
-        <div id="button" class="flex justify-center w-auto text-black">
+    <div id="headline" class="grid w-auto mt-16 p-4 text-black items-start" ;>
+        <h1 class="font-bold text-black text-4xl text-center dark:text-white lg:text-6xl">
+            Welcome to Marzweb!
+        </h1>
+    </div>
+    <div class="flex mt-14 justify-center items-center">
+        <div id="links" class="mr-32 p-8 relative justify-center items-start lg:mr-48">
             <a href="/Projects/">
-                <button type="button"
-                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 mr-12 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
-                    <img src="/src/img/GitHub_Logo.png" class="max-w-7">
-                    <p class="text-lg text-nowrap">Projects</p>
+                <button
+                    class="flex p-8 text-black bg-white/85 transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 btn items-center border-white hover:bg-sky-300/65 hover:p-9 active:p-7 btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">
+                    <img src="/src/img/GitHub_Logo.png" alt="" class="w-10" />
+                    <p class="text-lg">Projects</p>
                 </button>
             </a>
-            <a href="https://fastwork.co/user/saksornth?source=web_marketplace_profile-menu_profile">
-                <button type="button"
-                    class="flex items-center gap-2.5 bg-white hover:bg-cyan-500/10 px-4 py-2 border border-gray-500/30 hover:border-cyan-500/30 rounded text-gray-800 hover:text-cyan-500 text-sm active:scale-95 transition">
-                    <img src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/473722ef-b6b9-4c8c-b3ea-24bba35b6504/dcpq84b-2927887e-e427-485f-995a-0cf7f2a36bef.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi80NzM3MjJlZi1iNmI5LTRjOGMtYjNlYS0yNGJiYTM1YjY1MDQvZGNwcTg0Yi0yOTI3ODg3ZS1lNDI3LTQ4NWYtOTk1YS0wY2Y3ZjJhMzZiZWYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.tfYhyHgCdV2Ukgu6-VHV3r_6q1JWSaKjitVW0UepBsI" alt="" class="max-w-6">
-                    <p class="text-lg">Fastwork</p>
+        </div>
+        <div id="links" class="p-8 relative justify-center items-start">
+            <a href="/Projects/">
+                <button
+                    class="flex p-8 text-black bg-white/85 transition-all absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 btn items-center border-white hover:bg-sky-300/65 hover:p-9 active:p-7 btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">
+                    <img src="/src/img/GitHub_Logo.png" alt="" class="w-10" />
+                    <p class="text-lg">Projects</p>
                 </button>
             </a>
         </div>
