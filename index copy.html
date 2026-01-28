@@ -11,7 +11,7 @@
 </head>
 
 <body id="body" style="font-family: &quot;Montserrat&quot;, sans-serif"
-    class="min-h-screen bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark bg-fixed bg-center bg-no-repeat">
+    class=" h-screen bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark">
     <!-------Navigation Bar------>
 
     <div class="drawer">
@@ -54,27 +54,31 @@
 
     <!------Navigation Bar--------->
 
-    <div class="grid lg:flex justify-items-stretch w-full mt-16">
-        <div class="w-full">
-            <h1 class="bg-slate-700/80 rounded-lg p-6 justify-self-center text-center text-6xl font-semibold">Welcome To Marzweb!</h1>
+    <div class="flex h-auto justify-end">
+        <div id="headline" class="w-full grid mt-16 p-4 text-black items-start" ;>
+            <h1 class="justify-self-center font-bold text-black text-4xl text-center dark:text-white lg:text-6xl">
+                Welcome to Marzweb!
+            </h1>
         </div>
-        <div class="w-full lg:w-1/4 mt-10">
-            <h1 class="bg-slate-400/75 p-3 rounded-lg justify-self-center text-black text-2xl text-center dark:text-white lg:text-4xl">
+
+        <div class="mt-28 flex-col h-full justify-center bg-slate-600/100">
+
+            <h1 class="font-bold text-black text-2xl text-center dark:text-white lg:text-4xl">
                 Current Project
             </h1>
-            <div class="justify-self-center card bg-base-100 w-96 shadow-sm mx-9 m-7">
+            <div class="card bg-base-100 w-96 shadow-sm mx-9 m-7">
                 <figure>
                     <img class="h-95" src="/src/img/Marzweb.png" alt="Marzweb" />
                 </figure>
                 <div class="card-body">
-                    <h2 class="card-title">Marzweb (Vite Revamped)</h2>
-                    <p>The homepage of my everything</p>
+                    <h2 class="card-title">Marzweb</h2>
+                    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
                     <div class="card-actions justify-end">
                         <button class="btn btn-primary">Buy Now</button>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </body>
