@@ -11,14 +11,14 @@
 </head>
 
 <body id="body" style="font-family: 'Brush Script MT', cursive, sans-serif"
-    class="min-h-screen bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/dark-bg.jpg)] dark:bg-neutral-900 dark bg-fixed bg-center bg-no-repeat">
+    class="min-h-screen bg-[url(/src/background/white1-bg.jpg)] bg-white dark:bg-[url(/src/background/wallhaven-d5d1em.png)] dark:bg-neutral-900 dark bg-fixed bg-center bg-no-repeat">
     <!-------Navigation Bar------>
 
     <div class="drawer">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col">
             <!-- Navbar -->
-            <div class="navbar bg-base-300/70 w-full">
+            <div class="navbar bg-base-300/55 w-full">
                 <div class="flex-none lg:drawer-open">
                     <label for="my-drawer-2" aria-label="open sidebar" class="btn btn-square btn-ghost">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -44,9 +44,26 @@
         <div class="drawer-side">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <ul class="menu bg-base-200 min-h-full w-80 p-4">
-                <!--Sidebar content here-->
-                <li><a href="/Projects/"><img src="/src/img/GitHub_Invertocat_White.png" alt="" class="w-8">My
-                        Projects</a></li>
+                <li>
+                    <details open>
+                        <summary>Projects</summary>
+                        <ul>
+                            <li>
+                                <details false>
+                                    <summary>Gamehub</summary>
+                                    <ul>
+                                        <li><a>Submenu 1</a></li>
+                                        <li><a>Submenu 2</a></li>
+                                    </ul>
+                                </details>
+                            </li>
+                            <li><a>Marzweb</a></li>
+                            <li><a href="">Online-game-dns-blocklist</a></li>
+                            <li><a href="">Checkers Multiplayer</a></li>
+                        </ul>
+                    </details>
+                </li>
+
             </ul>
         </div>
 
@@ -55,11 +72,15 @@
     <!------Navigation Bar--------->
 
     <div class="grid lg:flex justify-items-stretch w-full mt-16">
-        <div class="w-full">
-            <h1 class="p-6 justify-self-center text-center text-7xl font-extrabold">Welcome To Marzweb!</h1>
+        <div class="mt-5 w-full justify-center items-start">
+            <p class="text-center text-8xl font-extrabold">Welcome To Marzweb!</p>
+            <p class="text-center mt-44 font-bold text-4xl">A website which gathers every progress of my life <br> and
+                unites them all in to my very own website that I created</p>
+            <p class="text-center mt-9 font-bold text-5xl">Right Here</p>
         </div>
         <div class="w-full lg:w-1/4 mt-10">
-            <h1 class="bg-slate-400/75 p-3 rounded-lg justify-self-center text-black text-2xl text-center dark:text-white lg:text-4xl">
+            <h1
+                class=" font-bold bg-base-200/40 p-3 rounded-lg justify-self-center text-black text-2xl text-center dark:text-white lg:text-4xl">
                 Current Project
             </h1>
             <div class="justify-self-center card bg-base-100 w-96 shadow-sm mx-9 m-7">
@@ -69,12 +90,14 @@
                 <div class="card-body">
                     <h2 class="card-title">Marzweb (Vite Revamped)</h2>
                     <p>The homepage of my everything</p>
-                    <div class="card-actions justify-end">
-                        <button class="btn btn-primary">Buy Now</button>
+                    <div class="card-actions justify-between">
+                        <a href="https://github.com/MarzSaksorn/marzweb"><button class="btn btn-primary"><img
+                                    src="/src/img/GitHub_Invertocat_White.png" alt="" class="w-6 h-6"></button></a>
+                        <button class="bg-lime-600 border-none btn btn-primary">You are already here!</button>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </body>
