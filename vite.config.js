@@ -22,6 +22,7 @@ export default defineConfig({
         checker: resolve(__dirname, '/checkers_multiplayer/index.html'),
         Gamehub: resolve(__dirname, '/Gamehub/index.html'),
         Minesweeper: resolve(__dirname, '/Gamehub/Minesweeper/src/index.html'),
+        Wordle: resolve(__dirname, '/Gamehub/tobiasmue91.github.io/games/wordle.html'),
         2048: resolve(__dirname, '/Gamehub/2048/index.html'),
         Sudoku: resolve(__dirname, '/Gamehub/Sudoku/index.html'),
         RPS: resolve(__dirname, '/Gamehub/Rock-paper-scissors_frontend_project/index.html'),
