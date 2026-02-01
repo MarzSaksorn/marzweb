@@ -14,7 +14,7 @@ export default defineConfig({
     port: 5173,
   },
   preview: {
-    allowedHosts:'www.marzweb.win',
+    allowedHosts:['www.marzweb.win'],
   },
   build: {
     rollupOptions: {
