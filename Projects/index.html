@@ -43,6 +43,7 @@
         <div class="drawer-side">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <ul class="menu bg-base-200 min-h-full w-80 p-4">
+                <li><a id="drawer-home-button" class="font-semibold" href="/">Home</a></li>
                 <li>
                     <details open>
                         <summary class="font-bold">Projects</summary>
@@ -101,7 +102,7 @@
 
     <!------Navigation Bar--------->
     <h1 class="justify-self-center mt-16 text-7xl font-extrabold">My Projects</h1>
-    <div class="flex mt-16 w-full items-start justify-evenly">
+    <div class="grid lg:flex mt-16 w-full items-center justify-evenly">
         <div class="justify-self-center card bg-base-100 w-96 shadow-sm mx-9 m-7">
             <figure>
                 <img class="h-95" src="/src/img/Gamehub.jpg" alt="Gamehub" />
@@ -138,14 +139,16 @@
                 <h2 class="card-title">Online game dns blocklist</h2>
                 <p>As the name says</p>
                 <div class="mt-5 card-actions justify-between">
-                    <a href="https://github.com/MarzSaksorn/Online-game-dns-blocklist"><button class="btn btn-primary"><img
-                                src="/src/img/GitHub_Invertocat_White.png" alt="" class="w-6 h-6"></button></a>
-                    <button id="Online-game-dns-blocklist-button" class="bg-lime-600 border-none btn btn-primary">Let's Go!</button>
+                    <a href="https://github.com/MarzSaksorn/Online-game-dns-blocklist"><button
+                            class="btn btn-primary"><img src="/src/img/GitHub_Invertocat_White.png" alt=""
+                                class="w-6 h-6"></button></a>
+                    <button id="Online-game-dns-blocklist-button" class="bg-lime-600 border-none btn btn-primary">Let's
+                        Go!</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="flex  w-full items-start justify-evenly">
+    <div class="grid lg:flex  w-full items-center justify-evenly">
         <div class="justify-self-center card bg-base-100 w-96 shadow-sm mx-9 m-7">
             <figure>
                 <img class="h-96 w-full" src="/src/img/checkers.png" alt="checkers_multiplayer" />
@@ -156,7 +159,22 @@
                 <div class="mt-5 card-actions justify-between">
                     <a href="https://github.com/MarzSaksorn/checkers_multiplayer"><button class="btn btn-primary"><img
                                 src="/src/img/GitHub_Invertocat_White.png" alt="" class="w-6 h-6"></button></a>
-                    <a href="/checkers_multiplayer/"><button class="bg-lime-600 border-none btn btn-primary">Let's Go!</button></a>
+                    <a href="/checkers_multiplayer/"><button class="bg-lime-600 border-none btn btn-primary">Let's
+                            Go!</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="justify-self-center card bg-base-100 w-96 shadow-sm mx-9 m-7">
+            <figure class="bg-white">
+                <img class="h-80 p-10" src="/src/img/questionmark.png" alt="checkers_multiplayer" />
+            </figure>
+            <div class="card-body">
+                <h2 class="card-title">PC Wiki by Marzweb</h2>
+                <p>PC Wiki for everyone on How to use a computer from the begining of buying a computer <br> to becoming efficently using a computer</p>
+                <div class="mt-5 card-actions justify-between">
+                    <button id="pc-wiki-button-github" class="bg-slate-400 border-none btn btn-primary"><img src="/src/img/GitHub_Invertocat_White.png" alt=""
+                            class="w-6 h-6"></button>
+                    <button id="pc-wiki-button" class="bg-slate-400 border-none btn btn-primary">Coming Soon!</button>
                 </div>
             </div>
         </div>
@@ -166,6 +184,18 @@
             this.textContent = 'Nope! No Preview';
             setTimeout(() => {
                 this.textContent = "Let's Go!";
+            }, 1000);
+        });
+        document.getElementById('pc-wiki-button').addEventListener('click', function () {
+            this.textContent = 'I Said COMING SOON!';
+            setTimeout(() => {
+                this.textContent = 'Coming Soon!';
+            }, 1000);
+        });
+        document.getElementById('pc-wiki-button-github').addEventListener('click', function (){
+            this.textContent = 'Not Yet!';
+            setTimeout(() => {
+                this.innerHTML = '<img src="/src/img/GitHub_Invertocat_White.png" alt="" class="w-6 h-6">';
             }, 1000);
         });
     </script>

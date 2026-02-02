@@ -44,6 +44,7 @@
         <div class="drawer-side">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <ul class="menu bg-base-200 min-h-full w-80 p-4">
+                <li><a id="drawer-home-button" class="text-sky-300 font-semibold" href="#">Home</a></li>
                 <li>
                     <details open>
                         <summary class="font-bold">Projects</summary>
@@ -80,7 +81,14 @@
         </div>
 
     </div>
-
+    <script>
+        document.getElementById('drawer-home-button').addEventListener('click', function () {
+            this.textContent = "You're already here!";
+            setTimeout(() => {
+                this.textContent = "Home";
+            }, 1000);
+        })
+    </script>
     <!------Navigation Bar--------->
 
     <div class="grid lg:flex justify-items-stretch w-full mt-16">
