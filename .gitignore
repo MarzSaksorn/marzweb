@@ -23,6 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-Gamehub/*
+Gamehub
 checkers_multiplayer
 web_clone
