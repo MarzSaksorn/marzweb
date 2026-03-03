@@ -24,6 +24,8 @@ export default defineConfig({
         Projects: resolve(__dirname, '/Projects/index.html'),
         Contact: resolve(__dirname, '/Contact/index.html'),
         checker: resolve(__dirname, '/checkers_multiplayer/index.html'),
+        valentine: resolve(__dirname, '/Valentine/index.html'),
+        valentineyespage: resolve(__dirname, '/Valentine/yes_page.html'),
       },
     },
   },
