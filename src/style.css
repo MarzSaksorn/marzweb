@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+   themes: dark --default;
+ }
+
+@font-face {
+    font-family: 'Brush Script MT';
+    src: url('/src/fonts/Comic\ Sans\ MS\ Bold.ttf') format('truetype');
+}
