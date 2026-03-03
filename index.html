@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html class="dark" lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -11,7 +11,7 @@
 </head>
 
 <body id="body" style="font-family: 'Brush Script MT', cursive, sans-serif"
-    class="min-w-screen min-h-screen bg-white bg-[url(/src/background/wallhaven-d5d1em.png)] dark:bg-neutral-900 dark bg-fixed bg-center bg-no-repeat">
+    class="min-w-screen min-h-screen bg-white bg-[url(/src/background/wallhaven-d5d1em.png)] dark bg-cover bg-center bg-no-repeat bg-local">
     <!-------Navigation Bar daisyui------>
 
     <div class="drawer">
@@ -44,7 +44,7 @@
         <div class="drawer-side">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <ul class="menu bg-base-200 min-h-full lg:w-80 p-4">
-                <li><a id="drawer-home-button" class="text-sky-300 font-semibold" href="/">Home</a></li>
+                <li><a id="drawer-home-button" class="text-sky-300 font-semibold" href="#">Home</a></li>
                 <li>
                     <details open>
                         <summary class="font-bold">Projects</summary>
@@ -66,12 +66,14 @@
                                         <li><a href="/Gamehub/taptaptap/">taptaptap</a></li>
                                         <li><a href="/Gamehub/tetris.bleach.dev/">Tetris</a></li>
                                         <li><a href="/Gamehub/Stack-Game-JavaScript/">Stack</a></li>
-                                        
+
                                     </ul>
                                 </details>
                             </li>
                             <li><a href="/">Marzweb</a></li>
-                            <li><a href="https://github.com/MarzSaksorn/Online-game-dns-blocklist">Online-game-dns-blocklist</a></li>
+                            <li><a
+                                    href="https://github.com/MarzSaksorn/Online-game-dns-blocklist">Online-game-dns-blocklist</a>
+                            </li>
                             <li><a href="https://www.marzweb.win/checkers_multiplayer/">Checkers Multiplayer</a></li>
                         </ul>
                     </details>
@@ -92,15 +94,21 @@
     <!------Navigation Bar--------->
 
     <div class="grid lg:flex justify-items-stretch w-full mt-16">
-        <div class="mt-5 w-full justify-center items-start">
+        <div class="mt-5 w-full grid items-start justify-center ">
             <p class="text-center p-3 text-6xl lg:text-8xl font-extrabold">Welcome To Marzweb!</p>
-            <p class=" p-3 text-center mt-44 font-bold text-3xl lg:text-4xl">A website which gathers every progress of my life <br> and
-                unites them all in to my very own website that I created</p>
-            <p class="text-center mt-9 font-bold text-5xl">Right Here</p>
+            <div class="mt-20 lg:mt-0 p-5 h-fit w-fit bg-slate-300/30 rounded-2xl  backdrop-brightness-84">
+                <p class=" p-3 text-center font-bold text-3xl lg:text-4xl">A website which gathers every progress of my
+                    life <br> and
+                    unites them all in to my very own website that I created
+                </p>
+                <p class="p-3 text-center font-bold text-5xl lg:text-6xl">
+                    Right here
+                </p>
+            </div>
         </div>
         <div class="w-full lg:w-1/4 mt-10">
             <h1
-                class=" font-bold bg-white/30 p-3 rounded-lg justify-self-center text-black text-2xl text-center dark:text-white lg:text-4xl">
+                class=" font-bold bg-white/30 p-3 rounded-lg justify-self-center text-white text-2xl text-center  lg:text-4xl">
                 Current Project
             </h1>
             <div class="justify-self-center card bg-base-100 lg:w-96 shadow-sm mx-9 m-7">
