@@ -18,7 +18,7 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         Projects: resolve(__dirname, '/Projects/index.html'),
@@ -26,6 +26,7 @@ export default defineConfig({
         checker: resolve(__dirname, '/checkers_multiplayer/index.html'),
         valentine: resolve(__dirname, '/Valentine/index.html'),
         valentineyespage: resolve(__dirname, '/Valentine/yes_page.html'),
+        pcwiki: resolve(__dirname, '/PC-wiki/index.html'),
       },
     },
   },
