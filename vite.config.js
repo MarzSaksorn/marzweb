@@ -18,7 +18,7 @@ export default defineConfig({
     port: 5173,
   },
   build: {
-    rolldownOptions: {
+    rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
         Projects: resolve(__dirname, '/Projects/index.html'),
