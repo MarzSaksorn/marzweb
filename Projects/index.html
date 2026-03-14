@@ -169,12 +169,12 @@
                 <img class="h-80 p-10" src="/src/img/questionmark.png" alt="checkers_multiplayer" />
             </figure>
             <div class="card-body">
-                <h2 class="card-title">PC Wiki by Marzweb</h2>
+                <h2 class="card-title">PC Wiki by Marzweb <br>(In Development)</h2>
                 <p>PC Wiki for everyone on How to use a computer from the begining of buying a computer <br> to becoming efficently using a computer</p>
                 <div class="mt-5 card-actions justify-between">
-                    <button id="pc-wiki-button-github" class="bg-slate-400 border-none btn btn-primary"><img src="/src/img/GitHub_Invertocat_White.png" alt=""
-                            class="w-6 h-6"></button>
-                    <button id="pc-wiki-button" class="bg-slate-400 border-none btn btn-primary">Coming Soon!</button>
+                    <a href="https://github.com/MarzSaksorn/PC-wiki"><button id="pc-wiki-button-github" class="border-none btn btn-primary"><img src="/src/img/GitHub_Invertocat_White.png" alt=""
+                            class="w-6 h-6"></button></a>
+                    <a href="/PC-wiki/"><button id="pc-wiki-button" class="bg-lime-600 border-none btn btn-primary">Let's Go!</button></a>
                 </div>
             </div>
         </div>
@@ -202,11 +202,11 @@
                 this.textContent = "Let's Go!";
             }, 1000);
         });
-        document.getElementById('pc-wiki-button').addEventListener('click', function () {
-            this.textContent = 'I Said COMING SOON!';
-            setTimeout(() => {
-                this.textContent = 'Coming Soon!';
-            }, 1000);
-        });
+        //document.getElementById('pc-wiki-button').addEventListener('click', function () {
+        //    this.textContent = 'I Said COMING SOON!';
+        //    setTimeout(() => {
+        ///        this.textContent = 'Coming Soon!';
+        //    }, 1000);
+        //});
     </script>
 </body>
