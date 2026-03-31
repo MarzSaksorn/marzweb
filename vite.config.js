@@ -35,7 +35,6 @@ export default defineConfig({
         checker: resolve(__dirname, '/checkers_multiplayer/index.html'),
         valentine: resolve(__dirname, '/Valentine/index.html'),
         valentineyespage: resolve(__dirname, '/Valentine/yes_page.html'),
-        ...pcWikiInputs,
       },
     },
   },
