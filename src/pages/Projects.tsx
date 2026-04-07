@@ -69,7 +69,7 @@ const projects: Project[] = [
     id: 6,
     title: "Valentine",
     description: "Credit to @code_wars_official on Instagram I got Friendzoned by my crush but i started this so i gotta finish it",
-    image: "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/Valentine/img1.gif",
+    image: "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/public/Valentine/img1.gif",
     githubUrl: "https://github.com/MarzSaksorn/Valentine",
     liveUrl: "/Valentine/",
     tags: ["Tailwind", "Instagram", "@code_wars_official"],
