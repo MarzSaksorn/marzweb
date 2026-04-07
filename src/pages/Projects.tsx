@@ -32,6 +32,7 @@ const projects: Project[] = [
     description: "The homepage that archive all My Projects of My Cloud / DevOps Engineer Path from Ground Zero",
     image: "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Marzweb.png",
     githubUrl: "https://github.com/MarzSaksorn/marzweb",
+    liveUrl: "/",
     tags: ["React", "Vite", "Tailwind", "TypeScript", "BigPickle AI Opencode"],
     accentColor: "from-fuchsia-400 to-pink-400",
   },
