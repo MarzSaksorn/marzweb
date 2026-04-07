@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ไม่บอกๆๆๆๆๆ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="gif_container">
+            <img src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif" alt="Cute GIF">
+        </div>
+        <h1>เป็นแฟนกันนะ ได้ไหมมมม น้าาาาา</h1>
+        <div class="buttons">
+            <button class="yes-button" onclick="handleYesClick()">ช่ายยยย</button>
+            <button class="no-button" onclick="handleNoClick()">ไม่</button>
+        </div>
+
+    </div>
+    <script>
+        const messages = [
+            "แน่ใจน้าาา?",
+            "จริงหรออ??",
+            "จริงป่ะเนี่ย?",
+            "ขอเถอะน้าาา",
+            "คิดดีแล้วหรือยังง!",
+            "ถ้าตอบไม่ เราจะร้องให้แล้วนะ...",
+            "เศร้าหว่ะ...",
+            "เศร้าจริงนะเนี่ยยยย...",
+            "เคร จะหยุดถามละ",
+            "เอาดี?!"
+        ];
+
+        let messageIndex = 0;
+
+        function handleNoClick() {
+            const noButton = document.querySelector('.no-button');
+            const yesButton = document.querySelector('.yes-button');
+            noButton.textContent = messages[messageIndex];
+            messageIndex = (messageIndex + 1) % messages.length;
+            const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = `${currentSize * 1.5}px`;
+        }
+
+        function handleYesClick() {
+            window.location.href = "yes_page";
+        }
+    </script>
+</body>
+
+</html>

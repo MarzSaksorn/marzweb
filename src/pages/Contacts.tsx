@@ -13,22 +13,22 @@ const contacts: ContactItem[] = [
   {
     icon: Mail,
     label: "Email",
-    value: "contact@marzweb.dev",
-    href: "mailto:contact@marzweb.dev",
+    value: "mark94849@proton.me",
+    href: "mailto:mark94849@proton.me",
     gradient: "from-pink-400 to-rose-400",
   },
   {
     icon: Instagram,
     label: "Instagram",
-    value: "@marzweb",
-    href: "https://instagram.com/marzweb",
+    value: "@marzsaksorn",
+    href: "https://instagram.com/marzsaksorn",
     gradient: "from-fuchsia-400 via-pink-400 to-rose-400",
   },
   {
     icon: Facebook,
     label: "Facebook",
-    value: "Marzweb Official",
-    href: "https://facebook.com/marzweb",
+    value: "Saksorn Ngandee",
+    href: "https://facebook.com/MarzSaksorn",
     gradient: "from-rose-400 to-fuchsia-400",
   },
 ]

@@ -6,7 +6,7 @@ const currentProject = {
   title: "Marzweb Redesign",
   description: "A modern portfolio website with responsive design, theme switching, and smooth navigation. Built with React, TypeScript, and Tailwind CSS for optimal performance and developer experience.",
   status: "In Development",
-  githubUrl: "#",
+  githubUrl: "https://github.com/MarzSaksorn/marzweb/tree/redesign",
   liveUrl: "#",
 }
 
@@ -21,7 +21,7 @@ export default function Home() {
           <CardTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 bg-gradient-primary bg-clip-text text-transparent" />
             <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-              Welcome to My Portfolio
+              Welcome to Marzweb
             </span>
           </CardTitle>
           <CardDescription className="text-base">
@@ -77,9 +77,9 @@ export default function Home() {
               </a>
             </Button>
             <Button className="bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500" asChild>
-              <a href={currentProject.liveUrl} target="_blank" rel="noopener noreferrer">
+              <a href={currentProject.liveUrl}>
                 <ExternalLink className="h-4 w-4 mr-2" />
-                Live Demo
+                This is the live Demo!
               </a>
             </Button>
           </CardFooter>
