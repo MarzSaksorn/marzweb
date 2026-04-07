@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   preview: {
+    allowedHosts:['www.marzweb.win'],
     port: 5173,
     strictPort: true, 
   },
