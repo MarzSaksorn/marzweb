@@ -55,7 +55,7 @@ const projects: Project[] = [
     id: 5,
     title: "Love Me Valentine",
     description: "A hub that gathers games from around Github and unites them all",
-    image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Valentine/Love-Me-Valentine-1/preview.png",
+    image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Love-Me-Valentine-1/preview.png",
     liveUrl: "/Valentine/Love-Me-Valentine-1/",
     tags: ["Pure HTML, CSS", "Node.js"],
     accentColor: "from-pink-400 to-rose-400",
