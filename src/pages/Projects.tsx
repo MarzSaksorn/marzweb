@@ -73,7 +73,7 @@ const projects: Project[] = [
     image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/be-my-Valentine/img1.gif",
     githubUrl: "https://github.com/MarzSaksorn/Valentine",
     liveUrl: "/Valentine/",
-    tags: ["Tailwind", "Instagram", "@code_wars_official"],
+    tags: ["Pure HTML, CSS", "Instagram", "@code_wars_official"],
     accentColor: "from-fuchsia-300 to-rose-300",
   },
   {
