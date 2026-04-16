@@ -34,8 +34,8 @@ A modern, responsive Project Archive page website built with React, Vite, and Ty
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd marzweb-redesign
+   git clone https://github.com/MarzSaksorn/marzweb.git
+   cd marzweb
    ```
 
 2. Install dependencies:
