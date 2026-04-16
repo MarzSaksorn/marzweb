@@ -1,6 +1,6 @@
-# Marzweb Landing Page
+# Marzweb
 
-A modern, responsive landing page website built with React, Vite, and TypeScript.
+A modern, responsive Project Archive page website built with React, Vite, and TypeScript.
 
 ## Features
 
