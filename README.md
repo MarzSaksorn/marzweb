@@ -120,4 +120,5 @@ The project uses a pastel pink color palette:
 
 ## License
 
-MIT License
+Apache License 2.0
+
