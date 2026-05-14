@@ -1,6 +1,7 @@
 # marzweb
 
-## This branch is the archive of Marzweb Old Design of it at the beginning ----  Last updated on 14/5/2026
+## This branch is the Old Design archive of Marzweb at the beginning
+## Last updated on 14/5/2026
 
 https://www.marzweb.win
 
