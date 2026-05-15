@@ -74,7 +74,7 @@ export function Sidebar({ children }: SidebarProps) {
 
           <div className="p-4 border-t space-y-3">
             <a
-              href="https://marzweb-old.netlify.app/"
+              href="https://old-design.marzweb.win/"
               target="_blank"
               rel="noopener noreferrer"
             >
