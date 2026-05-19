@@ -15,6 +15,7 @@ const pcWikiInputs = globSync('PC-wiki/**/*.html', { cwd: __dirname })
   }, {});
 
 export default defineConfig({
+  base: '/old_marzweb_archive/',
   plugins: [
     tailwindcss()
   ],
