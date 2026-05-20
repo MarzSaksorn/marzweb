@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTheme } from "next-themes"
-import { Menu, X, Sun, Moon } from "lucide-react"
+import { Menu, X, Sun, Moon, ArrowLeft } from "lucide-react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 
@@ -72,7 +72,20 @@ export function Sidebar({ children }: SidebarProps) {
             ))}
           </nav>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t space-y-3">
+            <a
+              href="https://old-design.marzweb.win/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-3 bg-gradient-to-r from-pink-400/10 to-rose-400/10 hover:from-pink-400/20 hover:to-rose-400/20 border-pink-400/30"
+              >
+                <ArrowLeft className="h-5 w-5 text-pink-400" />
+                <span className="text-foreground">Go to Old design</span>
+              </Button>
+            </a>
             <Button
               variant="outline"
               className="w-full justify-start gap-3 bg-gradient-to-r from-pink-400/10 to-rose-400/10 hover:from-pink-400/20 hover:to-rose-400/20 border-pink-400/30"
