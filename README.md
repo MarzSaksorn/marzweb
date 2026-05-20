@@ -9,4 +9,4 @@ Marzweb is a Homepage of my everything
 
 Which uses tailwind and bunch of tailwind libraries
 
-Hosted on free Google Cloud VM e2-micro
+Hosted on DigitalOcean Droplet with Github Education 200USD credit
