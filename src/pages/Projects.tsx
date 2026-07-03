@@ -10,161 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Github, ExternalLink, Search, FolderOpen } from "lucide-react";
-
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  githubUrl?: string;
-  liveUrl?: string;
-  tags: string[];
-  accentColor: string;
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Gamehub",
-    description:
-      "A hub that gathers games from around Github and unites them all",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Gamehub.jpg",
-    githubUrl: "https://github.com/MarzSaksorn/Gamehub",
-    liveUrl: "/Gamehub/",
-    tags: ["Pure HTML, CSS", "Node.js"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-  {
-    id: 2,
-    title: "Marzweb - Vite Revamped",
-    description:
-      "The homepage that archive all My Projects of My Cloud / DevOps Engineer Path from Ground Zero",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Marzweb.png",
-    githubUrl: "https://github.com/MarzSaksorn/marzweb",
-    liveUrl: "/",
-    tags: ["React", "Vite", "Tailwind", "TypeScript", "BigPickle AI Opencode"],
-    accentColor: "from-fuchsia-400 to-pink-400",
-  },
-  {
-    id: 3,
-    title: "Online game dns blocklist",
-    description:
-      "Windows hosts file that contains bunch of online game domains",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Game-Blocklist.png",
-    githubUrl: "https://github.com/MarzSaksorn/Online-game-dns-blocklist",
-
-    tags: ["Windows Hosts file"],
-    accentColor: "from-rose-400 to-fuchsia-400",
-  },
-  {
-    id: 4,
-    title: "Checkers Multiplayer",
-    description:
-      "Checkers Multiplayer with lobby system built entirely by Canva AI",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/checkers.png",
-    githubUrl: "https://github.com/MarzSaksorn/checkers_multiplayer",
-    liveUrl: "/checkers_multiplayer/",
-    tags: ["Node.js", "HTML", "Tailwind", "JavaScript", "Canva AI"],
-    accentColor: "from-pink-300 to-rose-300",
-  },
-  {
-    id: 5,
-    title: "PC Wiki by Marzweb (Paused Dev.)",
-    description:
-      "PC Wiki for everyone on How to use a computer from the begining to being able to troubleshoot stuffs",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/PC-Wiki.png",
-    githubUrl: "https://github.com/MarzSaksorn/PC-Wiki",
-    liveUrl: "/PC-Wiki/",
-    tags: ["React", "Vite", "Tailwind", "BigPickle AI Opencode"],
-    accentColor: "from-rose-300 to-pink-300",
-  },
-  {
-    id: 6,
-    title: "Valentine",
-    description:
-      "Credit to @code_wars_official on Instagram I got Friendzoned by my crush but i started this so i gotta finish it",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/be-my-Valentine/img1.gif",
-    githubUrl: "https://github.com/MarzSaksorn/Valentine",
-    liveUrl: "/Valentine/",
-    tags: ["Pure HTML, CSS", "Instagram", "@code_wars_official"],
-    accentColor: "from-fuchsia-300 to-rose-300",
-  },
-  {
-    id: 7,
-    title: "borntoDev-Project",
-    description: "Lite-Fundamental-Web-Dev-With-HTML5-CSS3",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Lite-Fundamental-Web-Dev-With-HTML5-CSS3.png",
-    githubUrl:
-      "https://github.com/MarzSaksorn/borntoDev-Project_Lite-Fundamental-Web-Dev-With-HTML5-CSS3",
-
-    tags: ["borntoDev", "Pure HTML, CSS"],
-    accentColor: "from-fuchsia-300 to-rose-300",
-  },
-  {
-    id: 8,
-    title: "borntoDev-Project",
-    description: "Introduction-to-JavaScript",
-    image:
-      "https://raw.githubusercontent.com/MarzSaksorn/marzweb/refs/heads/main/src/img/Thailand_tax_cal.png",
-    githubUrl:
-      "https://github.com/MarzSaksorn/borntoDev-Project_Introduction-to-JavaScript",
-
-    tags: ["borntoDev", "Tailwind", "JavaScript"],
-    accentColor: "from-fuchsia-300 to-rose-300",
-  },
-  {
-    id: 9,
-    title: "Be My Valentine",
-    description: "Credit to @code_wars_official on Instagram — a cute Valentine proposal page",
-    image: "https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif",
-    liveUrl: "/Valentine/be-my-Valentine/",
-    tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-  {
-    id: 10,
-    title: "Love Me Valentine",
-    description: "Credit to @code_wars_official on Instagram — an interactive Valentine experience",
-    image: "https://media.giphy.com/media/FTGah7Mx3ss04PcasF/giphy.gif",
-    liveUrl: "/Valentine/Love-Me-Valentine/",
-    tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-  {
-    id: 11,
-    title: "Valentine Card",
-    description: "Credit to @code_wars_official on Instagram — a digital Valentine card",
-    image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmhrbmtqb3V2YmZ2aWJ5eWJqbm5oZnN5Y3h4aG5rOGZ6aHhua3VwMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KztT2c4u8mYYUiMKdJ/giphy.gif",
-    liveUrl: "/Valentine/Valentine-Card/",
-    tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-  {
-    id: 12,
-    title: "Valentine Letter",
-    description: "Credit to @code_wars_official on Instagram — an animated envelope Valentine letter",
-    image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Valentine-Letter/envelope.png",
-    liveUrl: "/Valentine/Valentine-Letter/",
-    tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-  {
-    id: 13,
-    title: "Love Me Valentine",
-    description: "Credit to @code_wars_official on Instagram — another Valentine interactive page",
-    image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Love-Me-Valentine-1/preview.png",
-    liveUrl: "/Valentine/Love-Me-Valentine-1/",
-    tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
-  },
-];
+import { projects } from "@/data/projects";
 
 export default function Projects() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -184,7 +30,7 @@ export default function Projects() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#A78BFA] to-[#C4B5FD] bg-clip-text text-transparent">
             My Projects
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -192,20 +38,20 @@ export default function Projects() {
           </p>
         </div>
         <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-pink-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#A78BFA]" />
           <Input
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 border-pink-400/30 focus-visible:ring-pink-400"
+            className="pl-10 border-[#A78BFA]/30 focus-visible:ring-[#A78BFA]"
           />
         </div>
       </div>
 
       {filteredProjects.length === 0 ? (
-        <Card className="py-12 border-pink-400/20">
+        <Card className="py-12 border-[#A78BFA]/20">
           <CardContent className="flex flex-col items-center justify-center text-center">
-            <FolderOpen className="h-12 w-12 text-pink-400 mb-4" />
+            <FolderOpen className="h-12 w-12 text-[#A78BFA] mb-4" />
             <CardTitle className="text-xl mb-2">No projects found</CardTitle>
             <CardDescription>
               Try adjusting your search query or browse all projects
@@ -213,7 +59,7 @@ export default function Projects() {
             {searchQuery && (
               <Button
                 variant="outline"
-                className="mt-4 border-pink-400/50 hover:bg-pink-400/10"
+                className="mt-4 border-[#A78BFA]/50 hover:bg-[#A78BFA]/10"
                 onClick={() => setSearchQuery("")}
               >
                 Clear Search
@@ -255,7 +101,7 @@ export default function Projects() {
                   {project.tags.slice(1).map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-pink-400/10 text-pink-600 dark:text-pink-400 border border-pink-400/20"
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] border border-[#A78BFA]/20"
                     >
                       {tag}
                     </span>
@@ -266,7 +112,7 @@ export default function Projects() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-1 border-pink-400/30 hover:bg-pink-400/10 hover:border-pink-400/50"
+                  className="flex-1 border-[#A78BFA]/30 hover:bg-[#A78BFA]/10 hover:border-[#A78BFA]/50"
                   asChild
                 >
                   <a

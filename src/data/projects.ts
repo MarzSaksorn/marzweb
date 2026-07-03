@@ -97,7 +97,7 @@ export const projects: Project[] = [
     image: "https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.gif",
     liveUrl: "/Valentine/be-my-Valentine/",
     tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
+    accentColor: "from-[#A78BFA] to-[#C4B5FD]",
   },
   {
     id: 10,
@@ -106,7 +106,7 @@ export const projects: Project[] = [
     image: "https://media.giphy.com/media/FTGah7Mx3ss04PcasF/giphy.gif",
     liveUrl: "/Valentine/Love-Me-Valentine/",
     tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
+    accentColor: "from-[#A78BFA] to-[#C4B5FD]",
   },
   {
     id: 11,
@@ -115,7 +115,7 @@ export const projects: Project[] = [
     image: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmhrbmtqb3V2YmZ2aWJ5eWJqbm5oZnN5Y3h4aG5rOGZ6aHhua3VwMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KztT2c4u8mYYUiMKdJ/giphy.gif",
     liveUrl: "/Valentine/Valentine-Card/",
     tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
+    accentColor: "from-[#A78BFA] to-[#C4B5FD]",
   },
   {
     id: 12,
@@ -124,7 +124,7 @@ export const projects: Project[] = [
     image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Valentine-Letter/envelope.png",
     liveUrl: "/Valentine/Valentine-Letter/",
     tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
+    accentColor: "from-[#A78BFA] to-[#C4B5FD]",
   },
   {
     id: 13,
@@ -133,6 +133,6 @@ export const projects: Project[] = [
     image: "https://raw.githubusercontent.com/MarzSaksorn/Valentine/refs/heads/main/Love-Me-Valentine-1/preview.png",
     liveUrl: "/Valentine/Love-Me-Valentine-1/",
     tags: ["Valentine", "Pure HTML, CSS", "JavaScript"],
-    accentColor: "from-pink-400 to-rose-400",
+    accentColor: "from-[#A78BFA] to-[#C4B5FD]",
   },
 ];
