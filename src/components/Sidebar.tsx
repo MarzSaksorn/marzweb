@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTheme } from "next-themes"
-import { Home, Folder, Mail, Sun, Moon, PanelLeftClose, PanelLeft, ArrowUpRight } from "lucide-react"
+import { Home, Folder, Mail, Sun, Moon, PanelLeftClose, PanelLeft, ArrowUpRight, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
 ]
 
 export function Sidebar({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [collapsed, setCollapsed] = useState(false)
   const [mounted, setMounted] = useState(false)
   const location = useLocation()
@@ -23,36 +24,58 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-background flex">
-      {/* Desktop: full-height collapsible sidebar */}
+      {/* Open button — visible when sidebar is hidden */}
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className={cn(
+          "fixed left-3 top-1/2 -translate-y-1/2 z-40 hidden md:flex items-center justify-center w-10 h-10 rounded-xl bg-background/80 backdrop-blur-xl border border-border/50 shadow-lg text-muted-foreground hover:text-[#A78BFA] transition-all duration-300",
+          sidebarOpen ? "opacity-0 pointer-events-none scale-95" : "opacity-100 pointer-events-auto scale-100"
+        )}
+        title="Open sidebar"
+      >
+        <PanelLeft className="h-4 w-4" />
+      </button>
+
+      {/* Desktop: floating collapsible sidebar */}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen hidden md:flex flex-col border-r border-border/50 bg-background/80 backdrop-blur-xl transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          "fixed left-3 top-3 bottom-3 z-40 hidden md:flex flex-col rounded-2xl border border-border/50 bg-background/80 backdrop-blur-xl shadow-lg transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          sidebarOpen ? "opacity-100 pointer-events-auto translate-x-0" : "opacity-0 pointer-events-none -translate-x-4",
           collapsed ? "w-16" : "w-56"
         )}
       >
         {/* Header */}
         <div className={cn(
-          "flex items-center border-b border-border/50 h-14 shrink-0",
-          collapsed ? "justify-center px-0" : "justify-between px-4"
+          "flex items-center shrink-0 h-14",
+          collapsed ? "justify-center" : "justify-between pl-4 pr-3"
         )}>
           {!collapsed && (
             <h1 className="text-base font-bold text-foreground tracking-tight">Marzweb</h1>
           )}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-2 rounded-lg text-muted-foreground hover:bg-[#A78BFA]/10 hover:text-[#A78BFA] transition-colors"
-            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-          >
-            {collapsed ? (
-              <PanelLeft className="h-4 w-4" />
-            ) : (
-              <PanelLeftClose className="h-4 w-4" />
-            )}
-          </button>
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="p-2 rounded-lg text-muted-foreground hover:bg-[#A78BFA]/10 hover:text-[#A78BFA] transition-colors"
+              title={collapsed ? "Expand" : "Collapse"}
+            >
+              {collapsed ? (
+                <PanelLeft className="h-4 w-4" />
+              ) : (
+                <PanelLeftClose className="h-4 w-4" />
+              )}
+            </button>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 rounded-lg text-muted-foreground hover:bg-[#A78BFA]/10 hover:text-[#A78BFA] transition-colors"
+              title="Close sidebar"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-2">
+        <nav className="flex-1 space-y-1 px-2">
           {navItems.map((item) => {
             const Icon = item.icon
             const active = location.pathname === item.path
@@ -82,7 +105,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         </nav>
 
         {/* Footer */}
-        <div className="border-t border-border/50 p-2 space-y-1">
+        <div className="px-2 pb-2 space-y-1">
           <button
             onClick={toggleTheme}
             className={cn(
@@ -163,7 +186,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
       {/* Main content */}
       <main className={cn(
         "flex-1 min-h-screen pb-20 md:pb-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
-        collapsed ? "md:ml-16" : "md:ml-56"
+        !sidebarOpen ? "md:ml-0" : collapsed ? "md:ml-24" : "md:ml-64"
       )}>
         <div className="p-6">{children}</div>
       </main>
