@@ -63,8 +63,8 @@ export function Sidebar({ children }: SidebarProps) {
                 className={cn(
                   "w-full text-left px-4 py-3 rounded-lg transition-all duration-200",
                   location.pathname === item.path
-                    ? "bg-gradient-to-r from-pink-400/20 to-rose-400/20 text-pink-600 dark:text-pink-400 font-medium border-l-2 border-pink-400"
-                    : "text-muted-foreground hover:bg-gradient-to-r hover:from-pink-400/10 hover:to-rose-400/10"
+                    ? "bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] font-medium border-l-2 border-[#A78BFA]"
+                    : "text-muted-foreground hover:bg-[#A78BFA]/5"
                 )}
               >
                 {item.label}
@@ -80,20 +80,20 @@ export function Sidebar({ children }: SidebarProps) {
             >
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 bg-gradient-to-r from-pink-400/10 to-rose-400/10 hover:from-pink-400/20 hover:to-rose-400/20 border-pink-400/30"
+                className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30"
               >
-                <ArrowLeft className="h-5 w-5 text-pink-400" />
+                <ArrowLeft className="h-5 w-5 text-[#A78BFA]" />
                 <span className="text-foreground">Go to Old design</span>
               </Button>
             </a>
             <Button
               variant="outline"
-              className="w-full justify-start gap-3 bg-gradient-to-r from-pink-400/10 to-rose-400/10 hover:from-pink-400/20 hover:to-rose-400/20 border-pink-400/30"
+              className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30"
               onClick={toggleTheme}
             >
               {mounted && theme === "dark" ? (
                 <>
-                  <Moon className="h-5 w-5 text-pink-400" />
+                  <Moon className="h-5 w-5 text-[#A78BFA]" />
                   <span className="text-foreground">Dark Theme</span>
                 </>
               ) : (
