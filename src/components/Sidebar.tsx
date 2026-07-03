@@ -40,13 +40,17 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-2 rounded-lg text-muted-foreground hover:bg-[#A78BFA]/10 hover:text-[#A78BFA] transition-colors"
+            className={cn(
+              "flex items-center justify-center rounded-xl transition-all duration-200 shrink-0",
+              collapsed ? "h-11 w-11" : "h-11 w-11",
+              "text-muted-foreground hover:bg-[#A78BFA]/10 hover:text-[#A78BFA]"
+            )}
             title={collapsed ? "Expand" : "Collapse"}
           >
             {collapsed ? (
-              <PanelLeft className="h-4 w-4" />
+              <PanelLeft className="h-4 w-4 shrink-0" />
             ) : (
-              <PanelLeftClose className="h-4 w-4" />
+              <PanelLeftClose className="h-4 w-4 shrink-0" />
             )}
           </button>
         </div>
@@ -61,8 +65,8 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
                 key={item.path}
                 onClick={() => navigate(item.path)}
                 className={cn(
-                  "flex items-center gap-3 rounded-xl transition-all duration-200 w-full",
-                  collapsed ? "justify-center h-11 w-11 mx-auto" : "px-3 py-2.5",
+                  "flex items-center rounded-xl transition-all duration-200 w-full",
+                  collapsed ? "justify-center h-11 w-11 mx-auto gap-0" : "px-3 h-11 gap-3",
                   active
                     ? "bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] font-medium"
                     : "text-muted-foreground hover:bg-[#A78BFA]/5 hover:text-foreground"
@@ -86,8 +90,8 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
           <button
             onClick={toggleTheme}
             className={cn(
-              "flex items-center gap-3 rounded-xl transition-all duration-200 w-full",
-              collapsed ? "justify-center h-11 w-11 mx-auto" : "px-3 py-2.5",
+              "flex items-center rounded-xl transition-all duration-200 w-full",
+              collapsed ? "justify-center h-11 w-11 mx-auto gap-0" : "px-3 h-11 gap-3",
               "text-muted-foreground hover:bg-[#A78BFA]/5 hover:text-foreground"
             )}
             title={collapsed ? (mounted && theme === "dark" ? "Dark" : "Light") : undefined}
@@ -109,8 +113,8 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              "flex items-center gap-3 rounded-xl transition-all duration-200 w-full",
-              collapsed ? "justify-center h-11 w-11 mx-auto" : "px-3 py-2.5",
+              "flex items-center rounded-xl transition-all duration-200 w-full",
+              collapsed ? "justify-center h-11 w-11 mx-auto gap-0" : "px-3 h-11 gap-3",
               "text-muted-foreground hover:bg-[#A78BFA]/5 hover:text-[#A78BFA]"
             )}
             title={collapsed ? "Old design" : undefined}
