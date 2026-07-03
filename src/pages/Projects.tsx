@@ -120,6 +120,7 @@ export default function Projects() {
               className={`overflow-hidden group hover:-translate-y-[1px] transition-all duration-200 flex flex-col border-border animate-up ${
                 i === 0 ? "" : i === 1 ? "animate-up-d1" : i === 2 ? "animate-up-d2" : "animate-up-d3"
               }`}
+              style={{ backgroundColor: project.color + '0d' }}
             >
               <div className="relative h-40 overflow-hidden">
                 <img
@@ -151,7 +152,8 @@ export default function Projects() {
                   {project.tags.slice(1).map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded-full text-[11px] bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] border border-[#A78BFA]/20"
+                      className="px-2 py-0.5 rounded-full text-[11px] border"
+                      style={{ backgroundColor: project.color + '1a', color: project.color, borderColor: project.color + '33' }}
                     >
                       {tag}
                     </span>

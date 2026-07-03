@@ -169,6 +169,8 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         "flex-1 min-h-screen pb-20 md:pb-0 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
         collapsed ? "md:ml-24" : "md:ml-64"
       )}>
+        {/* Subtle page-wide background gradient */}
+        <div className="fixed inset-0 pointer-events-none bg-gradient-to-br from-[#A78BFA]/[0.03] via-transparent to-[#2DD4BF]/[0.03] dark:from-[#A78BFA]/[0.05] dark:via-transparent dark:to-[#F472B6]/[0.03]" />
         <div className="p-6">{children}</div>
       </main>
     </div>

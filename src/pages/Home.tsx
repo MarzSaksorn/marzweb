@@ -11,9 +11,10 @@ export default function Home() {
     <div className="space-y-8">
       {/* Hero — colorful spotlight gradient */}
       <section className="relative overflow-hidden rounded-[8px] border border-[#A78BFA]/20 bg-card animate-up">
-        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#A78BFA]/10 blur-3xl" />
-        <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-[#2DD4BF]/10 blur-3xl" />
-        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-[#F472B6]/8 blur-3xl" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#A78BFA]/20 blur-3xl" />
+        <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-[#2DD4BF]/15 blur-3xl" />
+        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-[#F472B6]/15 blur-3xl" />
+        <div className="absolute -bottom-16 right-1/4 w-48 h-48 rounded-full bg-[#818CF8]/10 blur-3xl" />
         <div className="relative px-8 py-12 md:px-12 md:py-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
             Marzweb
@@ -47,7 +48,7 @@ export default function Home() {
             Featured Projects
           </h2>
           {featured.map(project => (
-            <Card key={project.id} className="group overflow-hidden border-border hover:-translate-y-[1px] transition-all duration-200 animate-up">
+            <Card key={project.id} className="group overflow-hidden border-border hover:-translate-y-[1px] transition-all duration-200 animate-up" style={{ backgroundColor: project.color + '0d' }}>
               <div className="relative h-48 overflow-hidden">
                 <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -81,7 +82,7 @@ export default function Home() {
         <div className="md:col-span-2 space-y-6">
           {/* Currently Working */}
           {currentProject && (
-            <Card className="border-[#A78BFA]/20 overflow-hidden animate-up">
+            <Card className="overflow-hidden animate-up" style={{ backgroundColor: currentProject.color + '0d', borderColor: currentProject.color + '33' }}>
               <div className="relative h-36 overflow-hidden">
                 <img src={currentProject.image} alt={currentProject.title} className="w-full h-full object-cover" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
@@ -109,7 +110,7 @@ export default function Home() {
           {/* Bottom row — 2-col sub-grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* About */}
-            <Card className="animate-up">
+            <Card className="animate-up" style={{ backgroundColor: '#A78BFA0d' }}>
               <CardHeader className="p-4">
                 <CardTitle className="text-xs font-semibold flex items-center gap-1.5">
                   <User className="h-3.5 w-3.5 text-[#A78BFA]" /> About
@@ -122,7 +123,7 @@ export default function Home() {
             </Card>
 
             {/* Tech */}
-            <Card className="animate-up">
+            <Card className="animate-up" style={{ backgroundColor: '#2DD4BF0d' }}>
               <CardHeader className="p-4 pb-2">
                 <CardTitle className="text-xs font-semibold flex items-center gap-1.5">
                   <Code2 className="h-3.5 w-3.5 text-[#A78BFA]" /> Stack
@@ -130,8 +131,17 @@ export default function Home() {
               </CardHeader>
               <CardContent className="p-4 pt-0">
                 <div className="flex flex-wrap gap-1.5">
-                  {["React", "TypeScript", "Tailwind", "Node.js", "Python", "Git", "Docker", "Supabase"].map(tech => (
-                    <span key={tech} className="px-2 py-0.5 rounded-full text-[11px] bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] border border-[#A78BFA]/20">
+                  {[
+                    { tech: "React", color: "#2DD4BF" },
+                    { tech: "TypeScript", color: "#A78BFA" },
+                    { tech: "Tailwind", color: "#F472B6" },
+                    { tech: "Node.js", color: "#818CF8" },
+                    { tech: "Python", color: "#FB923C" },
+                    { tech: "Git", color: "#F97316" },
+                    { tech: "Docker", color: "#2DD4BF" },
+                    { tech: "Supabase", color: "#A78BFA" },
+                  ].map(({ tech, color }) => (
+                    <span key={tech} className="px-2 py-0.5 rounded-full text-[11px] border" style={{ backgroundColor: color + '1a', color: color, borderColor: color + '33' }}>
                       {tech}
                     </span>
                   ))}

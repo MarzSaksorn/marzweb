@@ -25,9 +25,9 @@ export default function Contacts() {
               rel="noopener noreferrer"
               className="block"
             >
-              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden relative press">
-                <div className={`absolute inset-0 bg-gradient-to-r ${contact.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                <div className={`absolute top-0 left-0 w-1 h-full bg-gradient-to-b ${contact.gradient}`} />
+              <Card className="group hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden relative press" style={{ backgroundColor: (contact.gradient.includes('2DD4BF') ? '#2DD4BF0d' : contact.gradient.includes('F472B6') ? '#F472B60d' : '#818CF80d') }}>
+                <div className={`absolute inset-0 bg-gradient-to-r ${contact.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300`} />
+                <div className={`absolute top-0 left-0 w-[3px] h-full bg-gradient-to-b ${contact.gradient}`} />
                 <CardHeader className="flex flex-row items-center gap-4 pb-2 relative">
                   <div
                     className={`p-3 rounded-lg bg-gradient-to-br ${contact.gradient} shadow-lg group-hover:scale-110 transition-transform duration-200`}
@@ -50,7 +50,7 @@ export default function Contacts() {
         })}
       </div>
 
-      <Card className="bg-gradient-to-br from-[#A78BFA]/10 via-[#C4B5FD]/10 to-[#A78BFA]/10 border-[#A78BFA]/20 overflow-hidden relative animate-up">
+      <Card className="border-[#A78BFA]/20 overflow-hidden relative animate-up" style={{ backgroundColor: '#818CF80d' }}>
         <div className="absolute inset-0 bg-gradient-to-br from-[#A78BFA]/5 to-[#C4B5FD]/5" />
         <CardHeader className="relative">
           <CardTitle className="flex items-center gap-2">
