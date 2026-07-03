@@ -15,17 +15,17 @@ const pcWikiInputs = globSync('PC-wiki/**/*.html', { cwd: __dirname })
   }, {});
 
 export default defineConfig({
-  base: '/old_marzweb_archive/',
+  base: '/',
   plugins: [
     tailwindcss()
   ],
   server: {
     host:'0.0.0.0',
-    port: 5175,
+    port: 5173,
   },
   preview: {
-    allowedHosts:['www.marzweb.win'],
-    port: 5175
+    allowedHosts:["marzweb.vercel.app", 'www.marzweb.win'],
+    port: 5173
   },
   build: {
     rollupOptions: {
