@@ -23,4 +23,4 @@ package-lock.json
 *.njsproj
 *.sln
 *.sw?
-public/Valentine
+# Static sub-project repos are now tracked in public/

@@ -1,0 +1,173 @@
+## Other
+- household planner
+  - single time tasks that are removed after being completed
+- autocontinue script
+  - on network error, copy the text that has already been written and append it to the last user message with the words "you already started responding but got cut off due to an error: <cutMessage>"
+- argumentator
+  - add permalinks to the generated arguments
+- auto-improver script
+  - improvement history, to prevent repeated or duplicate improvements
+- userscript to let gpt-4 communicate with gpt-3.5
+
+## Practical Tools
+- csv<->json converter
+- text<->morse converter
+- text<->emoji converter (GPTranslator can do that! :D)
+- form builder
+- text<->ascii converter
+- ASCII Art Generator
+- Image to Text Converter
+- CSS Beautifier
+- Akinator
+- CSS Animation Creator: An editor to create custom CSS animations with keyframes, easing, and delay settings.
+- Broken Link Checker: A tool to check a list of URLs for broken links and report their status.
+- Currency Converter: A real-time currency converter using exchange rate APIs to provide accurate conversions.
+- SVG Editor: A simple SVG editing tool to modify shapes, colors, and sizes of SVG files.
+- Audio Visualizer: A tool to generate visual representations of audio files based on waveform or frequency data.
+- Browser Storage Explorer: A tool to view and manage browser storage (local and session storage) data for debugging purposes.
+- CSS Flexbox Builder: A visual builder for creating and customizing CSS flexbox layouts, generating the corresponding code.
+- Keyboard Shortcut Tester: A tool for users to test and discover various keyboard shortcuts for different operating systems and applications.
+- Favicon Generator: A tool to create and download favicons in multiple sizes and formats from an uploaded image.
+- Image Placeholder Generator: A tool to generate placeholder images with customizable dimensions, colors, and text for use during website development.
+- Website Color Extractor: A tool to extract the color palette from a website URL or CSS code.
+- Online Flowchart Maker: A simple flowchart creation tool with drag-and-drop functionality.
+- Aspect Ratio Calculator: A tool to calculate the aspect ratio of images or videos, and resize dimensions while maintaining the aspect ratio.
+- CSS Grid Builder: A visual builder for creating and customizing CSS grid layouts, generating the corresponding code.
+- Font Pairing Tool: A tool to preview and compare different font pairings for web design.
+- Image to ASCII Converter: A tool to convert images into ASCII art, with options for customization.
+- Morse Code Translator: A tool to convert text to Morse code and vice versa.
+- Online Banner Maker: A simple banner creation tool to design custom banners for websites and social media.
+- Online Signature Maker: A tool to create and download digital signatures using a drawing interface.
+- CSS Variables Generator: A tool to manage and generate CSS variables for consistent styling across projects.
+- Online Mind Mapping: A simple mind mapping tool to organize and visualize ideas and concepts.
+- CSS Transform Playground: A playground for experimenting with CSS transform properties, such as scale, rotate, and skew.
+- Browser Compatibility Checker: A tool to check the compatibility of HTML, CSS, and JavaScript features with various browser versions.
+- CSS Blend Modes Generator: A tool to experiment with different CSS blend modes on images or backgrounds.
+- Online Whiteboard: A collaborative whiteboard tool for users to draw, write, and share ideas in real-time.
+- Sitemap Visualizer: A tool to generate visual sitemaps from XML files or website URLs.
+- Web Accessibility Checker: A tool to identify potential accessibility issues in HTML and CSS code.
+- Online Photo Collage Maker: A tool to create custom photo collages from uploaded images.
+- CSS Clip Path Generator: A tool to create and export custom CSS clip paths using a visual editor.
+- Browser Mockup Generator: A tool to generate browser mockups of websites or app interfaces.
+- Online Diagram Maker: A tool for creating various types of diagrams, such as flowcharts, Venn diagrams, and organizational charts.
+- Online Sticky Notes: A tool to create, edit, and manage digital sticky notes.
+- CSS Pseudo-Class Tester: A tool to experiment with various CSS pseudo-classes and see their effects in real-time.
+- Online Logo Maker: A simple logo creation tool with customizable shapes, colors, and fonts.
+- File Format Converter: A tool to convert files between different formats, such as image, audio, or document types.
+- Character Encoding Converter: A tool to convert text between different character encodings, like UTF-8, ISO-8859-1, and Windows-1252.
+- Online Icon Editor: A tool to create and modify icons in various sizes and formats, such as ICO, PNG, and SVG.
+- CSS Filters Playground: A playground for experimenting with different CSS filters, such as blur, brightness, and contrast.
+- Online Post-it Board: A collaborative board for users to create, edit, and organize digital Post-it notes.
+- CSS Selector Tester: A tool to test and experiment with CSS selectors on sample HTML code.
+- CSS Box Model Visualizer: A tool to visualize and understand the CSS box model, with options to modify padding, border, and margin values.
+- Online Calendar Creator: A tool to create and download custom calendars with customizable dates, holidays, and events.
+- JavaScript Event Listener Tester: A tool to test and experiment with JavaScript event listeners and their effects on HTML elements.
+- Web Font Tester: A tool to preview and compare different web fonts on sample text, with options to adjust size, color, and other styling properties.
+- Online Receipt Generator: A tool to create and download custom receipts for personal or business purposes.
+- CSS Background Patterns Generator: A tool to create and customize repeating background patterns using CSS.
+- "AI Cooking Challenge": Players input ingredients they have on hand, and your API generates creative and unique recipes to try. Players can adjust the complexity, cuisine style, and dietary preferences.
+- "CodeGPT": Players input the desired functionality and language for a simple programming task, and your API generates the necessary code. Players can adjust the level of optimization, readability, and programming paradigms.
+- "AI Poetry Slam": Players input a theme, style, and mood for a poem, and your API generates a unique poem based on their preferences. Players can challenge friends to create better poems with the same parameters and vote on their favorites.
+- "GPT Mind Mapper": Users input a central topic or problem, and your API generates a mind map with related subtopics, ideas, and connections. Users can customize the map's complexity, depth, and level of detail.
+- "AI Study Buddy": Users input a subject, topic, or question, and your API generates a concise summary, explanation, or tutorial. Users can adjust the level of detail, difficulty, and learning style.
+- "GPT DIY Guide": Users input a home improvement or repair project, and your API generates step-by-step instructions and a list of necessary tools and materials. Users can adjust the level of detail, difficulty, and project type.
+- "AI Riddle Inventor": Players input a topic or theme, and your API generates original riddles with answers. Players can adjust the difficulty, humor, and complexity of the riddles.
+- "GPT Skill Builder": Users input a skill they want to learn or improve (e.g., public speaking, negotiation, cooking, etc.) and provide their current level of expertise. Your API generates a customized learning plan with resources, exercises, and milestones. Users can adjust the level of detail, pace, and focus on specific sub-skills.
+- "AI Life Event Planner": Users input the type of event they're planning (wedding, party, corporate function, etc.) and provide relevant details, such as budget, guest count, and theme. Your API generates a comprehensive plan, including checklists, timelines, and vendor recommendations. Users can adjust the level of detail, uniqueness, and formality.
+- "GPT Creative Prompt Generator": Users input a preferred medium (writing, painting, photography, etc.) and a theme or emotion, and your API generates a series of unique creative prompts to inspire their work. Users can customize the level of challenge, abstractness, and number of prompts generated.
+- "AI Text Naturalizer" which aims to modify AI-generated text to make it appear more human-like and less recognizable by tools like ZeroGPT.
+- CSS Grid Layout Generator
+- Invoice Generator
+- SVG Editor
+- Font Pairing Tool
+- Animated GIF Maker
+- Photo Collage Creator
+- Color Palette Generator
+- Website Screenshot Tool
+- Online Video Trimmer
+- Icon Library and Generator
+- Audio Converter
+- Video to GIF Converter
+- Online Flowchart Maker
+- Online Mind Map Creator
+- Text to Speech Converter
+- Speech to Text Transcription Tool
+- Online Meme Generator
+- Online Video Editor
+- Character Name Generator
+- Online Logo Maker
+- Browser Compatibility Checker
+- Email Signature Generator
+- Language Translator
+- Online Music Editor
+- Social Media Post Designer
+- Recipe Builder
+- Online PDF Editor
+- Banner Ad Creator
+- Online Calendar Maker
+- GIF to Video Converter
+- Online Whiteboard
+- Social Media Image Resizer
+- IP Address Lookup Tool
+- Online File Converter
+- Online XML Editor
+- Resumé Builder
+- Online Sketchpad
+- Website Accessibility Checker
+- Online Video Subtitle Editor
+- Screen Recorder
+- Online Slideshow Maker
+- Online Budget Planner
+- Online Grammar Checker
+- Online Image Vectorizer
+- Color Contrast Checker
+- Meta Tag Analyzer
+- Online Poster Maker
+- Online Typography Generator
+- Online Icon Editor
+
+## Games
+- War (Card Game)
+- Snake Ladder
+- Bouncing Ball Shooter
+- Pac-Man clone
+- Trivia Quiz
+- Crossword Puzzle
+- Jigsaw Puzzle
+- Solitaire
+- Pinball
+- Roulette
+- Shooting Gallery
+- Scrabble
+- Checkers
+- Backgammon
+- Bingo
+- Racing Game
+- Platformer
+- Maze Runner
+- Archery Game
+- Ice Hockey
+- Pool
+- Basketball
+- Air Hockey
+- Racing Game clone
+- Tower Defense
+- Dragon Slayer
+- Kung Fu Fighting
+- Mastermind
+- Music Rhythm Game
+- Treasure Hunt
+- Ball Drop Game
+- Coding challenges as game idea provider
+- human benchmark
+
+
+## Plugins
+- a plugin that looks for the cheapest price of a specific product.
+- a plugin for web developers that lets users perform acceptance (or E2E) tests on a specified web service; can be expanded to let ChatGPT also perform performance checks, look for console errors, check for security flaws and be a mighty tool for asserting the quality a website as a whole while giving improvement suggestions
+- use ChatGPT to assign a trust value to a website; as the web is flooded with scam sites, fake shops and unserious businesses and ChatGPT might be able to detect and analyze such websites before they even appear on TrustPilot and co
+- a "discover" plugin that helps the user to discover new content for specific topics (music, tv series, movies etc.) while ChatGPT considers the users taste based on existing public accessible information (imdb ratings given by the user, spotify favorite song playlists, myanimelist list etc.) or based on a list of favorites provided by the user
+
+## API Functions
+- add web search functionality
+- web voice assistant (maybe app later)

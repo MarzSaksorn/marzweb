@@ -7,7 +7,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      Valentine: path.resolve(__dirname, './Valentine'),
     },
   },
   preview: {

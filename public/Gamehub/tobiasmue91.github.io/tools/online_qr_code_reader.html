@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online QR Code Reader</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            min-height: 40px;
+            justify-content: center;
+        }
+        .btn:hover:not(:disabled) {
+            background-color: #2980b9;
+        }
+        .btn:focus {
+            outline: 3px solid rgba(52, 152, 219, 0.5);
+        }
+        .btn:active:not(:disabled) {
+            background-color: #2472a4;
+        }
+        .btn i {
+            margin-right: 8px;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn.loading {
+            opacity: 0.7;
+            cursor: wait;
+        }
+        .qr-code {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .qr-code-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            border: 2px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .qr-code video, .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .qr-code img[src="#"], .qr-code img:not([src]) {
+            display: none;
+        }
+        .scan-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+        .placeholder-text {
+            position: absolute;
+            color: #777;
+            font-style: italic;
+            text-align: center;
+        }
+        .tooltip {
+            position: relative;
+        }
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 12px;
+            background-color: #333;
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        .decoded-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            word-wrap: break-word;
+            min-height: 60px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .empty-result {
+            color: #777;
+            text-align: center;
+            font-style: italic;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .copy-btn {
+            background-color: #27ae60;
+        }
+        .copy-btn:hover:not(:disabled) {
+            background-color: #219d55;
+        }
+        .clear-btn {
+            background-color: #e74c3c;
+        }
+        .clear-btn:hover:not(:disabled) {
+            background-color: #c0392b;
+        }
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fdf2f2;
+            border-radius: 4px;
+            border-left: 4px solid #e74c3c;
+        }
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f2fdf2;
+            border-radius: 4px;
+            border-left: 4px solid #27ae60;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #3498db;
+            font-weight: bold;
+            color: #333;
+        }
+        .tab-btn:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .history-container {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .history-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .history-text {
+            max-width: 75%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 10px;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 14px;
+            min-height: 32px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            padding: 12px 24px;
+            background-color: #333;
+            color: white;
+            border-radius: 4px;
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+            z-index: 1000;
+            max-width: 90%;
+            text-align: center;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        .toast.error {
+            background-color: #e74c3c;
+        }
+        .toast.success {
+            background-color: #27ae60;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+            .tabs {
+                flex-wrap: wrap;
+            }
+            .tab-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Online QR Code Reader</h1>
+
+    <div class="tabs" role="tablist">
+        <button id="camera-tab-btn" class="tab-btn active" role="tab" aria-selected="true" aria-controls="camera-tab">
+            <i class="fas fa-camera"></i> Camera
+        </button>
+        <button id="upload-tab-btn" class="tab-btn" role="tab" aria-selected="false" aria-controls="upload-tab">
+            <i class="fas fa-upload"></i> Upload
+        </button>
+        <button id="paste-tab-btn" class="tab-btn" role="tab" aria-selected="false" aria-controls="paste-tab">
+            <i class="fas fa-paste"></i> Paste
+        </button>
+        <button id="history-tab-btn" class="tab-btn" role="tab" aria-selected="false" aria-controls="history-tab">
+            <i class="fas fa-history"></i> History
+        </button>
+    </div>
+
+    <div id="camera-tab" class="tab-content active" role="tabpanel">
+        <div class="form-group">
+            <label for="qr-video">Scan QR Code with Camera:</label>
+            <div class="qr-code">
+                <div class="qr-code-container">
+                    <video id="qr-video" playsinline autoplay muted aria-label="Camera feed for scanning QR codes"></video>
+                    <div class="scan-frame" aria-hidden="true"></div>
+                    <div class="placeholder-text" id="camera-placeholder">Initializing camera...</div>
+                </div>
+            </div>
+            <div class="error" id="camera-error" aria-live="polite" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="upload-tab" class="tab-content" role="tabpanel">
+        <div class="form-group">
+            <label for="qr-file">Upload QR Code Image:</label>
+            <input type="file" id="qr-file" accept="image/*" aria-label="Select QR code image to upload">
+            <label for="qr-file" class="btn tooltip" data-tooltip="Choose an image file with a QR code">
+                <i class="fas fa-upload"></i> Choose File
+            </label>
+            <div class="qr-code">
+                <div class="qr-code-container">
+                    <img id="qr-image" alt="Uploaded QR Code image">
+                    <div class="placeholder-text" id="upload-placeholder">Select an image file</div>
+                </div>
+            </div>
+            <div class="error" id="file-error" aria-live="polite" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="paste-tab" class="tab-content" role="tabpanel">
+        <div class="form-group">
+            <label for="paste-qr">Paste QR Code from Clipboard:</label>
+            <button type="button" class="btn tooltip" id="paste-btn" data-tooltip="Paste an image from your clipboard">
+                <i class="fas fa-paste"></i> Paste from Clipboard
+            </button>
+            <div class="qr-code">
+                <div class="qr-code-container">
+                    <img id="paste-image" alt="Pasted QR Code image">
+                    <div class="placeholder-text" id="paste-placeholder">Click "Paste from Clipboard" button</div>
+                </div>
+            </div>
+            <div class="error" id="paste-error" aria-live="polite" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div id="history-tab" class="tab-content" role="tabpanel">
+        <div class="form-group">
+            <label>Previous Scans:</label>
+            <div class="history-container" id="history-list">
+                <div class="empty-result">No scan history yet</div>
+            </div>
+            <button type="button" class="btn" id="clear-history">
+                <i class="fas fa-trash"></i> Clear History
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="decoded-info">Decoded Result:</label>
+        <div class="decoded-info" id="decoded-info" tabindex="0" aria-label="Decoded QR code content">
+            <div class="empty-result">Scan a QR code to see results</div>
+        </div>
+        <div class="button-group">
+            <button type="button" class="btn copy-btn tooltip" id="copy-btn" disabled data-tooltip="Copy result to clipboard">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+            <button type="button" class="btn clear-btn tooltip" id="clear-btn" disabled data-tooltip="Clear current result">
+                <i class="fas fa-times"></i> Clear
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.20.0/umd/index.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM Elements
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const qrVideo = document.getElementById('qr-video');
+        const qrImage = document.getElementById('qr-image');
+        const pasteImage = document.getElementById('paste-image');
+        const decodedInfo = document.getElementById('decoded-info');
+        const copyBtn = document.getElementById('copy-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const cameraError = document.getElementById('camera-error');
+        const fileError = document.getElementById('file-error');
+        const pasteError = document.getElementById('paste-error');
+        const historyList = document.getElementById('history-list');
+        const clearHistory = document.getElementById('clear-history');
+        const toast = document.getElementById('toast');
+        const pasteBtn = document.getElementById('paste-btn');
+
+        // Placeholders
+        const cameraPlaceholder = document.getElementById('camera-placeholder');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
+        const pastePlaceholder = document.getElementById('paste-placeholder');
+
+        // Initialize QR code reader
+        const codeReader = new ZXing.BrowserQRCodeReader();
+        let controls = null;
+        let scanHistory = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+        let currentResultFromHistory = false;
+        let activeObjectURLs = new Set(); // Track created object URLs for cleanup
+
+        // Initialize
+        updateHistoryUI();
+        startCamera();
+
+        // Utility functions
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideError(element) {
+            element.style.display = 'none';
+        }
+
+        function showToast(message, type = 'info') {
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function setButtonLoading(button, loading) {
+            if (loading) {
+                button.classList.add('loading');
+                button.disabled = true;
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.className = 'loading-spinner';
+                }
+            } else {
+                button.classList.remove('loading');
+                button.disabled = false;
+                const spinner = button.querySelector('.loading-spinner');
+                if (spinner) {
+                    spinner.className = button.id === 'paste-btn' ? 'fas fa-paste' : 'fas fa-upload';
+                }
+            }
+        }
+
+        function createImageLoadPromise(img, src) {
+            return new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('Image loading timeout'));
+                }, 10000);
+
+                img.onload = function() {
+                    clearTimeout(timeout);
+                    resolve();
+                };
+                img.onerror = function() {
+                    clearTimeout(timeout);
+                    reject(new Error('Failed to load image'));
+                };
+                img.src = src;
+            });
+        }
+
+        function cleanupObjectURL(url) {
+            if (url && url.startsWith('blob:')) {
+                URL.revokeObjectURL(url);
+                activeObjectURLs.delete(url);
+            }
+        }
+
+        function cleanupAllObjectURLs() {
+            activeObjectURLs.forEach(url => URL.revokeObjectURL(url));
+            activeObjectURLs.clear();
+        }
+
+        async function tryClipboardAccess() {
+            // Method 1: Modern Clipboard API
+            if (navigator.clipboard && navigator.clipboard.read) {
+                try {
+                    return await navigator.clipboard.read();
+                } catch (error) {
+                    console.log('Modern clipboard API failed:', error);
+                }
+            }
+
+            // Method 2: Check if user has something in clipboard by trying to read text first
+            if (navigator.clipboard && navigator.clipboard.readText) {
+                try {
+                    await navigator.clipboard.readText();
+                    // If text read succeeds, try to read items
+                    return await navigator.clipboard.read();
+                } catch (error) {
+                    console.log('Clipboard text check failed:', error);
+                }
+            }
+
+            throw new Error('Clipboard access not available. Make sure you\'re using HTTPS and have copied an image.');
+        }
+
+        // Tab navigation
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Update tab buttons
+                tabBtns.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-selected', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+
+                // Update tab content
+                const tabId = this.id.replace('-btn', '');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+
+                // Handle camera
+                if (tabId === 'camera-tab') {
+                    startCamera();
+                } else {
+                    stopCamera();
+                }
+
+                // Clear errors when switching tabs
+                hideError(cameraError);
+                hideError(fileError);
+                hideError(pasteError);
+            });
+        });
+
+        // File upload
+        document.getElementById('qr-file').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        });
+
+        // Paste from clipboard
+        // Paste from clipboard
+        pasteBtn.addEventListener('click', async function() {
+            setButtonLoading(pasteBtn, true);
+            hideError(pasteError);
+
+            // Clean up previous pasted image
+            if (pasteImage.src && pasteImage.src !== window.location.href + '#') {
+                cleanupObjectURL(pasteImage.src);
+            }
+
+            pasteImage.src = '';
+            pastePlaceholder.style.display = 'block';
+
+            try {
+                // Check if clipboard API is supported
+                if (!navigator.clipboard || !navigator.clipboard.read) {
+                    throw new Error('Clipboard API not supported in this browser. Try using Chrome, Firefox, or Safari.');
+                }
+
+                // Try to read from clipboard directly
+                let clipboardItems;
+                try {
+                    clipboardItems = await tryClipboardAccess();
+                } catch (clipboardError) {
+                    throw new Error(clipboardError.message);
+                }
+
+                let imageFound = false;
+
+                for (const item of clipboardItems) {
+                    for (const type of item.types) {
+                        if (type.startsWith('image/')) {
+                            try {
+                                const blob = await item.getType(type);
+
+                                // Validate blob
+                                if (!blob || blob.size === 0) {
+                                    throw new Error('Empty or invalid image in clipboard');
+                                }
+
+                                const url = URL.createObjectURL(blob);
+                                activeObjectURLs.add(url);
+
+                                await createImageLoadPromise(pasteImage, url);
+                                pastePlaceholder.style.display = 'none';
+                                await decodeFromImage(pasteImage, pasteError);
+                                imageFound = true;
+                                break;
+                            } catch (imageError) {
+                                console.error('Image processing error:', imageError);
+                                if (pasteImage.src) {
+                                    cleanupObjectURL(pasteImage.src);
+                                }
+                                throw new Error('Failed to process pasted image: ' + imageError.message);
+                            }
+                        }
+                    }
+                    if (imageFound) break;
+                }
+
+                if (!imageFound) {
+                    throw new Error('No image found in clipboard. Copy an image to your clipboard first.');
+                }
+            } catch (err) {
+                console.error('Paste error:', err);
+                showError(pasteError, err.message);
+                showToast('Failed to paste image: ' + err.message, 'error');
+                pastePlaceholder.textContent = 'Click "Paste from Clipboard" button';
+            } finally {
+                setButtonLoading(pasteBtn, false);
+            }
+        });
+
+        // Copy button
+        copyBtn.addEventListener('click', async function() {
+            const textToCopy = decodedInfo.textContent;
+            if (!textToCopy || decodedInfo.querySelector('.empty-result')) return;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                showToast('Copied to clipboard!', 'success');
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                showToast('Failed to copy to clipboard', 'error');
+            }
+        });
+
+        // Clear button
+        clearBtn.addEventListener('click', function() {
+            decodedInfo.innerHTML = '<div class="empty-result">Scan a QR code to see results</div>';
+            copyBtn.disabled = true;
+            clearBtn.disabled = true;
+            currentResultFromHistory = false;
+        });
+
+        // Clear history
+        clearHistory.addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all scan history?')) {
+                scanHistory = [];
+                localStorage.removeItem('scanHistory');
+                updateHistoryUI();
+                showToast('History cleared', 'success');
+            }
+        });
+
+        // Start camera
+        async function startCamera() {
+            try {
+                hideError(cameraError);
+                cameraPlaceholder.textContent = 'Initializing camera...';
+                cameraPlaceholder.style.display = 'block';
+
+                if (controls) {
+                    controls.stop();
+                    controls = null;
+                }
+
+                // Check camera permissions
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    stream.getTracks().forEach(track => track.stop()); // Just testing permissions
+                } catch (permError) {
+                    throw new Error('Camera access denied. Please allow camera permissions and refresh the page.');
+                }
+
+                const devices = await codeReader.listVideoInputDevices();
+                if (devices.length === 0) {
+                    throw new Error('No camera available on this device');
+                }
+
+                controls = await codeReader.decodeFromVideoDevice(
+                    undefined, // Use default camera
+                    qrVideo,
+                    (result, err) => {
+                        if (result) {
+                            const text = result.getText();
+                            processResult(text, false);
+                        }
+
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            console.error('Scanning error:', err);
+                        }
+                    }
+                );
+
+                cameraPlaceholder.style.display = 'none';
+            } catch (err) {
+                console.error('Camera error:', err);
+                showError(cameraError, err.message);
+                cameraPlaceholder.textContent = 'Camera unavailable';
+            }
+        }
+
+        // Stop camera
+        function stopCamera() {
+            if (controls) {
+                controls.stop();
+                controls = null;
+            }
+        }
+
+        // Handle file upload
+        async function handleFile(file) {
+            if (!file.type.match('image.*')) {
+                showError(fileError, 'Selected file is not an image');
+                return;
+            }
+
+            hideError(fileError);
+            uploadPlaceholder.textContent = 'Loading image...';
+            uploadPlaceholder.style.display = 'block';
+
+            try {
+                const reader = new FileReader();
+                const dataURL = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => reject(new Error('Failed to read file'));
+                    reader.readAsDataURL(file);
+                });
+
+                await createImageLoadPromise(qrImage, dataURL);
+                uploadPlaceholder.style.display = 'none';
+                await decodeFromImage(qrImage, fileError);
+            } catch (err) {
+                console.error('File error:', err);
+                showError(fileError, 'Error reading file: ' + err.message);
+                uploadPlaceholder.textContent = 'Select an image file';
+            }
+        }
+
+        // Decode from image
+        async function decodeFromImage(imgElement, errorElement) {
+            try {
+                const result = await codeReader.decodeFromImage(imgElement);
+                if (result) {
+                    const text = result.getText();
+                    processResult(text, false);
+                } else {
+                    throw new Error('No QR code found in the image');
+                }
+            } catch (err) {
+                let errorMessage = 'Error decoding QR code';
+
+                if (err instanceof ZXing.NotFoundException) {
+                    errorMessage = 'No QR code found in the image. Make sure the image contains a clear, well-lit QR code.';
+                } else if (err.message && err.message !== 'undefined') {
+                    errorMessage = 'Error decoding QR code: ' + err.message;
+                } else {
+                    errorMessage = 'Failed to decode QR code. The image may be corrupted, too blurry, or not contain a valid QR code.';
+                }
+
+                console.error('Decode error:', err);
+                showError(errorElement, errorMessage);
+                showToast('Failed to decode QR code', 'error');
+            }
+        }
+
+        // Process scan result
+        function processResult(text, fromHistory) {
+            if (!text || typeof text !== 'string') {
+                showToast('Invalid QR code result', 'error');
+                return;
+            }
+
+            currentResultFromHistory = fromHistory;
+
+            decodedInfo.textContent = text;
+            copyBtn.disabled = false;
+            clearBtn.disabled = false;
+
+            if (!fromHistory) {
+                addToHistory(text);
+            }
+
+            showToast(fromHistory ? 'Loaded from history' : 'QR code decoded successfully!', 'success');
+        }
+
+        // Add to history
+        function addToHistory(text) {
+            // Check if this text is already in history to avoid duplicates
+            const exists = scanHistory.some(item => item.text === text);
+            if (exists) return;
+
+            const timestamp = new Date().toISOString();
+            scanHistory.unshift({ text, timestamp });
+
+            // Limit history size
+            if (scanHistory.length > 50) {
+                scanHistory = scanHistory.slice(0, 50);
+            }
+
+            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+            updateHistoryUI();
+        }
+
+        // Update history UI
+        function updateHistoryUI() {
+            historyList.innerHTML = '';
+
+            if (scanHistory.length === 0) {
+                historyList.innerHTML = '<div class="empty-result">No scan history yet</div>';
+                return;
+            }
+
+            scanHistory.forEach((item, index) => {
+                const date = new Date(item.timestamp);
+                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+
+                historyItem.innerHTML = `
+                    <div class="history-text" title="${item.text.replace(/"/g, '&quot;')}">${item.text}</div>
+                    <div class="history-actions">
+                        <button class="btn action-btn tooltip" data-index="${index}" data-tooltip="Load this item">
+                            <i class="fas fa-arrow-right"></i> Load
+                        </button>
+                        <button class="btn action-btn tooltip" data-index="${index}" data-tooltip="Delete this item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+
+                // Load history item
+                const loadBtn = historyItem.querySelector('.fa-arrow-right').parentElement;
+                loadBtn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (scanHistory[index]) {
+                        processResult(scanHistory[index].text, true);
+                    }
+                });
+
+                // Delete history item
+                const deleteBtn = historyItem.querySelector('.fa-trash').parentElement;
+                deleteBtn.addEventListener('click', function() {
+                    const index = parseInt(this.dataset.index);
+                    if (scanHistory[index]) {
+                        scanHistory.splice(index, 1);
+                        localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+                        updateHistoryUI();
+                        showToast('Item removed from history', 'success');
+                    }
+                });
+
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            stopCamera();
+            cleanupAllObjectURLs();
+        });
+
+        // Handle visibility change
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopCamera();
+            } else if (document.getElementById('camera-tab').classList.contains('active')) {
+                startCamera();
+            }
+        });
+    });
+</script>
+<script src="../logo.js"></script>
+</body>
+</html>

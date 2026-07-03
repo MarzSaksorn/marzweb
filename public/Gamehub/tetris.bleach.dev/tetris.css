@@ -1,0 +1,223 @@
+h1 {
+    font-size: 40px;
+    margin: 16px 0;
+}
+
+.grid, .small-grid {
+    backdrop-filter: blur(6px);
+}
+
+.grid {
+    display: inline-grid;
+    grid-auto-rows: 100%;
+    grid-template-columns: repeat(1, 1fr);
+    margin: 10px 0;
+}
+
+.grid-cell {
+    border: 1px solid #777;
+    box-sizing: border-box;
+}
+
+.grid-cell-hidden {
+    box-sizing: border-box;
+}
+
+.small-grid {
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 75px;
+    width: 100px;
+}
+
+.small-grid > .grid {
+    width: 100px;
+    height: 100px;
+}
+
+#sp-container {
+    display: inline-block;
+}
+
+#sp-text-container {
+    height: 22px;
+}
+
+#tetris, #vs-tetris {
+    width: 350px;
+    height: 770px;
+    transition-duration: 0.07s;
+}
+
+#vs-container {
+    display: none/*inline-block*/;
+    margin-left: 120px;
+}
+
+#vs-text-container {
+    display: none/*block*/;
+}
+
+#progress {
+    margin: auto;
+    width: 350px;
+    background-color: #202020;
+}
+
+#progressbar {
+    width: 0;
+    height: 16px;
+    border: 1px solid #202020;
+    background-color: #8c0b16;
+}
+
+#cleared-text {
+    margin: -18px;
+    color: var(--link-color);
+}
+
+#timer {
+    margin: 0;
+    font-size: 22px;
+}
+
+#spectators {
+    color: var(--header-color);
+    font-size: 18px;
+}
+
+/* Toasts */
+
+.toast {
+    background-color: #00000080;
+}
+
+.toast > div {
+    width: 405px;
+    max-height: 6000px;
+}
+
+.toast-header {
+    font-size: 20px;
+    margin: 6px;
+    color: var(--header-color);
+}
+
+.menu-button {
+    font-size: 27px;
+    width: 280px;
+}
+
+.half-menu-button {
+    font-size: 16px;
+    width: 34%;
+    margin: 0;
+}
+
+input {
+    width: 116px;
+}
+
+#vs-code {
+    background-color: var(--box-color);
+    font-size: 16px;
+    padding: 7px 10px;
+    border-radius: 4px;
+    margin: 0;
+}
+
+/* Leaderboard */
+
+#leaderboard-toast > div {
+    width: 430px;
+}
+
+#leaderboard {
+    height: 270px;
+    padding: 7px 10px;
+    margin: auto auto 5px;
+    display: grid;
+    grid-template-columns: 13% 50% 37%;
+    grid-auto-rows: min-content;
+    overflow-y: auto;
+}
+
+.leaderboard-left-h {
+    text-align: left;
+    font-weight: 600;
+}
+
+.leaderboard-right-h {
+    text-align: right;
+    font-weight: 600;
+}
+
+.leaderboard-left {
+    text-align: left;
+    color: var(--header-color);
+}
+
+.leaderboard-right {
+    text-align: right;
+}
+
+.leaderboard-button {
+    font-size: 16px;
+    width: 27.5%;
+    margin: 4px 0;
+}
+
+/* Corner */
+
+.bottom-right {
+    padding: 4px 12px;
+    position: absolute;
+    top: 100%;
+    left: 100%;
+    transform: translate(-100%, -100%);
+    text-align: right;
+}
+
+.bottom-left {
+    padding: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform: translate(0, -100%);
+    text-align: left;
+}
+
+.corner-text {
+    margin: 0;
+    color: #bbb;
+}
+
+.color-link {
+    filter: grayscale(1) brightness(70%);
+    -webkit-filter: grayscale(1) brightness(70%);
+}
+
+/* Touchscreen UI */
+
+#touch-controls {
+    display: none;
+}
+
+.touch-box {
+    opacity: 0.7;
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    background-color: #101010c0;
+}
+
+.touch-box p {
+    font-size: 70px;
+    font-weight: bold;
+    line-height: 0;
+    margin: 35px 0;
+}
+
+body {
+    touch-action: none;
+}

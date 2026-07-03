@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐾</text></svg>">
+  <title>Catching Game for Cats</title>
+  <meta name="keywords" content="cat, catching, game, fun, animal, score, challenge">
+  <meta name="description" content="Catching Game for Cats is a fun game where you have to catch cats and other animals as fast as you can to get the highest score. Try it now and challenge yourself!">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <style>
+      body {
+          margin: 0;
+          overflow: hidden;
+      }
+      #score {
+          position: absolute;
+          font-size: 80px;
+          font-weight: bolder;
+          color: white;
+          text-shadow: black 0 0 4px, black 0 0 4px, black 0 0 4px, black 0 0 4px;
+      }
+      #game-area {
+          width: 100vw;
+          height: 100vh;
+          overflow: hidden;
+          background: url(img/background/animalbg.png) no-repeat center bottom;
+          background-size: cover;
+      }
+      .animal {
+          cursor: pointer;
+          position: absolute;
+          font-size: 100px;
+          text-shadow: black 0 0 4px, black 0 0 4px, black 0 0 4px, black 0 0 4px;
+          padding: 70px;
+          top: -80px;
+          left: -80px;
+      }
+  </style>
+</head>
+<body>
+<div id="game-area">
+  <div id="score">Score: 0</div>
+  <script>
+    const animals = [
+      String.fromCodePoint(0x1F401),
+      String.fromCodePoint(0x1F41C),
+      String.fromCodePoint(0x1F41D),
+      String.fromCodePoint(0x1F426)
+    ];
+    const randomAnimal = () => {
+      return animals[Math.floor(Math.random() * animals.length)];
+    };
+    const randomTrueFalse = () => {
+      return Boolean(Math.floor(Math.random() * 2));
+    }
+
+    const gameArea = document.getElementById("game-area");
+    let animalCounter = 0;
+    let score = 0;
+    const createAnimal = () => {
+      if (animalCounter >= 10) return;
+      animalCounter++;
+      const animal = document.createElement("span");
+      let animalNumber = Math.floor(Math.random() * 4 + 1)
+      animal.innerHTML = randomAnimal();
+      animal.classList.add("animal");
+      animal.addEventListener("click", (e) => {
+        gameArea.removeChild(e.target);
+        score++;
+        animalCounter--;
+        document.querySelector('#score').textContent = `Score: ${score}`;
+        if (score === 33) {
+          alert(atob("SEFQUFkgQklSVEhEQVksIExJRUJTVEVTIFNDSFdFU1RFUkxFISA6RA=="))
+        }
+      });
+      gameArea.appendChild(animal);
+      let timeout = Math.floor(Math.random() * 4000 + 1000);
+      setTimeout(createAnimal, timeout);
+      let oldY = Math.random() * gameArea.offsetHeight;
+      let oldX = randomTrueFalse() ? -100 : gameArea.offsetWidth + 100;
+      randomWalk(animal, oldX, oldY);
+    };
+
+    createAnimal();
+
+    function randomWalk(animal, oldX = 0, oldY = 0) {
+      if (!animal) {
+        return;
+      }
+      let x = Math.floor(Math.random() * gameArea.offsetWidth);
+      let y = Math.floor(Math.random() * gameArea.offsetHeight);
+
+      let timeout = Math.random() * 1900 + 200;
+
+      animal.animate([
+        { transform: `translate(${oldX}px, ${oldY}px)` },
+        { transform: `translate(${x}px, ${y}px)` }
+      ], {
+        duration: timeout,
+        easing: "ease-in-out",
+        fill: "forwards"
+      });
+
+      setTimeout(() => randomWalk(animal, x, y), timeout);
+    }
+
+  </script>
+</div>
+<script src="../sidebar.js" data-position="top-right"></script>
+</body>
+</html>

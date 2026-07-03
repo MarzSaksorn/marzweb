@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <title>Rock Paper Scissors Multiplayer</title>
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+<div class="game-container bg-white rounded-lg shadow-lg p-8 mx-4 max-w-md w-full">
+    <h1 class="text-4xl font-bold mb-8 text-center">Rock Paper Scissors</h1>
+    <div class="choices mb-8 flex justify-center text-6xl transition-opacity duration-500">
+        <span title="Rock" class="choice mx-4 cursor-pointer transition-transform duration-200 hover:scale-110" data-choice="rock">🪨</span>
+        <span title="Paper" class="choice mx-4 cursor-pointer transition-transform duration-200 hover:scale-110" data-choice="paper">📃</span>
+        <span title="Scissors" class="choice mx-4 cursor-pointer transition-transform duration-200 hover:scale-110" data-choice="scissors">✂️</span>
+    </div>
+    <div id="game-info" class="mb-4 p-2 text-center transition-opacity duration-500 border rounded-xl">Creating game...</div>
+    <input type="text" id="share-url" class="hidden text-center px-4 py-2 mt-2 mb-4 border rounded-md w-full" style="opacity: 0;" readonly>
+    <div id="game-result" class="mb-8 text-center">
+        <div id="your-choice" class="text-xl mb-4 transition-opacity duration-500 opacity-0">คุณเลือก: <span></span></div>
+        <div id="result" class="text-2xl transition-opacity duration-500 opacity-0"></div>
+    </div>
+    <div id="game-actions" class="flex justify-center space-x-4 mb-8 transition-opacity duration-500 opacity-0">
+        <button id="play-again-btn" class="btn btn-primary bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">เล่นอีกครั้ง</button>
+        <button id="reset-btn" class="btn btn-secondary bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">เริ่มใหม่</button>
+    </div>
+    <div id="scores" class="grid grid-cols-2 gap-4 text-center">
+        <div>
+            <p class="text-lg font-bold mb-2">แต้มของคุณ</p>
+            <p id="player-score" class="text-3xl">0</p>
+        </div>
+        <div>
+            <p class="text-lg font-bold mb-2">แต้มฝ่ายตรงข้าม</p>
+            <p id="opponent-score" class="text-3xl">0</p>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import {app} from '../firebase.js';
+
+    import {
+        getDatabase,
+        ref,
+        set,
+        get,
+        onValue,
+        update
+    } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+    const db = getDatabase(app);
+    const gameIdFromUrl = window.location.hash.substr(1);
+    const gameId = gameIdFromUrl || generateGameId();
+    const isNewGame = gameIdFromUrl === '';
+    const gameRef = ref(db, `games/${gameId}`);
+    const scoresRef = ref(db, `scores/${gameId}`);
+    let isPlayerTwo = !isNewGame;
+    let hasChosen = false;
+    let playerScore = 0;
+    let opponentScore = 0;
+
+    onValue(scoresRef, (snapshot) => {
+        const {player1 = 0, player2 = 0} = snapshot.val() || {};
+        [playerScore, opponentScore] = isPlayerTwo ? [player2, player1] : [player1, player2];
+        document.getElementById('player-score').textContent = playerScore;
+        document.getElementById('opponent-score').textContent = opponentScore;
+    });
+
+    if (isNewGame) {
+        showShareUrl();
+    } else {
+        animateElement('#game-info', {opacity: 1}, {opacity: 0}, () => {
+            document.getElementById('game-info').textContent = 'Make your choice.';
+            animateElement('#game-info', {opacity: 0}, {opacity: 1});
+        });
+    }
+
+    function displayResult(player1Choice, player2Choice, result) {
+        const choicesMap = {rock: '🪨', paper: '📃', scissors: '✂️'};
+        const resultElement = document.getElementById('result');
+        const [player1Emoji, player2Emoji] = [choicesMap[player1Choice], choicesMap[player2Choice]];
+        const winnerText = result === 'tie'
+            ? "เสมอ!"
+            : result === 'player1'
+                ? `${isPlayerTwo ? 'อีกฝ่ายชนะ!'  : 'คุณชนะ!'}!`
+                : `${isPlayerTwo ? 'คุณชนะ!' : 'อีกฝ่ายชนะ!'}!`;
+
+        resultElement.innerHTML = `<div class="text-3xl">${player1Emoji} vs ${player2Emoji}</div><div>${winnerText}</div>`;
+        animateElement('#game-info', {opacity: 1}, {opacity: 0}, () => {
+            document.getElementById('game-info').textContent = 'รอบนี้จบแล้ว';
+            animateElement('#game-info', {opacity: 0}, {opacity: 1});
+        });
+        animateElement('.choices', {opacity: 1}, {opacity: 0});
+        animateElement('#share-url', {opacity: 1}, {opacity: 0}, () => { document.getElementById('share-url').classList.add('hidden') });
+        animateElement('#result', {opacity: 0}, {opacity: 1});
+        animateElement('#game-result', {opacity: 0}, {opacity: 1});
+        animateElement('#game-actions', {opacity: 0}, {opacity: 1});
+    }
+
+    function initOrUpdateGame(choice) {
+        if (hasChosen) {
+            alert('You have already made your choice!');
+            return Promise.resolve();
+        }
+        hasChosen = true;
+        animateElement('#game-info', {opacity: 1}, {opacity: 0}, () => {
+            document.getElementById('game-info').textContent = 'คุณได้ทำการเลือกแล้ว โปรดรออีกฝั่ง';
+            animateElement('#game-info', {opacity: 0}, {opacity: 1});
+        });
+        document.getElementById('your-choice').querySelector('span').textContent = choice;
+        animateElement('#your-choice', {opacity: 0}, {opacity: 1});
+
+        return get(gameRef).then((snapshot) => {
+            const updates = {
+                player1Choice: isNewGame ? choice : snapshot.val()?.player1Choice || null,
+                player2Choice: isPlayerTwo ? choice : snapshot.val()?.player2Choice || null
+            };
+            processGameUpdate(updates.player1Choice, updates.player2Choice);
+            return snapshot.exists() ? update(gameRef, updates) : set(gameRef, updates);
+        });
+    }
+
+    function processGameUpdate(player1Choice, player2Choice) {
+        if (!player1Choice || !player2Choice) return;
+
+        const result = getGameResult(player1Choice, player2Choice);
+        if (result !== 'tie' && !isPlayerTwo) {
+            [playerScore, opponentScore] = result === 'player1'
+                ? [playerScore + 1, opponentScore]
+                : [playerScore, opponentScore + 1];
+            updateScores(playerScore, opponentScore);
+        }
+        displayResult(player1Choice, player2Choice, result);
+    }
+
+    onValue(ref(db, `games/${gameId}`), (snapshot) => {
+        const {player1Choice, player2Choice} = snapshot.val() || {};
+        processGameUpdate(player1Choice, player2Choice);
+    });
+
+    document.querySelector('.choices').addEventListener('click', (event) => {
+        if (!event.target.classList.contains('choice')) return;
+        event.target.classList.add('border-4', 'border-green-400', 'rounded-full', 'shadow-xl');
+        const choice = event.target.dataset.choice;
+        initOrUpdateGame(choice);
+    });
+
+    document.getElementById('share-url').addEventListener('click', function() {
+        if (!this.value) return;
+        navigator.clipboard.writeText(this.value).then(() => {
+            alert('Link copied to clipboard!');
+        });
+    });
+
+    document.getElementById('play-again-btn').addEventListener('click', () => {
+        resetGame();
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        resetGame(true);
+    });
+
+    function resetGame(isNewGame = false) {
+        set(gameRef, {player1Choice: null, player2Choice: null});
+        if (isNewGame) {
+            updateScores(0, 0);
+            isPlayerTwo = false;
+        }
+        animateElement('#game-info', {opacity: 1}, {opacity: 0}, () => {
+            document.getElementById('game-info').textContent = isNewGame ? 'Creating game...' : 'โปรดเลือก';
+            animateElement('#game-info', {opacity: 0}, {opacity: 1});
+        });
+        animateElement('.choices', {opacity: 0}, {opacity: 1});
+        animateElement('#game-result', {opacity: 1}, {opacity: 0});
+        animateElement('#game-actions', {opacity: 1}, {opacity: 0});
+        document.querySelectorAll('.choice').forEach(element => {
+            element.classList.remove('border-4', 'border-green-400', 'rounded-full', 'shadow-xl');
+        });
+        hasChosen = false;
+
+        if (isNewGame) {
+            const newGameId = generateGameId();
+            window.location.hash = newGameId;
+            showShareUrl();
+        }
+    }
+
+    function animateElement(selector, from, to, callback) {
+        anime({
+            targets: selector,
+            ...from,
+            ...to,
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: callback
+        });
+    }
+
+    // Helper functions
+    function generateGameId() {
+        return Math.random().toString(36).substr(2, 9);
+    }
+
+    function showShareUrl() {
+        const shareUrl = `${window.location.origin}${window.location.pathname}#${gameId}`;
+        const shareUrlElement = document.getElementById('share-url');
+        shareUrlElement.value = shareUrl;
+        shareUrlElement.classList.remove('hidden');
+        animateElement('#share-url', {opacity: 0}, {opacity: 1});
+        animateElement('#game-info', {opacity: 1}, {opacity: 0}, () => {
+            document.getElementById('game-info').textContent = 'แชร์ลิงค์นี้ให้กับเพื่อน:';
+            animateElement('#game-info', {opacity: 0}, {opacity: 1});
+        });
+    }
+
+    function getGameResult(player1Choice, player2Choice) {
+        if (player1Choice === player2Choice) return 'tie';
+        const winningCombos = [
+            ['rock', 'scissors'],
+            ['scissors', 'paper'],
+            ['paper', 'rock']
+        ];
+        return winningCombos.some(([a, b]) => a === player1Choice && b === player2Choice)
+            ? 'player1'
+            : 'player2';
+    }
+
+    function updateScores(player1Score, player2Score) {
+        set(scoresRef, {player1: player1Score, player2: player2Score});
+    }
+</script>
+<script src="../logo.js"></script>
+</body>
+</html>

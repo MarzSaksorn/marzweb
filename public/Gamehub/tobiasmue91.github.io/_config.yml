@@ -1,0 +1,2 @@
+baseurl: /
+include: [".well-known"]
