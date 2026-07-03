@@ -30,7 +30,7 @@ export default function Projects() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-[#A78BFA] to-[#C4B5FD] bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold tracking-tight text-[#A78BFA] dark:text-[#C4B5FD]">
             My Projects
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -59,7 +59,7 @@ export default function Projects() {
             {searchQuery && (
               <Button
                 variant="outline"
-                className="mt-4 border-[#A78BFA]/50 hover:bg-[#A78BFA]/10"
+                className="mt-4 border-[#A78BFA]/50 hover:bg-[#A78BFA]/10 press"
                 onClick={() => setSearchQuery("")}
               >
                 Clear Search
@@ -72,7 +72,7 @@ export default function Projects() {
           {filteredProjects.map((project) => (
             <Card
               key={project.id}
-              className="overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col border-0 shadow-md"
+              className="overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col border-0 shadow-md animate-up"
             >
               <div className="relative h-40 overflow-hidden">
                 <img
@@ -112,7 +112,7 @@ export default function Projects() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="flex-1 border-[#A78BFA]/30 hover:bg-[#A78BFA]/10 hover:border-[#A78BFA]/50"
+                  className="flex-1 border-[#A78BFA]/30 hover:bg-[#A78BFA]/10 hover:border-[#A78BFA]/50 press"
                   asChild
                 >
                   <a
@@ -127,7 +127,7 @@ export default function Projects() {
                 {project.liveUrl && (
                   <Button
                     size="sm"
-                    className={`flex-1 bg-gradient-to-r ${project.accentColor} hover:opacity-90 shadow-lg`}
+                    className={`flex-1 bg-gradient-to-r ${project.accentColor} hover:opacity-90 shadow-lg press`}
                     asChild
                   >
                     <a

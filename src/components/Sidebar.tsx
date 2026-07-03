@@ -80,7 +80,7 @@ export function Sidebar({ children }: SidebarProps) {
             >
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30"
+                className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30 press"
               >
                 <ArrowLeft className="h-5 w-5 text-[#A78BFA]" />
                 <span className="text-foreground">Go to Old design</span>
@@ -88,7 +88,7 @@ export function Sidebar({ children }: SidebarProps) {
             </a>
             <Button
               variant="outline"
-              className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30"
+              className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30 press"
               onClick={toggleTheme}
             >
               {mounted && theme === "dark" ? (
@@ -98,7 +98,7 @@ export function Sidebar({ children }: SidebarProps) {
                 </>
               ) : (
                 <>
-                  <Sun className="h-5 w-5 text-amber-500" />
+                  <Sun className="h-5 w-5 text-[#A78BFA]" />
                   <span className="text-foreground">Light Theme</span>
                 </>
               )}

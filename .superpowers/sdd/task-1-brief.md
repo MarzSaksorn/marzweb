@@ -1,3 +1,18 @@
+# Task 1: Design Tokens — CSS Variables & Tailwind Config
+
+**Files:**
+- Modify: `src/index.css`
+- Modify: `tailwind.config.js`
+
+**Interfaces:**
+- Consumes: existing HSL-based shadcn CSS variable structure
+- Produces: new pastel purple hex-based CSS variables consumed by all components
+
+### Step 1: Replace index.css HSL variables with pastel purple palette
+
+Replace the entire `:root` and `.dark` blocks in `src/index.css`:
+
+```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -59,27 +74,39 @@
 }
 
 @layer utilities {
-  .press {
-    @apply active:scale-[0.98] transition-transform duration-150;
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#A78BFA] via-[#8B6FE8] to-[#C4B5FD];
   }
-}
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-[#A78BFA] via-[#8B6FE8] to-[#C4B5FD];
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .animate-up {
-    animation: fade-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  .border-gradient {
+    border-image: linear-gradient(135deg, #A78BFA, #8B6FE8, #C4B5FD) 1;
   }
-  .animate-up-d1 { animation-delay: 0.1s; }
-  .animate-up-d2 { animation-delay: 0.2s; }
-  .animate-up-d3 { animation-delay: 0.3s; }
 }
+```
+
+### Step 2: Verify radius scale in tailwind.config.js
+
+The `borderRadius` section in `tailwind.config.js` should be:
+
+```js
+borderRadius: {
+  lg: 'var(--radius)',
+  md: 'calc(var(--radius) - 2px)',
+  sm: 'calc(var(--radius) - 4px)',
+},
+```
+
+### Step 3: Verify build
+
+Run: `npm run build` — must pass with zero errors.
+
+### Step 4: Commit
+
+```bash
+git add src/index.css tailwind.config.js
+git commit -m "feat: update design tokens to pastel purple palette"
+```
