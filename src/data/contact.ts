@@ -15,7 +15,7 @@ export const contactItems: ContactItem[] = [
     label: "Email",
     value: "mark94849@proton.me",
     href: "mailto:mark94849@proton.me",
-    gradient: "from-[#A78BFA] to-[#C4B5FD]",
+    gradient: "from-[#2DD4BF] to-[#5EEAD4]",
     description: "Click to send an email",
   },
   {
@@ -23,7 +23,7 @@ export const contactItems: ContactItem[] = [
     label: "Instagram",
     value: "@marzsaksorn",
     href: "https://instagram.com/marzsaksorn",
-    gradient: "from-[#C4B5FD] to-[#A78BFA]",
+    gradient: "from-[#F472B6] to-[#F9A8D4]",
     description: "Click to view Instagram profile",
   },
   {
@@ -31,7 +31,7 @@ export const contactItems: ContactItem[] = [
     label: "Facebook",
     value: "Saksorn Ngandee",
     href: "https://facebook.com/MarzSaksorn",
-    gradient: "from-[#A78BFA] to-[#8B6FE8]",
+    gradient: "from-[#818CF8] to-[#A5B4FC]",
     description: "Click to view Facebook profile",
   },
 ];

@@ -9,10 +9,11 @@ const currentProject = projects.find(p => p.title.includes("PC Wiki"));
 export default function Home() {
   return (
     <div className="space-y-8">
-      {/* Hero — spotlight gradient */}
+      {/* Hero — colorful spotlight gradient */}
       <section className="relative overflow-hidden rounded-[8px] border border-[#A78BFA]/20 bg-card animate-up">
         <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#A78BFA]/10 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-[#C4B5FD]/10 blur-3xl" />
+        <div className="absolute -bottom-32 -left-20 w-80 h-80 rounded-full bg-[#2DD4BF]/10 blur-3xl" />
+        <div className="absolute top-1/2 left-1/3 w-64 h-64 rounded-full bg-[#F472B6]/8 blur-3xl" />
         <div className="relative px-8 py-12 md:px-12 md:py-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground">
             Marzweb
@@ -50,7 +51,7 @@ export default function Home() {
               <div className="relative h-48 overflow-hidden">
                 <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#A78BFA] to-[#C4B5FD]" />
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.accentColor}`} />
               </div>
               <CardHeader>
                 <CardTitle className="text-base">{project.title}</CardTitle>
@@ -65,7 +66,7 @@ export default function Home() {
                   </Button>
                 )}
                 {project.liveUrl && (
-                  <Button size="sm" className="bg-[#A78BFA] hover:bg-[#8B6FE8] text-white press" asChild>
+                  <Button size="sm" className="text-white press hover:brightness-90" style={{ backgroundColor: project.color }} asChild>
                     <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                       <ExternalLink className="h-4 w-4 mr-1.5" /> Demo
                     </a>
@@ -85,7 +86,7 @@ export default function Home() {
                 <img src={currentProject.image} alt={currentProject.title} className="w-full h-full object-cover" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <div className="absolute top-3 left-3">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#A78BFA] text-white shadow-lg">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium text-white shadow-lg" style={{ backgroundColor: currentProject.color }}>
                     <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
                     In Development
                   </span>
@@ -96,7 +97,7 @@ export default function Home() {
                 <CardDescription className="text-xs">{currentProject.description}</CardDescription>
               </CardHeader>
               <CardFooter>
-                <Button size="sm" className="bg-[#A78BFA] hover:bg-[#8B6FE8] text-white w-full press" asChild>
+                <Button size="sm" className="text-white w-full press hover:brightness-90" style={{ backgroundColor: currentProject.color }} asChild>
                   <a href={currentProject.githubUrl} target="_blank" rel="noopener noreferrer">
                     <Github className="h-4 w-4 mr-1.5" /> View Source
                   </a>
@@ -142,7 +143,7 @@ export default function Home() {
       </div>
 
       {/* Connect strip */}
-      <Card className="border-[#A78BFA]/20 bg-gradient-to-br from-[#A78BFA]/5 via-[#C4B5FD]/5 to-transparent overflow-hidden animate-up">
+      <Card className="border-[#A78BFA]/20 bg-gradient-to-br from-[#A78BFA]/5 via-[#F472B6]/5 to-[#2DD4BF]/5 overflow-hidden animate-up">
         <CardContent className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <p className="text-sm font-medium text-foreground">Let&apos;s connect</p>

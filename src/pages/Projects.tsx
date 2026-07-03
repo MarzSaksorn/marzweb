@@ -128,9 +128,12 @@ export default function Projects() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"
                 />
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#A78BFA] to-[#C4B5FD]" />
+                <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${project.accentColor}`} />
                 <div className="absolute top-3 left-3">
-                  <span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#A78BFA] text-white shadow-lg">
+                  <span
+                    className="px-2.5 py-1 rounded-full text-[11px] font-medium text-white shadow-lg"
+                    style={{ backgroundColor: project.color }}
+                  >
                     {project.tags[0]}
                   </span>
                 </div>
@@ -174,7 +177,8 @@ export default function Projects() {
                 {project.liveUrl && (
                   <Button
                     size="sm"
-                    className="flex-1 bg-[#A78BFA] hover:bg-[#8B6FE8] text-white press"
+                    className="flex-1 text-white press hover:brightness-90"
+                    style={{ backgroundColor: project.color }}
                     asChild
                   >
                     <a
