@@ -1,150 +1,110 @@
 import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTheme } from "next-themes"
-import { Menu, X, Sun, Moon, ArrowLeft } from "lucide-react"
-import { Button } from "./ui/button"
+import { Home, Folder, Mail, Sun, Moon, ArrowUpRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface SidebarProps {
-  children: React.ReactNode
-}
-
 const navItems = [
-  { path: "/", label: "Home" },
-  { path: "/projects", label: "My Projects" },
-  { path: "/contacts", label: "My Contacts" },
+  { path: "/", label: "Home", icon: Home },
+  { path: "/projects", label: "Projects", icon: Folder },
+  { path: "/contacts", label: "Contacts", icon: Mail },
 ]
 
-export function Sidebar({ children }: SidebarProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export function Sidebar({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const { theme, setTheme } = useTheme()
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => { setMounted(true) }, [])
 
-  useEffect(() => {
-    setIsOpen(false)
-  }, [location.pathname])
-
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark")
 
   return (
     <div className="min-h-screen bg-background">
-      <aside
-        className={cn(
-          "fixed top-0 left-0 z-40 h-screen w-64 border-r bg-card transition-transform duration-300 ease-in-out",
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-        )}
-      >
-        <div className="flex h-full flex-col">
-          <div className="p-6 border-b flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 md:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </Button>
-            <h1 className="text-xl font-bold text-foreground">Marzweb</h1>
-          </div>
-
-          <nav className="flex-1 space-y-1 p-4">
-            {navItems.map((item) => (
-              <button
-                key={item.path}
-                onClick={() => navigate(item.path)}
-                className={cn(
-                  "w-full text-left px-4 py-3 rounded-lg transition-all duration-200",
-                  location.pathname === item.path
-                    ? "bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] font-medium border-l-2 border-[#A78BFA]"
-                    : "text-muted-foreground hover:bg-[#A78BFA]/5"
-                )}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          <div className="p-4 border-t space-y-3">
-            <a
-              href="/old_marzweb_archive/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                variant="outline"
-                className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30 press"
-              >
-                <ArrowLeft className="h-5 w-5 text-[#A78BFA]" />
-                <span className="text-foreground">Go to Old design</span>
-              </Button>
-            </a>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-3 bg-[#A78BFA]/10 hover:bg-[#A78BFA]/20 border-[#A78BFA]/30 press"
-              onClick={toggleTheme}
-            >
-              {mounted && theme === "dark" ? (
-                <>
-                  <Moon className="h-5 w-5 text-[#A78BFA]" />
-                  <span className="text-foreground">Dark Theme</span>
-                </>
-              ) : (
-                <>
-                  <Sun className="h-5 w-5 text-[#A78BFA]" />
-                  <span className="text-foreground">Light Theme</span>
-                </>
+      {/* Desktop: floating nav pill */}
+      <nav className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-1 p-2 rounded-2xl bg-background/80 backdrop-blur-xl border border-border/50 shadow-lg">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const active = location.pathname === item.path
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={cn(
+                "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200",
+                active
+                  ? "bg-[#A78BFA]/10 text-[#A78BFA] dark:text-[#C4B5FD] font-medium"
+                  : "text-muted-foreground hover:bg-[#A78BFA]/5 hover:text-foreground"
               )}
-            </Button>
-          </div>
-        </div>
-      </aside>
-
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
-
-      {!isOpen && (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="fixed top-4 left-4 z-50 md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
+            >
+              <Icon className="h-4 w-4 shrink-0" />
+              <span>{item.label}</span>
+            </button>
+          )
+        })}
+        <div className="border-t border-border/50 my-1" />
+        <button
+          onClick={toggleTheme}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-200 text-muted-foreground hover:bg-[#A78BFA]/5 hover:text-foreground"
         >
-          <Menu className="h-5 w-5" />
-        </Button>
-      )}
+          {mounted && theme === "dark" ? (
+            <Moon className="h-4 w-4 shrink-0" />
+          ) : (
+            <Sun className="h-4 w-4 shrink-0" />
+          )}
+          <span>{mounted && theme === "dark" ? "Dark" : "Light"}</span>
+        </button>
+      </nav>
 
-      <main className="md:ml-64 min-h-screen">
-        <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="flex h-16 items-center justify-end px-6">
-            <nav className="flex items-center gap-2">
-              {navItems.slice(1).map((item) => (
-                <Button
-                  key={item.path}
-                  variant={location.pathname === item.path ? "secondary" : "ghost"}
-                  onClick={() => navigate(item.path)}
-                  className="hidden md:inline-flex"
-                >
-                  {item.label}
-                </Button>
-              ))}
-            </nav>
-          </div>
-        </header>
+      {/* Mobile: bottom tab bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex md:hidden bg-background/95 backdrop-blur-xl border-t border-border">
+        {navItems.map((item) => {
+          const Icon = item.icon
+          const active = location.pathname === item.path
+          return (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className={cn(
+                "flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[10px] transition-colors duration-200",
+                active
+                  ? "text-[#A78BFA] dark:text-[#C4B5FD]"
+                  : "text-muted-foreground"
+              )}
+            >
+              <Icon className="h-5 w-5" />
+              <span>{item.label}</span>
+            </button>
+          )
+        })}
+        <button
+          onClick={toggleTheme}
+          className="flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[10px] text-muted-foreground"
+        >
+          {mounted && theme === "dark" ? (
+            <Moon className="h-5 w-5" />
+          ) : (
+            <Sun className="h-5 w-5" />
+          )}
+          <span>{mounted && theme === "dark" ? "Dark" : "Light"}</span>
+        </button>
+      </nav>
 
+      {/* Main — full width, no sidebar offset */}
+      <main className="min-h-screen pb-20 md:pb-0">
         <div className="p-6">{children}</div>
       </main>
+
+      {/* Old design link — bottom-left corner */}
+      <a
+        href="/old_marzweb_archive/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 hidden md:flex items-center gap-1 text-[11px] text-muted-foreground hover:text-[#A78BFA] transition-colors z-50"
+      >
+        Old design <ArrowUpRight className="h-3 w-3" />
+      </a>
     </div>
   )
 }
